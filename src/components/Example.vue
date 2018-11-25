@@ -19,8 +19,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-a {
-  color: #b90015;
-}
+<style lang="sass" scoped>
+a
+  color: #b90015
 </style>
