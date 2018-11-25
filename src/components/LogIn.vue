@@ -18,7 +18,7 @@
         <input autofocus="autofocus" class="form-control" placeholder="E-mail" type="email" id="user_email"   
           v-model="email"
         >
-      <div class='feedback'>Errors</div>
+      <!-- <div class='feedback'>Errors</div> -->
       </div>
       <div class="form-group">
         <label for="user_password"
@@ -55,9 +55,7 @@ export default {
     }
   },
   computed: {
-     isEmptyEmail() {
-       return this.email === '';
-     }
+
   },
   methods: {
 
