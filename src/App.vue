@@ -5,6 +5,8 @@
     <ForumList v-if="page === 'ForumList'"/>
     <LogIn v-if="page === 'LogIn'"/>
     <Registration v-if="page === 'Registration'"/>
+    <ForumAccount v-if="page === 'ForumAccount'"/>
+
   </div>
 </template>
 
@@ -14,6 +16,7 @@
   import ForumList from "@/components/ForumList";
   import LogIn from "@/components/LogIn";
   import Registration from "@/components/Registration";
+  import ForumAccount from "@/components/ForumAccount";
 
   export default {
     name: 'app',
@@ -22,11 +25,12 @@
       LogIn,
       ForumList,
       ForumItem,
-      Example
+      Example,
+      ForumAccount
     },
     data: () => {
       return {
-        page: 'ForumList'
+        page: 'ForumAccount'
       }
     }
   }
