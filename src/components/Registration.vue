@@ -5,7 +5,7 @@
     <div class="social-registration">
       <a class="social-registration-item vkontakte" href="/auth/vkontakte">VK</a>
     </div>
-    <form action="/" method="post">
+    <form @submit.prevent="sendRegData()">
 
       <form-input :value="userName.value"
                   v-model="userName.value"
@@ -31,7 +31,7 @@
                   label-text="E-mail"
                   :input-error="email.error"                                    
       ></form-input>
-         <form-input :value="password.value"
+      <form-input :value="password.value"
                   v-model="password.value"
                   id="password"
                   type="password"
@@ -48,7 +48,7 @@
                   :input-error="confirmPassword.error"                                    
       ></form-input>
 
-      <div class="form-group">
+      <div>
         <input class="btn-submit-registration" type="submit" value="Зарегистрироваться">
       </div>
     </form>    
@@ -91,6 +91,16 @@ export default {
 
   },
   methods: {
+    sendRegData() {
+      const data = {
+        name: this.userName.value,
+        lastName: this.userLastName.value,
+        email: this.email.value,
+        password: this.password.value,
+      }
+      // eslint-disable-next-line
+      console.log(`Try send: ${JSON.stringify(data)}`);
+    }
   },
 }
 </script>
