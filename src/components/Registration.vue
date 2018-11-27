@@ -6,36 +6,48 @@
       <a class="social-registration-item vkontakte" href="/auth/vkontakte">VK</a>
     </div>
     <form action="/" method="post">
-      <div class="form-group">
-        <label for="user_email"
-          v-bind:class="{ invisible: !email }"
-        >
-          Email
-        </label>
-        <input autofocus="autofocus" class="form-control" placeholder="E-mail" type="email" id="user_email"   
-          v-model="email"
-        >
-      <div class='feedback'
-        v-bind:class="{ invisible: !email }"
-      >
-        Lorem ipsum dolor sit amet consectetur.
-      </div>
-      </div>
-      <div class="form-group">
-        <label for="user_password"
-          v-bind:class="{ invisible: !password }"
-        >
-          Пароль
-        </label>
-        <input autocomplete="off" class="form-control" placeholder="Пароль" type="password" id="user_password" 
-          v-model="password"
-        >
-        <div class='feedback'
-          v-bind:class="{ invisible: !password }"
-        >
-          Errors
-        </div>
-      </div>
+
+      <form-input :value="userName.value"
+                  v-model="userName.value"
+                  id="userName"
+                  type="text"
+                  placeholder="Имя"
+                  label-text="Имя"
+                  :input-error="userName.error"                                    
+      ></form-input>
+      <form-input :value="userLastName.value"
+                  v-model="userLastName.value"
+                  id="userLastName"
+                  type="text"
+                  placeholder="Фамилия"
+                  label-text="Фамилия"
+                  :input-error="userLastName.error"                                    
+      ></form-input>
+      <form-input :value="email.value"
+                  v-model="email.value"
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  label-text="E-mail"
+                  :input-error="email.error"                                    
+      ></form-input>
+         <form-input :value="password.value"
+                  v-model="password.value"
+                  id="password"
+                  type="password"
+                  placeholder="Пароль"
+                  label-text="Пароль"
+                  :input-error="password.error"                                    
+      ></form-input>
+      <form-input :value="confirmPassword.value"
+                  v-model="confirmPassword.value"
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Подтверждение пароля"
+                  label-text="Подтверждение"
+                  :input-error="confirmPassword.error"                                    
+      ></form-input>
+
       <div class="form-group">
         <input class="btn-submit-registration" type="submit" value="Зарегистрироваться">
       </div>
@@ -44,21 +56,41 @@
 </template>
 
 <script>
+import FormInput from './FormInput.vue';
 export default {
   name: 'Registration',
+  components: {
+    FormInput,
+  },
   props: {},
   data() {
     return {
-      email: '',
-      password: '',
-      rememberMe: false,
+      userName: {
+        value: '',
+        error: '',
+      },
+      userLastName: {
+        value: '',
+        error: '',
+      },
+      email: {
+        value: '',
+        error: '',
+      },
+      password: {
+        value: '',
+        error: '',
+      },
+      confirmPassword: {
+        value: '',
+        error: '',
+      }
     }
   },
   computed: {
 
   },
   methods: {
-
   },
 }
 </script>
@@ -111,65 +143,27 @@ h3
   &:hover
     background-color: #5982b1
 
-.invisible
-      opacity: 0
-
-.form-group
-  // margin-bottom: 15px
-  label
-    font-size: 13px
-    font-weight: 400
-    color: #50667b
-    margin: 0
-    // display: inline-block
-    max-width: 100%
-  .feedback
-    font-size: 13px
-    font-weight: 400
-    margin: 0
-    // display: inline-block
-    max-width: 100%
-    color: #dc3545
-    line-height: 15px
-  input:not([type="checkbox"]):not([type="submit"])
-    background-color: rgba(164,175,221,.2)
-    color: #50667b
-    padding: 8px 16px
-    width: 100%
-    border-radius: 3px
-    border: 1px solid transparent
-    font-size: 15px
-    height: 40px
-    box-shadow: none
-    &:focus
-      background-color: #fff
-      outline: none
-      border: 1px solid #c6ccd1
-      color: #2c2d30
-    &.input-error
-      border-color: #d74a5c
-  
-  .btn-submit-registration
-    height: 40px
-    padding: 10px 16px
-    font-size: 15px
-    width: 100%
-    cursor: pointer
-    background-color: #f65121
-    color: #ffffff
-    transition: background-color .2s,opacity .2s
-    display: inline-block
-    margin-bottom: 0
-    margin-top: 25px
-    text-align: center
-    font-weight: 400
-    border: none
-    border-radius: 4px
-    box-shadow: none
-    &:hover,
-    &:focus
-      background-color: #f7643a
-      outline: none
-    &:active
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+.btn-submit-registration
+  height: 40px
+  padding: 10px 16px
+  font-size: 15px
+  width: 100%
+  cursor: pointer
+  background-color: #f65121
+  color: #ffffff
+  transition: background-color .2s,opacity .2s
+  display: inline-block
+  margin-bottom: 0
+  margin-top: 25px
+  text-align: center
+  font-weight: 400
+  border: none
+  border-radius: 4px
+  box-shadow: none
+  &:hover,
+  &:focus
+    background-color: #f7643a
+    outline: none
+  &:active
+    box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
 </style>
