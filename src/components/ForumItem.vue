@@ -29,16 +29,20 @@
         Комментарии • 3
       </div>
       <!-- div скрывается, если не зарегистрирован :class="{invisible : loggedIn}" -->
-      <div class="myComment">
+      <div  class="myComment" >
+
         <!-- сюда вставляется шаблон из компонента <my-comment>  -->
-        <div class="userComment">
+        <div  class="userComment">
           <div class="userImg">I</div>
           <div class="userCommentBody">
-            <textarea type="text" class="inputComment"></textarea>
+              <p >  {{comments.textComment}}</p>
+            <textarea type="text"  class="inputComment" id="comment"
+
+            ></textarea>
             <!-- Кнопки '.invisible', пока нет фокуса на textarea -->
             <div class="btnWrap">
               <!-- Кнопка не нажмается, пока в textarea нет текста -->
-              <button class="sendBtn">Отправить</button>
+              <button class="sendBtn" @click="addComment">Отправить</button>
               <!-- -->
               <button class="cancelBtn">Х</button>
             </div>
@@ -53,9 +57,9 @@
         <div class="comment">
           <div class="userImg">U</div>
           <div class="commentWrap">
-            <div class="commentBody">
+            <div v-for="comments in comments" class="commentBody">
               <a href="#" class="commentUserName">Иван Иванов</a>
-              <div class="commentText">Текст комментария</div>
+              <div class="commentText"><p>{{comments.textComment}}</p></div>
               <!-- Кнопки "ответить" и "спасибо" '.invisible', если пользователь не зарегистрирован  -->
               <div class="commentProps">
                 <p class="answer">Ответить</p>
@@ -76,7 +80,7 @@
           <div class="userComment">
             <div class="userImg">I</div>
             <div class="userCommentBody">
-              <textarea type="text" class="inputComment"></textarea>
+              <textarea @keyup.enter="addComment"   v-model="newComment"   type="text" class="inputComment"></textarea>
               <!-- Кнопки '.invisible', пока нет фокуса на textarea -->
               <div class="btnWrap">
                 <!-- Кнопка не нажмается, пока в textarea нет текста -->
@@ -103,9 +107,26 @@
     props: {},
     data: function() {
       return {
+          newComment:'',
+          comments:[{
+              textComment: ''
+          }
+          ]
        }
     },
+     methods:{
+         addComment:function () {
+             this.comments.push({
+                 textComment: this.newComment,
+
+             });
+             this.newComment = "";
+
+         },
+     }
   }
+
+
 
  /*
  Vue.component('user-comment',{
@@ -134,8 +155,8 @@
  */
 
 
- /*
-  Vue.component('my-comment',{
+
+ /* Vue.component('my-comment',{
     data() {
       return {
         avatar:'I',
