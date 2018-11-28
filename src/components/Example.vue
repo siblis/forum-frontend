@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
+    <h3>all pages</h3>
+    <div class="links">
+      <router-link to="/forum-account">Перейти к ForumAccount</router-link>
+      <router-link to="/forum-item">Перейти к ForumItem</router-link>
+      <router-link to="/forum-list">Перейти к ForumList</router-link>
+      <router-link to="/registration">Перейти к Registration</router-link>
+      <router-link to="/login">Перейти к LogIn</router-link>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
-a
-  color: #b90015
+.links
+  display: flex
+  flex-direction: column
 </style>

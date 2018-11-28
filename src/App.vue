@@ -1,36 +1,16 @@
 <template>
-  <div id="app">
-    <Example v-if="page === 'Example'"/>
-    <ForumItem v-if="page === 'ForumItem'"/>
-    <ForumList v-if="page === 'ForumList'"/>
-    <LogIn v-if="page === 'LogIn'"/>
-    <Registration v-if="page === 'Registration'"/>
-    <ForumAccount v-if="page === 'ForumAccount'"/>
-
+  <div>
+    <!--header-->
+    <router-view></router-view>
+    <!--footer-->
   </div>
 </template>
 
 <script>
-  import Example from './components/Example.vue'
-  import ForumItem from "@/components/ForumItem";
-  import ForumList from "@/components/ForumList";
-  import LogIn from "@/components/LogIn";
-  import Registration from "@/components/Registration";
-  import ForumAccount from "@/components/ForumAccount";
-
   export default {
     name: 'app',
-    components: {
-      Registration,
-      LogIn,
-      ForumList,
-      ForumItem,
-      Example,
-      ForumAccount
-    },
     data: () => {
       return {
-        page: 'ForumAccount'
       }
     }
   }
