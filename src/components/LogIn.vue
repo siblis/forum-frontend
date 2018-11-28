@@ -32,7 +32,10 @@
         <label for="user_remember_me">Запомнить меня</label>
       </div>
       <div class="form-group">
-        <input class="btn-submit" type="submit" value="Войти">
+        <input  class="btn-submit"
+                type="submit"
+                value="Войти"
+                :disabled="submitStatus === 'PENDING'">
       </div>
     </form>    
   </div>
