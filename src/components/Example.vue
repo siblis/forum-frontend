@@ -7,7 +7,7 @@
       <router-link to="/forum-list">Перейти к ForumList</router-link>
       <router-link to="/registration">Перейти к Registration</router-link>
       <router-link to="/login">Перейти к LogIn</router-link>
-      <router-link to="/FormInput">Перейти к FormInput</router-link>
+      <router-link to="/footer-forum">Перейти к FooterForum</router-link>
     </div>
     <router-view></router-view>
   </div>

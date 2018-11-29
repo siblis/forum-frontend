@@ -7,7 +7,7 @@ import ForumList from "@/components/ForumList";
 import LogIn from "@/components/LogIn";
 import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
-import FormInput from "@/components/FormInput";
+import FooterForum from "@/components/FooterForum";
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
@@ -20,8 +20,7 @@ const router = new VueRouter({
     {path: '/forum-list', component: ForumList},
     {path: '/registration', component: Registration},
     {path: '/login', component: LogIn},
-    {path: '/FormInput', component: FormInput},
-
+    {path: '/footer-forum', component: FooterForum},
 
 
 
