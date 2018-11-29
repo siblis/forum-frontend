@@ -9,6 +9,7 @@ import ForumList from "@/components/ForumList";
 import LogIn from "@/components/LogIn";
 import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
+import FooterForum from "@/components/FooterForum";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -22,7 +23,7 @@ const router = new VueRouter({
     {path: '/forum-list', component: ForumList},
     {path: '/registration', component: Registration},
     {path: '/login', component: LogIn},
-
+    {path: '/footer-forum', component: FooterForum},
 
 
 
