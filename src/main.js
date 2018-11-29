@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from "vue-router";
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import ForumItem from "@/components/ForumItem";
 import Example from "@/components/Example";
 import ForumList from "@/components/ForumList";
@@ -9,7 +11,7 @@ import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
 import FooterForum from "@/components/FooterForum";
 
-
+Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
 
