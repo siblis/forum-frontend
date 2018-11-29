@@ -10,20 +10,20 @@
     </div>
     <form @submit.prevent="sendRegData()">
       <form-input :value="email.value"
-                  v-model="email.value"
+                  v-model="$v.email.$model"
                   id="email"
                   type="email"
                   placeholder="Email"
                   label-text="E-mail"
-                  :input-error="email.error"                                    
+                  :input-error="emailError"                                    
       ></form-input>
-      <form-input :value="password.value"
-                  v-model="password.value"
+      <form-input :value="password"
+                  v-model.trim="$v.password.$model"
                   id="password"
                   type="password"
                   placeholder="Пароль"
                   label-text="Пароль"
-                  :input-error="password.error"                                    
+                  :input-error="passwordError"                                    
       ></form-input>
       <div class="form-group">
         <input  type="checkbox"
@@ -32,7 +32,10 @@
         <label for="user_remember_me">Запомнить меня</label>
       </div>
       <div class="form-group">
-        <input class="btn-submit" type="submit" value="Войти">
+        <input  class="btn-submit"
+                type="submit"
+                value="Войти"
+                :disabled="submitStatus === 'PENDING'">
       </div>
     </form>    
   </div>
@@ -40,36 +43,66 @@
 
 <script>
 import FormInput from './FormInput.vue';
+import { validationMixin } from 'vuelidate';
+import { email, required } from 'vuelidate/lib/validators';
+
 export default {
   name: 'LogIn',
+  mixins: [validationMixin],
   components: {
     FormInput,
   },
   data() {
     return {
-      email: {
-        value: '',
-        error: '',
-      },
-      password: {
-        value: '',
-        error: '',
-      },
+      email: '',
+      password: '',
       rememberMe: false,
+      submitStatus: null,
     }
   },
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+    },
+  },
   computed: {
-
+    emailError() {
+      if (!this.$v.email.$error) {
+        return '';
+      }
+      const errors = {
+        'required': 'Это поле обязательно для заполнения',
+        'email': 'Введте пожалуйста корректный email',
+      };
+      const errorKey = Object.keys(errors).find(key => !this.$v.email[key]);
+      return errors[errorKey] || 'Ошибка ввода';
+    },
+    passwordError() {
+      return this.$v.password.$error ? 'Это поле обязательно для заполнения' : '';
+    },
   },
   methods: {
     sendRegData() {
-      const data = {
-        email: this.email.value,
-        password: this.password.value,
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR';
+        return;
       }
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
+      this.submitStatus = 'PENDING';
       // eslint-disable-next-line
       console.log(`Try send: ${JSON.stringify(data)}`);
-    }
+      setTimeout(() => {
+        this.submitStatus = 'OK';
+      }, 2000);
+    },
   },
 }
 </script>
