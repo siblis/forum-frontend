@@ -57,9 +57,10 @@
         <div class="comment">
           <div class="userImg">U</div>
           <div class="commentWrap">
-            <div v-for="comments in comments" class="commentBody">
+            <div v-for="comment in comments" :key="comment"
+           class="commentBody">
               <a href="#" class="commentUserName">Иван Иванов</a>
-              <div class="commentText"><p>{{comments.textComment}}</p></div>
+              <div class="commentText"><p>{{comment.textComment}}</p></div>
               <!-- Кнопки "ответить" и "спасибо" '.invisible', если пользователь не зарегистрирован  -->
               <div class="commentProps">
                 <p class="answer">Ответить</p>
@@ -109,7 +110,8 @@
       return {
           newComment:'',
           comments:[{
-              textComment: ''
+              textComment: '',
+
           }
           ]
        }
