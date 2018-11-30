@@ -11,6 +11,7 @@ import LogIn from "@/components/LogIn";
 import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
 import FooterForum from "@/components/FooterForum";
+import AddNewPost from "@/components/AddNewPost";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -26,6 +27,8 @@ const router = new VueRouter({
     {path: '/registration', component: Registration},
     {path: '/login', component: LogIn},
     {path: '/footer-forum', component: FooterForum},
+    {path: '/add-new-post', component: AddNewPost},
+
 
 
 
