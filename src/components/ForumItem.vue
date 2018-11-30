@@ -2,20 +2,20 @@
   <div class="container">
     <h3>ForumItem</h3>
     <div class="content">
-      <h2 class="postName">Название темы</h2>
+      <h2 class="postName">{{post.title}}</h2>
       <div class="tags">
         <p class="tagIcon">#</p>
         <a href="#" class="postTag">тэг</a>
       </div>
 
-      <div class="post">
+      <div class="post" >
         <div class="userImg">U</div>
         <div class="postBody">
-          <div class="postText">Название темы</div>
+          <div class="postText">{{post.body}}</div>
           <div class="postProps">
             <div class="topicSubscribe">
               <div class="nameIcon"></div>
-              <a href="#" class="postUserName">Имя</a>
+              <a href="#" class="postUserName">{{user.name}}</a>
             </div>
             <div class="topicSubscribe">
               <div class="postTimeIcon"></div>
@@ -26,12 +26,11 @@
       </div>
 
       <div class="commentsValue">
-        Комментарии • 3
+        Комментарии • {{userComments.length}}
       </div>
       <!-- div скрывается, если не зарегистрирован :class="{invisible : loggedIn}" -->
       <div  class="myComment" >
 
-        <!-- сюда вставляется шаблон из компонента <my-comment>  -->
         <div  class="userComment">
           <div class="userImg">I</div>
           <div class="userCommentBody">
@@ -52,17 +51,16 @@
         <!-- -->
       </div>
 
-      <div class="commentsBlock">
-        <!-- сюда вставляется шаблон из компонента <user-comment>  -->
+      <div class="commentsBlock" v-for="comment in userComments" :key="comment.id">
         <div class="comment">
           <div class="userImg">U</div>
           <div class="commentWrap">
-            <div v-for="comments in comments" class="commentBody">
-              <a href="#" class="commentUserName">Иван Иванов</a>
-              <div class="commentText"><p>{{comments.textComment}}</p></div>
+            <div class="commentBody">
+              <a href="#" class="commentUserName">{{comment.name}}</a>
+              <div class="commentText"><p>{{comment.body}}</p></div>
               <!-- Кнопки "ответить" и "спасибо" '.invisible', если пользователь не зарегистрирован  -->
-              <div class="commentProps">
-                <p class="answer">Ответить</p>
+              <div class="commentProps" v-show="!showAnswer">
+                <p class="answer" @click="openAnswer">Ответить</p>
                 <div class="likeBody">
                   <p class="like">Спасибо</p>
                   <div class="likeIcon">#</div>
@@ -73,10 +71,8 @@
             </div>
           </div>
         </div>
-        <!-- -->
 
-        <div class="myAnswer">
-          <!-- сюда вставляется шаблон из компонента <my-comment>  -->
+        <div class="myAnswer" v-show="showAnswer">
           <div class="userComment">
             <div class="userImg">I</div>
             <div class="userCommentBody">
@@ -86,12 +82,11 @@
                 <!-- Кнопка не нажмается, пока в textarea нет текста -->
                 <button class="sendBtn">Отправить</button>
                 <!-- -->
-                <button class="cancelBtn">Х</button>
+                <button class="cancelBtn" @click="openAnswer">Х</button>
               </div>
               <!-- -->
             </div>
           </div>
-          <!-- -->
         </div>
 
       </div>
@@ -101,7 +96,6 @@
 </template>
 
 <script>
-  // import Vue from 'vue/dist/vue.js'
   export default {
     name: 'ForumItem',
     props: {},
@@ -111,78 +105,50 @@
           comments:[{
               textComment: ''
           }
-          ]
+          ],
+          post: '',
+          user: '',
+          userId: '',
+          userComments: [],
+          showAnswer: false,
        }
     },
-     methods:{
-         addComment:function () {
-             this.comments.push({
-                 textComment: this.newComment,
+    async mounted() {
+      await this.axios
+        .get('https://jsonplaceholder.typicode.com/posts/1')
+        .then((post) => {
+          this.post = post.data;
+          this.userId = post.data.userId;
+        })
+        .catch(error => console.log(error));
+      await  this.axios
+        .get(`https://jsonplaceholder.typicode.com/users/${this.userId}`)
+        .then((user) => {
+          this.user = user.data;
+        })
+        .catch(error => console.log(error));
+      await this.axios
+        .get(`https://jsonplaceholder.typicode.com/posts/${this.userId}/comments`)
+        .then((user) => {
+          this.userComments = user.data;
+          console.log(this.userComments);
+        })
+        .catch(error => console.log(error));
+    },
+    methods: {
+      addComment: function () {
+        this.comments.push({
+          textComment: this.newComment,
 
-             });
-             this.newComment = "";
-
-         },
-     }
+        });
+        this.newComment = "";
+      },
+      openAnswer() {
+        this.showAnswer = !this.showAnswer;
+      }
+     },
   }
 
-
-
- /*
- Vue.component('user-comment',{
-    props: ['user'],
-    template:`
-      <div class="comment">
-        <div class="userImg">{{user.avatar}}</div>
-        <div class="commentWrap">
-          <div class="commentBody">
-            <a href="#" class="commentUserName">{{user.name}}</a>
-            <div class="commentText">{{user.message}}</div>
-            <!-- Кнопки "ответить" и "спасибо" '.invisible', если пользователь не зарегистрирован  -->
-            <div class="commentProps" :class="{invisible : !loggedIn}">
-              <p class="answer">Ответить</p>
-              <div class="likeBody">
-                <p class="like">Спасибо</p>
-                <div class="likeIcon">#</div>
-                <div class="likeCounter">{{user.likes}}</div>
-              </div>
-            </div>
-            <!-- -->
-          </div>
-        </div>
-      </div>`
-  });
- */
-
-
-
- /* Vue.component('my-comment',{
-    data() {
-      return {
-        avatar:'I',
-        login:'',
-        message:'',
-        messageTime:'',
-      }
-    },
-    template:`
-      <div class="userComment">
-        <div class="userImg">{{avatar}}</div>
-          <div class="userCommentBody">
-            <textarea type="text" class="inputComment"></textarea>
-            <!-- Кнопки '.invisible', пока нет фокуса на textarea -->
-            <div class="btnWrap">
-              <!-- Кнопка не нажмается, пока в textarea нет текста -->
-              <button class="sendBtn">Отправить</button>
-              <!-- -->
-              <button class="cancelBtn">Х</button>
-            </div>
-            <!-- -->
-          </div>
-      </div>`
-  });
-  window.onload = () => {new Vue ({el:'.myComment'})};
-  */
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -327,6 +293,7 @@
       line-height: 24px
       color: #2c2d30
     .commentProps
+      margin-bottom: 40px
       display: flex
       margin-top: 5px
       font-size: 13px
