@@ -7,49 +7,52 @@
     </div>
     <form @submit.prevent="sendRegData()">
 
-      <form-input :value="userName.value"
-                  v-model="userName.value"
+      <form-input :value="userName"
+                  v-model.trim="$v.userName.$model"
                   id="userName"
                   type="text"
                   placeholder="Имя"
                   label-text="Имя"
-                  :input-error="userName.error"                                    
+                  :input-error="userNameError"                                    
       ></form-input>
-      <form-input :value="userLastName.value"
-                  v-model="userLastName.value"
+      <form-input :value="userLastName"
+                  v-model.trim="$v.userLastName.$model"
                   id="userLastName"
                   type="text"
                   placeholder="Фамилия"
                   label-text="Фамилия"
-                  :input-error="userLastName.error"                                    
+                  :input-error="userLastNameError"                                    
       ></form-input>
-      <form-input :value="email.value"
-                  v-model="email.value"
+      <form-input :value="email"
+                  v-model.trim="$v.email.$model"
                   id="email"
                   type="email"
                   placeholder="Email"
                   label-text="E-mail"
-                  :input-error="email.error"                                    
+                  :input-error="emailError"                                    
       ></form-input>
-      <form-input :value="password.value"
-                  v-model="password.value"
+      <form-input :value="password"
+                  v-model.trim="$v.password.$model"
                   id="password"
                   type="password"
                   placeholder="Пароль"
                   label-text="Пароль"
-                  :input-error="password.error"                                    
+                  :input-error="passwordError"                                    
       ></form-input>
-      <form-input :value="confirmPassword.value"
-                  v-model="confirmPassword.value"
+      <form-input :value="confirmPassword"
+                  v-model.trim="$v.confirmPassword.$model"
                   id="confirmPassword"
                   type="password"
                   placeholder="Подтверждение пароля"
                   label-text="Подтверждение"
-                  :input-error="confirmPassword.error"                                    
+                  :input-error="confirmPasswordError"                                    
       ></form-input>
 
       <div>
-        <input class="btn-submit-registration" type="submit" value="Зарегистрироваться">
+        <input  class="btn-submit-registration"
+                type="submit"
+                value="Зарегистрироваться"
+                :disabled="submitStatus === 'PENDING'">
       </div>
     </form>    
   </div>
@@ -57,50 +60,111 @@
 
 <script>
 import FormInput from './FormInput.vue';
+import { validationMixin } from 'vuelidate';
+import { email, required, minLength , sameAs, helpers } from 'vuelidate/lib/validators';
+
+const alpha = helpers.regex('alpha', /^([а-яё -]+|[a-z ]+)$/i);
+
 export default {
   name: 'Registration',
+  mixins: [validationMixin],
   components: {
     FormInput,
   },
   props: {},
   data() {
     return {
-      userName: {
-        value: '',
-        error: '',
-      },
-      userLastName: {
-        value: '',
-        error: '',
-      },
-      email: {
-        value: '',
-        error: '',
-      },
-      password: {
-        value: '',
-        error: '',
-      },
-      confirmPassword: {
-        value: '',
-        error: '',
-      }
+      userName: '',
+      userLastName: '',
+      email: '',
+      password: '',
+      confirmPassword:'',
+      submitStatus: null,
+    };
+  },
+  validations: {
+    userName: {
+      alpha,
+      required,
+      minLength: minLength(4),
+    },
+    userLastName: {
+      alpha,
+    },
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(8),
+    },
+    confirmPassword: {
+      sameAsPassword: sameAs('password'),
     }
   },
   computed: {
-
+    userNameError() {
+      if (!this.$v.userName.$error) {
+        return '';
+      }
+      const errors = {
+        'required': 'Это поле обязательно для заполнения',
+        'alpha': 'Имя может состоять только из букв одного алфавита',
+        'minLength': 'Имя должно содержать не менее 4 симолов' 
+      };
+      const errorKey = Object.keys(errors).find(key => !this.$v.userName[key]);
+      return errors[errorKey] || 'Ошибка ввода';
+    },
+    userLastNameError() {
+      return this.$v.userLastName.$error ? 'Фамилия может состоять только из букв одного алфавита' : '';
+    },
+    emailError() {
+      if (!this.$v.email.$error) {
+        return '';
+      }
+      const errors = {
+        'required': 'Это поле обязательно для заполнения',
+        'email': 'Введте пожалуйста корректный email',
+      };
+      const errorKey = Object.keys(errors).find(key => !this.$v.email[key]);
+      return errors[errorKey] || 'Ошибка ввода';
+    },
+    passwordError() {
+      if (!this.$v.password.$error) {
+        return '';
+      }
+      const errors = {
+        'required': 'Это поле обязательно для заполнения',
+        'minLength': 'Минимальная длина пароля 8 символов',
+      };
+      const errorKey = Object.keys(errors).find(key => !this.$v.password[key]);
+      return errors[errorKey] || 'Ошибка ввода';
+    },
+    confirmPasswordError() {
+      return this.$v.confirmPassword.$error ? 'Введенные пароли не совпадают' : '';
+    },
   },
   methods: {
     sendRegData() {
-      const data = {
-        name: this.userName.value,
-        lastName: this.userLastName.value,
-        email: this.email.value,
-        password: this.password.value,
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        this.submitStatus = 'ERROR';
+        return;
       }
+      const data = {
+        name: this.userName,
+        lastName: this.userLastName,
+        email: this.email,
+        password: this.password,
+      };
+      this.submitStatus = 'PENDING';
       // eslint-disable-next-line
       console.log(`Try send: ${JSON.stringify(data)}`);
-    }
+      setTimeout(() => {
+        this.submitStatus = 'OK';
+      }, 2000);
+    },
   },
 }
 </script>
