@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <router-link to="/add-new-post" tag="button" class="createNewBtn">Создать тему</router-link>
     <paginate
       name="itemPages"
       :list="items"
@@ -7,7 +8,7 @@
       :per="5">
       <div v-for="item in paginated('itemPages')" v-bind:key="item.id" class="post_unit">
         <div>
-          <h3>{{item.title}}</h3>
+          <router-link to="/forum-item" ><h3>{{item.title}}</h3></router-link>
           <p v-if="item.tags" class="tags">{{item.tags.join()}}</p>
           <p v-if="item.username" class="author">Автор поста: {{item.username}}</p>
         </div>
@@ -82,4 +83,26 @@
         background-color: gray
         opacity: 0.7
 
+  .createNewBtn
+    transition: background-color .2s,opacity .2s
+    display: inline-block
+    margin-top: 10px
+    margin-left: 40px // временно
+    padding: 6px 12px
+    text-align: center
+    font-weight: 400
+    border: none
+    border-radius: 4px
+    box-shadow: none
+    background: #08d092
+    color: #fff
+    line-height: 1.42857
+    cursor: pointer
+    &:hover
+      background: #09df9c
+      outline: none
+    &:active
+      background: #07c188
+      outline: none
+      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
 </style>
