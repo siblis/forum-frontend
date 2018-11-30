@@ -5,6 +5,7 @@
       {{ labelText || '' }}
     </label>
     <input  class="form-control"
+            :class="{ 'input-error' : inputError}"
             :id="id"
             :type="type || 'text'"    
             :placeholder="placeholder || ''"
@@ -12,7 +13,7 @@
             v-on="inputListeners">
 
     <div  class='feedback'
-          :class="{ invisible: inputError === '' }">
+          :class="{ invisible: !inputError }">
       {{ inputError }}
     </div>
   </div>
@@ -80,5 +81,6 @@ export default {
       border: 1px solid #c6ccd1
       color: #2c2d30
     &.input-error
+      background-color: #fff
       border-color: #d74a5c
 </style>
