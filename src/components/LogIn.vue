@@ -15,7 +15,7 @@
                   type="email"
                   placeholder="Email"
                   label-text="E-mail"
-                  :input-error="emailError"                                    
+                  :input-error="getFieldErrorMessage('email')"                                    
       ></form-input>
       <form-input :value="password"
                   v-model.trim="$v.password.$model"
@@ -23,7 +23,7 @@
                   type="password"
                   placeholder="Пароль"
                   label-text="Пароль"
-                  :input-error="passwordError"                                    
+                  :input-error="getFieldErrorMessage('password')"                                    
       ></form-input>
       <div class="form-group">
         <input  type="checkbox"
@@ -45,6 +45,16 @@
 import FormInput from './FormInput.vue';
 import { validationMixin } from 'vuelidate';
 import { email, required } from 'vuelidate/lib/validators';
+
+const errors = {
+  email: {
+    required: 'Это поле обязательно для заполнения',
+    email: 'Введте пожалуйста корректный email',
+  },
+  password: {
+    required: 'Это поле обязательно для заполнения',
+  },
+};
 
 export default {
   name: 'LogIn',
@@ -70,22 +80,15 @@ export default {
     },
   },
   computed: {
-    emailError() {
-      if (!this.$v.email.$error) {
-        return '';
-      }
-      const errors = {
-        'required': 'Это поле обязательно для заполнения',
-        'email': 'Введте пожалуйста корректный email',
-      };
-      const errorKey = Object.keys(errors).find(key => !this.$v.email[key]);
-      return errors[errorKey] || 'Ошибка ввода';
-    },
-    passwordError() {
-      return this.$v.password.$error ? 'Это поле обязательно для заполнения' : '';
-    },
   },
   methods: {
+    getFieldErrorMessage(field) {
+      if (!this.$v[field].$error) {
+        return '';
+      }
+      const errorKey = Object.keys(errors[field]).find(key => !this.$v[field][key]);
+      return errors[field][errorKey] || 'Ошибка ввода';
+    },
     sendRegData() {
       this.$v.$touch();
       if (this.$v.$invalid) {
