@@ -13,7 +13,7 @@
                   type="text"
                   placeholder="Имя"
                   label-text="Имя"
-                  :input-error="userNameError"                                    
+                  :input-error="getFieldErrorMessage('userName')"                                    
       ></form-input>
       <form-input :value="userLastName"
                   v-model.trim="$v.userLastName.$model"
@@ -21,7 +21,7 @@
                   type="text"
                   placeholder="Фамилия"
                   label-text="Фамилия"
-                  :input-error="userLastNameError"                                    
+                  :input-error="getFieldErrorMessage('userLastName')"                                    
       ></form-input>
       <form-input :value="email"
                   v-model.trim="$v.email.$model"
@@ -29,7 +29,7 @@
                   type="email"
                   placeholder="Email"
                   label-text="E-mail"
-                  :input-error="emailError"                                    
+                  :input-error="getFieldErrorMessage('email')"                                    
       ></form-input>
       <form-input :value="password"
                   v-model.trim="$v.password.$model"
@@ -37,7 +37,7 @@
                   type="password"
                   placeholder="Пароль"
                   label-text="Пароль"
-                  :input-error="passwordError"                                    
+                  :input-error="getFieldErrorMessage('password')"                                    
       ></form-input>
       <form-input :value="confirmPassword"
                   v-model.trim="$v.confirmPassword.$model"
@@ -45,7 +45,7 @@
                   type="password"
                   placeholder="Подтверждение пароля"
                   label-text="Подтверждение"
-                  :input-error="confirmPasswordError"                                    
+                  :input-error="getFieldErrorMessage('confirmPassword')"                                    
       ></form-input>
 
       <div>
@@ -64,6 +64,28 @@ import { validationMixin } from 'vuelidate';
 import { email, required, minLength , sameAs, helpers } from 'vuelidate/lib/validators';
 
 const alpha = helpers.regex('alpha', /^([а-яё -]+|[a-z ]+)$/i);
+
+const errors = {
+  userName: {
+    required: 'Это поле обязательно для заполнения',
+    alpha: 'Имя может состоять только из букв одного алфавита',
+    minLength: 'Имя должно содержать не менее 4 симолов', 
+  },
+  userLastName: {
+    alpha: 'Фамилия может состоять только из букв одного алфавита',
+  },
+  email: {
+    required: 'Это поле обязательно для заполнения',
+    email: 'Введте пожалуйста корректный email',
+  },
+  password: {
+    required: 'Это поле обязательно для заполнения',
+    minLength: 'Минимальная длина пароля 8 символов',
+  },
+  confirmPassword: {
+    sameAsPassword: 'Пароли не совпадают',
+  },
+};
 
 export default {
   name: 'Registration',
@@ -104,48 +126,15 @@ export default {
     }
   },
   computed: {
-    userNameError() {
-      if (!this.$v.userName.$error) {
-        return '';
-      }
-      const errors = {
-        'required': 'Это поле обязательно для заполнения',
-        'alpha': 'Имя может состоять только из букв одного алфавита',
-        'minLength': 'Имя должно содержать не менее 4 симолов' 
-      };
-      const errorKey = Object.keys(errors).find(key => !this.$v.userName[key]);
-      return errors[errorKey] || 'Ошибка ввода';
-    },
-    userLastNameError() {
-      return this.$v.userLastName.$error ? 'Фамилия может состоять только из букв одного алфавита' : '';
-    },
-    emailError() {
-      if (!this.$v.email.$error) {
-        return '';
-      }
-      const errors = {
-        'required': 'Это поле обязательно для заполнения',
-        'email': 'Введте пожалуйста корректный email',
-      };
-      const errorKey = Object.keys(errors).find(key => !this.$v.email[key]);
-      return errors[errorKey] || 'Ошибка ввода';
-    },
-    passwordError() {
-      if (!this.$v.password.$error) {
-        return '';
-      }
-      const errors = {
-        'required': 'Это поле обязательно для заполнения',
-        'minLength': 'Минимальная длина пароля 8 символов',
-      };
-      const errorKey = Object.keys(errors).find(key => !this.$v.password[key]);
-      return errors[errorKey] || 'Ошибка ввода';
-    },
-    confirmPasswordError() {
-      return this.$v.confirmPassword.$error ? 'Введенные пароли не совпадают' : '';
-    },
   },
   methods: {
+    getFieldErrorMessage(field) {
+      if (!this.$v[field].$error) {
+        return '';
+      }
+      const errorKey = Object.keys(errors[field]).find(key => !this.$v[field][key]);
+      return errors[field][errorKey] || 'Ошибка ввода';
+    },
     sendRegData() {
       this.$v.$touch();
       if (this.$v.$invalid) {
