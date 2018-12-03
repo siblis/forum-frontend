@@ -50,9 +50,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
+  @import "../assets/variables"
+
   .container
+    background-color: $text_background_color
     margin: 0 auto
-    color: darkslategray
 
   .post_unit
     display: flex

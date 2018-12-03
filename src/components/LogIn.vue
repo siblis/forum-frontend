@@ -116,7 +116,6 @@ h3
 
 .container-login
   max-width: 450px
-  font-family: Roboto,San Francisco,Helvetica Neue,Helvetica,Arial
   font-weight: 400
   font-size: 15px
   line-height: 24px
