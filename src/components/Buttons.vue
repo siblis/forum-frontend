@@ -31,7 +31,6 @@ button
     height: 30px
     background: #c4c4c4
     border-radius: 5px
-    //border-color:
     font-weight: 500
     font-size: 14px
     line-height: normal
@@ -52,7 +51,7 @@ button
 .public
     width: 176px
     height: 40px
-    //box-shadow: 0 2px 2px rgba(0,0,0,0.1)
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1)
     font-weight: normal
     font-size: 16px
     line-height: normal
@@ -96,4 +95,7 @@ button
     line-height: normal
     text-align: center
     color: white
+
+
+
 </style>
