@@ -12,6 +12,8 @@ import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
 import FooterForum from "@/components/FooterForum";
 import AddNewPost from "@/components/AddNewPost";
+import UIkit from "@/components/UI-kit";
+
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -28,6 +30,7 @@ const router = new VueRouter({
     {path: '/login', component: LogIn},
     {path: '/footer-forum', component: FooterForum},
     {path: '/add-new-post', component: AddNewPost},
+    {path: '/ui-kit', component: UIkit},
 
 
 
