@@ -16,8 +16,6 @@
   }
 </script>
 
-<style>
-  #app {
-    color: #2c3e50;
-  }
+<style lang="sass">
+  @import 'assets/style.sass'
 </style>

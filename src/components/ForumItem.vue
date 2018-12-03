@@ -103,7 +103,8 @@
       return {
           newComment:'',
           comments:[{
-              textComment: ''
+              textComment: '',
+
           }
           ],
           post: '',
@@ -157,7 +158,6 @@
     margin: 0
     padding: 0
     box-sizing: border-box
-    font-family: Roboto, San Francisco, Helvetica Neue, Helvetica, Arial, sans-serif
 
   .container
     max-width: 80%
