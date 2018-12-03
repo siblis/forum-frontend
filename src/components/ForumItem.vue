@@ -103,7 +103,8 @@
       return {
           newComment:'',
           comments:[{
-              textComment: ''
+              textComment: '',
+
           }
           ],
           post: '',
