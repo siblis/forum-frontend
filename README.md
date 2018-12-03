@@ -21,7 +21,7 @@ npm run serve
 ```
 
 ### Compiles and minifies for production // сборка для продакшн
-
+```
 npm run build
 ```
 
