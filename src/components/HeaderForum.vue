@@ -24,6 +24,12 @@
       <span>Правило форума</span>
       <button id="enter_btn" class="auth_btn">Вход</button>
       <button id="reg_btn" class="auth_btn">Регистрация</button>
+      <div id="user-field"></div>
+      <svg width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="2" cy="2" r="2" fill="#C4C4C4"/>
+        <circle cx="2" cy="10" r="2" fill="#C4C4C4"/>
+        <circle cx="2" cy="18" r="2" fill="#C4C4C4"/>
+      </svg>
     </div>
   </div>
 </header>
@@ -38,34 +44,33 @@ export default {
 </script>
 
 
-<style lang="sass" scoped>
 
-$header-bg-color: #959595
+<style lang="sass" scoped>
+@import "../assets/variables"
 
 header
+  width: 100%
   display: flex
   justify-content: center
+  
+header *
+  background-color: $dark_background_color
 
 #header-content
-  background-color: $header-bg-color
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
-  max-width: 1440px
+  width: 1440px
   height: 60px
   display: flex
   align-items: center
-  justify-content: row
+  justify-content: space-between
+  padding: 0 25px 
   
 #logo-img, #search, #buttons
   display: flex
   align-items: center
 
 #logo-img
-  background-color: inherit
-  margin: 5px 0 0 25px
-  
-#search
-  background-color: inherit
-  margin-left: 70px
+  margin-top: 5px
   
 #btn-serch
   position: absolute
@@ -77,13 +82,12 @@ header
   padding: 0
   margin-left: 11px
 
-#search-img
-  background: #C4C4C4
+#search-img, #search_line
+  background: $background-color
   
 #search_line
   min-width: 607px
   height: 32px
-  background: #C4C4C4
   border-radius: 4px
   border: none
   outline: none
@@ -95,11 +99,9 @@ header
   outline: 1px solid red
   
 #buttons
-  margin-left: 98px
   span
     color: white
-    background-color: none
-  
+    
 .auth_btn
   height: 30px
   border: 0
@@ -107,6 +109,9 @@ header
   margin-left: 21px
   border-radius: 5px
   
+#enter_btn, #reg_btn, #user-field
+  background-color: $background-color
+
 #enter_btn
   width: 84px
   height: 30px
@@ -114,5 +119,12 @@ header
 #reg_btn
   width: 129px
   height: 30px
+  margin-right: 30px
+  
+#user-field
+  width: 45px
+  height: 45px
+  border-radius: 50%
+  margin-right: 15px
 
 </style>
