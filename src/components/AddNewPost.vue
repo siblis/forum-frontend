@@ -110,7 +110,6 @@
     display: flex
     margin: 0 auto
     padding: 24px 16px 0
-    font-family: Roboto,San Francisco,Helvetica Neue,Helvetica,Arial,sans-serif
     font-weight: 400
     font-size: 15px
     line-height: 24px
