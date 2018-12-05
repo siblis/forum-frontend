@@ -14,7 +14,7 @@ import ForumAccount from "@/components/ForumAccount";
 import FooterForum from "@/components/FooterForum";
 import AddNewPost from "@/components/AddNewPost";
 import UIkit from "@/components/UI-kit";
-
+import Page404 from "@/components/Page404";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -32,6 +32,7 @@ const router = new VueRouter({
     {path: '/footer-forum', component: FooterForum},
     {path: '/add-new-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
+    {path: '/page404', component: Page404},
 
 
 
