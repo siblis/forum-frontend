@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
-    <footer>
-      <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
-        <symbol id="vk" viewBox="0 0 20 12">
-          <path
-            fill-rule="evenodd" clip-rule="evenodd" d="M9.63656 11.7596H10.8139C10.8139 11.7596 11.1695 11.7206
+  <footer>
+   <div class="container">
+     <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
+       <symbol id="vk" viewBox="0 0 20 12">
+         <path
+           fill-rule="evenodd" clip-rule="evenodd" d="M9.63656 11.7596H10.8139C10.8139 11.7596 11.1695 11.7206
            11.3511 11.5249C11.5182 11.3452 11.5128 11.0077 11.5128 11.0077C11.5128 11.0077 11.4898 9.42799
            12.223 9.19537C12.9458 8.96621 13.8739 10.7222 14.8576 11.3973C15.6015 11.9083 16.1667 11.7963
            16.1667 11.7963L18.7971 11.7596C18.7971 11.7596 20.173 11.6749 19.5206 10.593C19.4671 10.5045
@@ -20,16 +20,16 @@
            4.06765 1.36541 3.91123 1.25043C3.72138 1.11112 3.45613 1.06673 3.45613 1.06673L0.641859 1.08518C0.641859
            1.08518 0.219384 1.09695 0.0642985 1.28065C-0.0736743 1.44402 0.0533355 1.782 0.0533355 1.782C0.0533355
            1.782 2.25662 6.93673 4.75136 9.53441C7.03888 11.916 9.63656 11.7596 9.63656 11.7596Z"/>
-        </symbol>
-        <symbol id="facebook" viewBox="0 0 10 20">
-          <path
-            d="M8.97394 9.76799H6.29738V19.5737H2.24216V9.76799H0.313477V6.32188H2.24216V4.09186C2.24216
+       </symbol>
+       <symbol id="facebook" viewBox="0 0 10 20">
+         <path
+           d="M8.97394 9.76799H6.29738V19.5737H2.24216V9.76799H0.313477V6.32188H2.24216V4.09186C2.24216
            2.49715 2.99967 0 6.33348 0L9.33733 0.012567V3.35761H7.15784C6.80034 3.35761 6.29765 3.53622
            6.29765 4.29694V6.32509H9.32824L8.97394 9.76799Z"/>
-        </symbol>
-        <symbol id="twitter" viewBox="0 0 19 15">
-          <path
-            d="M18.3911 1.96064C17.7483 2.24568 17.0568 2.43846 16.3316 2.52456C17.072 2.08097 17.6402 1.37907
+       </symbol>
+       <symbol id="twitter" viewBox="0 0 19 15">
+         <path
+           d="M18.3911 1.96064C17.7483 2.24568 17.0568 2.43846 16.3316 2.52456C17.072 2.08097 17.6402 1.37907
            17.9084 0.541338C17.2156 0.952315 16.4479 1.25045 15.6316 1.41116C14.9776 0.714607 14.0457 0.279297
            13.0139 0.279297C11.0341 0.279297 9.42844 1.88497 9.42844 3.86472C9.42844 4.14575 9.46026 4.41928
            9.52176 4.68186C6.54198 4.53239 3.8999 3.10507 2.13139 0.935202C1.82283 1.46463 1.64581 2.08097
@@ -40,10 +40,10 @@
            12.9209C1.4811 12.9209 1.195 12.9041 0.915039 12.8707C2.50092 13.8883 4.38602 14.4817 6.41069
            14.4817C13.0056 14.4817 16.6121 9.01838 16.6121 4.27997C16.6121 4.12462 16.6086 3.9698 16.6017
            3.81632C17.3028 3.31096 17.9106 2.67965 18.3911 1.96064Z"/>
-        </symbol>
-        <symbol id="instagram" viewBox="0 0 19 19">
-          <path
-            fill-rule="evenodd" clip-rule="evenodd" d="M13.6738 18.2441C16.1842 18.2441 18.226 16.2023 18.226
+       </symbol>
+       <symbol id="instagram" viewBox="0 0 19 19">
+         <path
+           fill-rule="evenodd" clip-rule="evenodd" d="M13.6738 18.2441C16.1842 18.2441 18.226 16.2023 18.226
            13.6919V4.75048C18.226 2.2404 16.1842 0.198242 13.6738 0.198242H4.73242C2.22233 0.198242 0.180176 2.2404
            0.180176 4.75048V13.6919C0.180176 16.2023 2.22233 18.2441 4.73242 18.2441H13.6738ZM13.6737
            2.16217H4.73234C3.30516 2.16217 2.14404 3.32329 2.14404 4.75046V13.6918C2.14404 15.119 3.30516 16.2805
@@ -55,10 +55,10 @@
            5.53457 14.0003 5.53457ZM6.51953 9.22081C6.51953 7.7415 7.7241 6.5376 9.20341 6.5376C10.6831 6.5376
            11.887 7.74184 11.887 9.22081C11.887 10.7008 10.6834 11.905 9.20341 11.905C7.7241 11.905 6.51953 10.7008
            6.51953 9.22081Z"/>
-        </symbol>
-        <symbol id="telegram" viewBox="0 0 18 15">
-          <path
-            fill-rule="evenodd" clip-rule="evenodd" d="M17.3575 1.15546C17.4888 0.527216 16.8706 0.00397421
+       </symbol>
+       <symbol id="telegram" viewBox="0 0 18 15">
+         <path
+           fill-rule="evenodd" clip-rule="evenodd" d="M17.3575 1.15546C17.4888 0.527216 16.8706 0.00397421
            16.2726 0.237295L0.567542 6.35647C0.0594752 6.55546 0.0897682 7.28472 0.614006 7.43929L4.60494
            8.61808L6.09381 13.3444C6.24938 13.8373 6.87463 13.9878 7.23727 13.6181L9.30088 11.511L13.3494
            14.4827C13.8443 14.8464 14.5504 14.5757 14.6756 13.9747L17.3575 1.15546ZM14.0776 2.77769C14.2756 2.65446
@@ -67,117 +67,125 @@
            10.06L6.61743 13.7144C6.60735 13.7962 6.49421 13.8073 6.46995 13.7285L5.29573 8.56961C5.25556 8.44158
            5.28475 8.30556 5.36581 8.20594C5.37242 8.19781 5.37938 8.18992 5.38667 8.1823C5.40917 8.15879 5.43485
            8.13782 5.46346 8.12009L14.0776 2.77769Z"/>
-        </symbol>
-        <symbol id="youtube" viewBox="0 0 21 15">
-          <path
-            d="M16.0494 0.180664H4.35687C2.06282 0.180664 0.203125 2.02032 0.203125 4.28965V10.0717C0.203125
+       </symbol>
+       <symbol id="youtube" viewBox="0 0 21 15">
+         <path
+           d="M16.0494 0.180664H4.35687C2.06282 0.180664 0.203125 2.02032 0.203125 4.28965V10.0717C0.203125
            12.341 2.06282 14.1807 4.35687 14.1807H16.0494C18.3434 14.1807 20.2031 12.341 20.2031 10.0717V4.28965C20.2031
            2.02032 18.3434 0.180664 16.0494 0.180664ZM13.2402 7.46198L7.77126 10.0422C7.62554 10.111 7.45721 10.0059
            7.45721 9.8462V4.5244C7.45721 4.36243 7.62996 4.25746 7.77599 4.33068L13.245 7.07221C13.4076 7.15371 13.4047
            7.38439 13.2402 7.46198Z"/>
-        </symbol>
-        <symbol id="google" viewBox="0 0 25 16">
-          <path d="M21.6998
+       </symbol>
+       <symbol id="google" viewBox="0 0 25 16">
+           <path d="M21.6998
              6.19996V3.09998H20.1498V6.19996H17.0498V7.74996H20.1498V10.8499H21.6998V7.74996H24.7998V6.19996H21.6998Z"/>
-          <path d="M7.74997 6.19997V9.29996H12.1349C11.4948 11.1042 9.77116 12.3999 7.74997 12.3999C5.18628
+           <path d="M7.74997 6.19997V9.29996H12.1349C11.4948 11.1042 9.77116 12.3999 7.74997 12.3999C5.18628
              12.3999 3.09999 10.3137 3.09999 7.74997C3.09999 5.18628 5.18628 3.09999 7.74997 3.09999C8.86131
              3.09999 9.93081 3.49833 10.7616 4.22218L12.7983 1.88479C11.4033 0.669597 9.61151 0 7.74997 0C3.47663
              0 0 3.47663 0 7.74997C0 12.0233 3.47663 15.4999 7.74997 15.4999C12.0233 15.4999 15.4999 12.0233
              15.4999 7.74997V6.19997H7.74997Z"/>
-        </symbol>
-      </svg>
-      <div class="footer-content row">
-        <div class="footer-info row col-xs-12 col-md-7">
-          <div class="footer-blocks col-xs-12 last-xs center-xs col-sm-6 first-sm start-sm col-md-7">
-            &copy 2018 "IT-room" Форум для IT-специалистов
-          </div>
-          <div class="footer-blocks col-xs-12 center-xs col-sm-6 end-sm col-md-5 center-md">
-            Контакты: 8-800-800-88-88
-          </div>
-        </div>
-        <div class="footer-icons row col-xs-12 first-xs center-xs col-md-5 end-md last-md">
-          <a class="ico-link" target="_blank">
-            <svg class="ico-vk">
-              <use xlink:href="#vk"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-facebook">
-              <use xlink:href="#facebook"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-twitter">
-              <use xlink:href="#twitter"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-instagram">
-              <use xlink:href="#instagram"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-telegram">
-              <use xlink:href="#telegram"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-youtube">
-              <use xlink:href="#youtube"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-google">
-              <use xlink:href="#google"></use>
-            </svg>
-          </a>
-        </div>
+       </symbol>
+     </svg>
+     <div class="footer-content">
+      <div class="footer-blocks">
+        &copy 2018; "IT-room" Форум для IT-специалистов
       </div>
-    </footer>
-  </div>
+      <div class="footer-blocks">
+          Контакты: 8-800-800-88-88
+        </div>
+       <div class="footer-icons">
+         <a class="ico-link" target="_blank">
+           <svg class="ico-vk">
+             <use xlink:href="#vk"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-facebook">
+             <use xlink:href="#facebook"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-twitter">
+             <use xlink:href="#twitter"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-instagram">
+             <use xlink:href="#instagram"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-telegram">
+             <use xlink:href="#telegram"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-youtube">
+             <use xlink:href="#youtube"></use>
+           </svg>
+         </a>
+         <a class="ico-link" target="_blank">
+           <svg class="ico-google">
+             <use xlink:href="#google"></use>
+           </svg>
+         </a>
+       </div>
+    </div>
+   </div>
+  </footer>
 </template>
 
 
 <script>
-  export default {
-    name: 'FooterForum',
-    props: {}
-  }
+export default {
+  name: 'FooterForum',
+  props: {}
+}
 </script>
 
 
 <style lang="sass" scoped>
+$color: #fff
+$color-hover: #858E99
 
-  @import "../assets/variables.sass"
 
-  *
-    background-color: $dark_background_color
-    color: $text_background_color
-    font-size: $medium_font_size
+.footer-content
+  display: flex
+  justify-content: space-between
+  padding: 22px 15px
+  background-color: #4D4D4D
+  color: $color
 
-  .footer-content
-    padding: 22px 15px 0
 
-  .footer-info
-    .footer-blocks
-      margin-bottom: 22px
-      line-height: 20px
+.footer-icons
+  display: flex
+  justify-content: space-between
 
-  .footer-icons
-    margin-bottom: 22px
+.ico-link
+  height: 20px
+  width: 20px
+  cursor: pointer
+  svg
+    width: 100%
+    height: 100%
+    fill: $color
 
-  .ico-link
-    height: 20px
-    width: 20px
-    cursor: pointer
-    &:not(:last-child)
-      margin-right: 12px
-    svg
-      width: 100%
-      height: 100%
-      fill: $text_background_color
-    &:hover
-      svg
-        fill: $background-color
+.ico-link:hover
+  svg
+    fill: $color-hover
+
+.ico-link:not(:last-child)
+  margin-right: 12px
+
+@media only screen and (max-width: 1314px)
+  #phone-label
+    display: none
+
+@media only screen and (max-width: 1093px)
+  #footer-content
+    flex-direction: column
+    justify-content: space-between
+  .footer-blocks:not(:last-child)
+    margin-right: 0
 
 </style>
