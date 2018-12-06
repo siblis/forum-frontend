@@ -14,6 +14,7 @@ import ForumAccount from "@/components/ForumAccount";
 import FooterForum from "@/components/FooterForum";
 import AddNewPost from "@/components/AddNewPost";
 import UIkit from "@/components/UI-kit";
+import HeaderForum from "@/components/HeaderForum";
 
 
 Vue.use(VueAxios, axios);
@@ -32,9 +33,7 @@ const router = new VueRouter({
     {path: '/footer-forum', component: FooterForum},
     {path: '/add-new-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
-
-
-
+    {path: '/header-forum', component: HeaderForum},
 
 
 // редирект должен быть в самом низу
