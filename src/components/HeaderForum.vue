@@ -21,7 +21,6 @@
       <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
     </div>
     <div id="buttons">
-      <span>Правило форума</span>
       <button id="enter_btn" class="auth_btn">Вход</button>
       <button id="reg_btn" class="auth_btn">Регистрация</button>
       <div id="user-field">
@@ -61,11 +60,12 @@ header *
 #header-content
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
   width: 1440px
-  height: 60px
+  min-height: 60px
   display: flex
   align-items: center
+  flex-wrap: wrap
+  padding: 0 25px
   justify-content: space-between
-  padding: 0 25px 
   
 #logo-img, #search, #buttons, #user-field
   display: flex
@@ -73,6 +73,7 @@ header *
 
 #logo-img
   margin-top: 5px
+  margin-right: 10px
   
 #btn-serch
   position: absolute
@@ -87,22 +88,21 @@ header *
 #search-img, #search_line, #enter_btn, #reg_btn, #user-ico
   background-color: $background-color
   
-#search_line
+#search
   min-width: 607px
+  
+#search_line
   height: 32px
   border-radius: 4px
   border: none
   outline: none
-  padding-left: 42px 
+  padding-left: 42px
+  width: 100%
   
 #btn
   width: 40px
   height: 40px
   outline: 1px solid red
-  
-#buttons
-  span
-    color: white
     
 .auth_btn
   height: 30px
@@ -128,5 +128,30 @@ header *
   height: 45px
   border-radius: 50%
   margin-right: 15px
+  
+@media only screen and (max-width: 1192px)
+  #header-content
+    justify-content: center
+  #logo-img
+    margin-top: 10px
+  #buttons
+    margin-bottom: 10px
+    
+@media only screen and (max-width: 843px)
+  #buttons
+    margin-top: 10px
+    
+@media only screen and (max-width: 656px)
+  #header-content
+    padding: 0 5px
+  #search
+    min-width: 100%
+    
+@media only screen and (max-width: 375px)
+  #buttons
+    flex-wrap: wrap
+    justify-content: center
+  #user-field
+    margin-top: 10px
 
 </style>
