@@ -150,6 +150,18 @@
           <i class='icon-youtube' style="color: #fff"></i>
           здесь цвет для соответствия дизайну
         </p>
+        <p>
+          <i class='icon-chat'></i>
+        </p>
+        <p>
+          <i class='icon-plus'></i>
+        </p>
+        <p>
+          <i class='icon-checkbox'></i>
+        </p>
+        <p>
+          <i class='icon-check'></i>
+        </p>
     </div>
 </template>
 
