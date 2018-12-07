@@ -11,6 +11,7 @@
       <router-link to="/footer-forum">Перейти к FooterForum</router-link>
       <router-link to="/add-new-post">Перейти к AddNewPost</router-link>
       <router-link to="/ui-kit">Перейти к UI-kit</router-link>
+      <router-link to="/page404">Перейти к Page404</router-link>
     </div>
     <router-view></router-view>
   </div>
