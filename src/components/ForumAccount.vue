@@ -1,6 +1,7 @@
 <template>
     <div>
-       <div class="container">
+      <h3>Страница пока без дизайна и адаптива!</h3>
+       <div class="user-profile">
            <div class="edited">
               <div class="foto">Фото</div>
                <div class="form-group">
@@ -12,9 +13,8 @@
            </div>
            <div class="info">
                    <span>Online</span>
-                   <h3>Алина Чистякова</h3>
-
-                   <p>Россия, г. Санкт-Петербург, 29 лет</p>
+                   <h3>user name</h3>
+                   <p>Россия, г. Город</p>
                    <p><a href="#">Добавьте информацию о себе</a></p>
                    <p><a href="#">Добавьте свои интересы</a></p>
            </div>
@@ -33,50 +33,44 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass"  scoped>
-.container
-    max-width: 1400px
-    font-weight: 400
-    font-size: 15px
-    line-height: 24px
-    margin: 0 auto
+.user-profile
+  display: flex
+  .edited
+   text-align: center
+   width: 400px
+   padding: 30px
 
-.edited
- text-align: center
- width: 400px
- padding: 30px
- float: left
-
-.foto
- width: 150px
- height: 150px
- background: gray
- border-radius: 100px
- text-align: center
- margin-left: 117px
-.btn-submit
-    height: 40px
-    padding: 10px 16px
-    font-size: 18px
-    width: 300px
-    cursor: pointer
-    background-color: blueviolet
-    color: #ffffff
-    transition: background-color .2s,opacity .2s
-    display: inline-block
-    margin-bottom: 0
-    margin-top: 20px
-    text-align: center
-    font-weight: 400
-    border: none
-    border-radius: 4px
-    box-shadow: none
-    &:hover,
-    &:focus
-        border-color: #158b6c
-        background-color: #09df9c
-        outline: none
-    &:active
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+  .foto
+   width: 150px
+   height: 150px
+   background: gray
+   border-radius: 100px
+   text-align: center
+   margin-left: 117px
+  .btn-submit
+      height: 40px
+      padding: 10px 16px
+      font-size: 18px
+      width: 300px
+      cursor: pointer
+      background-color: blueviolet
+      color: #ffffff
+      transition: background-color .2s,opacity .2s
+      display: inline-block
+      margin-bottom: 0
+      margin-top: 20px
+      text-align: center
+      font-weight: 400
+      border: none
+      border-radius: 4px
+      box-shadow: none
+      &:hover,
+      &:focus
+          border-color: #158b6c
+          background-color: #09df9c
+          outline: none
+      &:active
+          box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
 
 
 
@@ -99,8 +93,6 @@ h3
 
 
 .info span
- color: lawngreen
- position: absolute
  top: 14px
  right: 680px
  font-size: 20px

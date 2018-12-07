@@ -1,6 +1,4 @@
 <template>
-    <div class="container">
-
        <div class="main-content row">
            <div class="main-text col-xs-4 col-md-5 ">
                <p class="head ">Ошибка 404</p>
@@ -10,17 +8,11 @@
                <a href="Example.vue"><button class="button button-default-big">Назад</button></a>
                <p>Либо воспользуйтесь поиском ниже</p>
                <input type="search" placeholder="Поиск">
-
            </div>
            <div class="main-img col-xs-12   col-md-5 end-md last-md">
                <img src="../assets/img/cat404.png" alt="">
            </div>
-
-
        </div>
-
-
-    </div>
 </template>
 
 <script>

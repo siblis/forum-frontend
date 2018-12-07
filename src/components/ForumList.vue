@@ -1,7 +1,7 @@
 <template>
-  <div class="container-fluid row between-md top-xs">
+  <div class="row between-md top-xs">
     <div class="col-xs-12 col-md-9 col-lg-9">
-      <router-link to="/add-new-post" tag="button" class="button button-main">Добавить тему +</router-link>
+      <router-link to="/create-post" tag="button" class="button button-main">Добавить тему +</router-link>
       <h2 class="header-of-list">Список тем</h2>
       <paginate
         name="itemPages"
@@ -10,7 +10,7 @@
         :per="7">
         <div v-for="item in paginated('itemPages')" v-bind:key="item.id" class="post_unit row around-xs middle-xs">
           <div class="list-1 list-of-topics col-xs-12 col-sm-8">
-            <router-link to="/forum-item"><h4 class="header-of-topic">{{item.title}}</h4></router-link>
+            <router-link to="/topic"><h4 class="header-of-topic">{{item.title}}</h4></router-link>
             <div class="topic-params row">
               <span v-if="item.tags" class="tags col-xs-6 col-lg-3"><nobr><i class='icon-label'></i> {{item.tags.join()}}</nobr></span>
               <span v-if="item.commentTime" class="commentTime col-xs-6 col-lg-3"><nobr><i class='icon-clock'></i> {{item.commentTime}} минут назад</nobr></span>

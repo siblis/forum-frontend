@@ -1,7 +1,7 @@
 
 <template>
-  <div>
-    <!--header-->
+  <div class="container-fluid">
+    <forum-header></forum-header>
     <router-view></router-view>
     <forum-footer></forum-footer>
   </div>
@@ -9,10 +9,12 @@
 
 <script>
   import FooterForum from "@/components/FooterForum";
+  import HeaderForum from "@/components/HeaderForum";
   export default {
     name: 'app',
     components: {
-      'forum-footer': FooterForum
+      'forum-footer': FooterForum,
+      'forum-header': HeaderForum
     },
     data: () => {
       return {
