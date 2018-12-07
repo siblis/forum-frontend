@@ -1,7 +1,6 @@
 <template>
   <div class="form-group">
-    <label  :for="id"
-            :class="{ invisible: !value }"> 
+    <label  :for="id"> 
       {{ labelText || '' }}
     </label>
     <input  class="form-control"
@@ -46,41 +45,49 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
+@import "../assets/variables"
+
 *
   box-sizing: border-box
+
 .invisible
       opacity: 0
 
 .form-group
+  background-color: inherit
   label
-    font-size: 13px
-    font-weight: 400
-    color: #50667b
-    margin: 0
-    max-width: 100%
+    font-size: 16px
+    font-weight: 500
+    color: $dark_background_color
+    background-color: inherit
+    display: block
+    height: 17px
+    margin-bottom: 7px
   .feedback
     font-size: 13px
     font-weight: 400
     max-width: 100%
-    color: #dc3545
+    color: $base_alert_color
     line-height: 15px
     height: 15px
+    display: block
+    text-align: right
+    background-color: inherit
   input
-    background-color: rgba(164,175,221,.2)
-    color: #50667b
+    background-color: $text_background_color
+    color: $base_font_color
     padding: 8px 16px
     width: 100%
-    border-radius: 3px
-    border: 1px solid transparent
     font-size: 15px
     height: 40px
-    box-shadow: none
+    border: 1px solid $input_border_color 
+    box-sizing: border-box
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1)
+    border-radius: 5px
     &:focus
-      background-color: #fff
       outline: none
-      border: 1px solid #c6ccd1
-      color: #2c2d30
+      box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.4)
     &.input-error
-      background-color: #fff
-      border-color: #d74a5c
+      background-color: $text_background_color
+      border-color: $base_alert_color
 </style>
