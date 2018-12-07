@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
         <symbol id="vk" viewBox="0 0 20 12">
           <path
             fill-rule="evenodd" clip-rule="evenodd" d="M9.63656 11.7596H10.8139C10.8139 11.7596 11.1695 11.7206

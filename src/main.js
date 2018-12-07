@@ -11,6 +11,7 @@ import ForumList from "@/components/ForumList";
 import LogIn from "@/components/LogIn";
 import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
+import HeaderForum from "@/components/HeaderForum";
 import FooterForum from "@/components/FooterForum";
 import AddNewPost from "@/components/AddNewPost";
 import UIkit from "@/components/UI-kit";
@@ -29,11 +30,10 @@ const router = new VueRouter({
     {path: '/forum-list', component: ForumList},
     {path: '/registration', component: Registration},
     {path: '/login', component: LogIn},
+    {path: '/header-forum', component: HeaderForum},
     {path: '/footer-forum', component: FooterForum},
     {path: '/add-new-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
-
-
 
 
 

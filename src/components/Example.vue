@@ -7,6 +7,7 @@
       <router-link to="/forum-list">Перейти к ForumList</router-link>
       <router-link to="/registration">Перейти к Registration</router-link>
       <router-link to="/login">Перейти к LogIn</router-link>
+      <router-link to="/header-forum">Перейти к HeaderForum</router-link>
       <router-link to="/footer-forum">Перейти к FooterForum</router-link>
       <router-link to="/add-new-post">Перейти к AddNewPost</router-link>
       <router-link to="/ui-kit">Перейти к UI-kit</router-link>
