@@ -21,15 +21,16 @@
       <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
     </div>
     <div id="buttons">
-      <span>Правило форума</span>
       <button id="enter_btn" class="auth_btn">Вход</button>
       <button id="reg_btn" class="auth_btn">Регистрация</button>
-      <div id="user-field"></div>
-      <svg width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="2" cy="2" r="2" fill="#C4C4C4"/>
-        <circle cx="2" cy="10" r="2" fill="#C4C4C4"/>
-        <circle cx="2" cy="18" r="2" fill="#C4C4C4"/>
-      </svg>
+      <div id="user-field">
+        <div id="user-ico"></div>
+        <svg width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="2" cy="2" r="2" fill="#C4C4C4"/>
+          <circle cx="2" cy="10" r="2" fill="#C4C4C4"/>
+          <circle cx="2" cy="18" r="2" fill="#C4C4C4"/>
+        </svg>
+      </div>
     </div>
   </div>
 </header>
@@ -59,18 +60,20 @@ header *
 #header-content
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)
   width: 1440px
-  height: 60px
+  min-height: 60px
   display: flex
   align-items: center
+  flex-wrap: wrap
+  padding: 0 25px
   justify-content: space-between
-  padding: 0 25px 
   
-#logo-img, #search, #buttons
+#logo-img, #search, #buttons, #user-field
   display: flex
   align-items: center
 
 #logo-img
   margin-top: 5px
+  margin-right: 10px
   
 #btn-serch
   position: absolute
@@ -82,25 +85,24 @@ header *
   padding: 0
   margin-left: 11px
 
-#search-img, #search_line
-  background: $background-color
+#search-img, #search_line, #enter_btn, #reg_btn, #user-ico
+  background-color: $background-color
+  
+#search
+  min-width: 607px
   
 #search_line
-  min-width: 607px
   height: 32px
   border-radius: 4px
   border: none
   outline: none
-  padding-left: 42px 
+  padding-left: 42px
+  width: 100%
   
 #btn
   width: 40px
   height: 40px
   outline: 1px solid red
-  
-#buttons
-  span
-    color: white
     
 .auth_btn
   height: 30px
@@ -110,7 +112,7 @@ header *
   border-radius: 5px
   
 #enter_btn, #reg_btn, #user-field
-  background-color: $background-color
+  cursor: pointer
 
 #enter_btn
   width: 84px
@@ -121,10 +123,35 @@ header *
   height: 30px
   margin-right: 30px
   
-#user-field
+#user-ico
   width: 45px
   height: 45px
   border-radius: 50%
   margin-right: 15px
+  
+@media only screen and (max-width: 1192px)
+  #header-content
+    justify-content: center
+  #logo-img
+    margin-top: 10px
+  #buttons
+    margin-bottom: 10px
+    
+@media only screen and (max-width: 843px)
+  #buttons
+    margin-top: 10px
+    
+@media only screen and (max-width: 656px)
+  #header-content
+    padding: 0 5px
+  #search
+    min-width: 100%
+    
+@media only screen and (max-width: 375px)
+  #buttons
+    flex-wrap: wrap
+    justify-content: center
+  #user-field
+    margin-top: 10px
 
 </style>
