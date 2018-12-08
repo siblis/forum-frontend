@@ -47,18 +47,15 @@ export default {
 <style lang="sass" scoped>
 @import "../assets/variables"
 
-*
-  box-sizing: border-box
-
 .invisible
-      opacity: 0
+  opacity: 0
 
 .form-group
   background-color: inherit
   label
     font-size: 16px
     font-weight: 500
-    color: $dark_background_color
+    color: $auth_form_label_text_color
     background-color: inherit
     display: block
     height: 17px
@@ -67,15 +64,15 @@ export default {
     font-size: 13px
     font-weight: 400
     max-width: 100%
-    color: $base_alert_color
-    line-height: 15px
+    color: $auth_form_alert_color
+    line-height: 17px
     height: 15px
     display: block
     text-align: right
     background-color: inherit
   input
-    background-color: $text_background_color
-    color: $base_font_color
+    background-color: $input_background_color
+    color: $input_text_color
     padding: 8px 16px
     width: 100%
     font-size: 15px
@@ -88,6 +85,6 @@ export default {
       outline: none
       box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.4)
     &.input-error
-      background-color: $text_background_color
-      border-color: $base_alert_color
+      background-color: $input_background_color
+      border-color: $auth_form_alert_color
 </style>

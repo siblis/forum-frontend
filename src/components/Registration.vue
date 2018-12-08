@@ -65,6 +65,13 @@
                   type="submit"
                   value="Зарегистрироваться"
                   :disabled="submitStatus === 'PENDING'">
+          
+          <div class="checkbox-wrap">
+            <input  type="checkbox"
+                    id="isAccepted"
+                    v-model="isAccepted">
+            <label for="isAccepted">Настоящим подтверждаю, что я ознакомлен и согласен с условиями политики конфиденциальности. <a class='internal-href' href='/agreement'>Узнать больше</a></label>
+          </div>
         </form>    
       </div>
     </div>
@@ -110,6 +117,7 @@ export default {
       email: '',
       password: '',
       confirmPassword:'',
+      isAccepted: false,
       submitStatus: null,
     };
   },
@@ -129,7 +137,7 @@ export default {
     },
     confirmPassword: {
       sameAsPassword: sameAs('password'),
-    }
+    },
   },
   computed: {
   },
@@ -143,7 +151,7 @@ export default {
     },
     sendRegData() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || !this.isAccepted) {
         this.submitStatus = 'ERROR';
         return;
       }
@@ -152,12 +160,20 @@ export default {
         lastName: this.userLastName,
         email: this.email,
         password: this.password,
+        isAccepted: this.isAccepted,
       };
       this.submitStatus = 'PENDING';
       // eslint-disable-next-line
       console.log(`Try send: ${JSON.stringify(data)}`);
       setTimeout(() => {
         this.submitStatus = 'OK';
+        this.userName = '';
+        this.userLastName = '';
+        this.email = '';
+        this.password = '';
+        this.confirmPassword = '';
+        this.isAccepted = false;
+        this.$v.$reset();
       }, 2000);
     },
   },
@@ -167,13 +183,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 @import "../assets/variables"
-$social_hover_color: #263238
-*
-  box-sizing: border-box
 
 .registration-card-wrap
-  padding-top: 93px
-
+  padding: 93px 0
+  @media screen and ( max-width: 480px )
+    padding: 10px 0
 .registration-card
   max-width: 500px
   margin: 0 auto
@@ -197,7 +211,6 @@ $social_hover_color: #263238
     width: 161px
     padding-bottom: 7px
     margin: 0 auto 30px
-
   &-row
     display: flex
     justify-content: space-between
@@ -226,19 +239,21 @@ $social_hover_color: #263238
     margin: 0 0 14px
     font-weight: 500
     font-size: 20px
-    color: $dark_background_color
+    color: $auth_form_social_title_color
     background-color: inherit
   &-list
     display: flex
     align-items: center
     background-color: inherit
   &-item
-    color: $light_button_main_color
+    color: $auth_form_social_item_color
     text-decoration: none
     background-color: inherit
     cursor: pointer
     &:hover
-      color: $social_hover_color
+      color: $button_hover_color
+    &:active
+      color: $auth_form_social_hover_color
   & .google-plus
     font-size: 1.06rem
   & .vkontakte
@@ -254,23 +269,43 @@ $social_hover_color: #263238
 
 input[type="submit"]
   margin-top: 8px
-  height: 40px
-  padding: 10px 16px
-  border-radius: 5px
-  font-weight: normal
-  font-size: 16px
-  font-weight: 400
-  line-height: normal
-  text-align: center
-  color: $text_background_color
-  background-color: $light_button_main_color
+  margin-bottom: 11px
+
+.checkbox-wrap
+    background-color: inherit
+    display: flex
+
+input[type="checkbox"]
+  opacity: 0
+  z-index: 1
   cursor: pointer
-  margin-bottom: 0
-  border: none
-  box-shadow: none
-  &:hover,
-  &:focus
-    outline: none
-  &:active
-    background-color: $social_hover_color
+  margin: 1px
+  &+label,
+    background-color: inherit
+    font-size: 9px
+    color: $auth_form_label_text_color
+    position: relative
+    padding-left: 28px
+    &:before
+      content: "\e90f"
+      font-family: 'fp'
+      color: $auth_form_checkbox_color
+      font-size: 1.05rem
+      position: absolute
+      left: -15px
+  &+label>a
+    background-color: inherit
+    font-size: 9px
+    color: $auth_form_label_text_color
+    &:hover
+      color: $base_font_color
+  &:checked
+    &+label:after
+      content: "\e910"
+      font-family: 'fp'
+      color: $auth_form_label_text_color
+      font-size: 1rem
+      position: absolute
+      left: -15px
+      top: -1px
 </style>
