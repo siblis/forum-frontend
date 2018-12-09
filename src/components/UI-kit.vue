@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="ui-kit">
       <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
         <symbol id="vk" viewBox="0 0 20 12">
           <path
@@ -131,4 +131,9 @@
         props: {}
     }
 </script>
+
+<style lang="sass" scoped>
+  .ui-kit
+    padding: 50px
+</style>
 

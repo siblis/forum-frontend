@@ -72,11 +72,6 @@
       &:active
           box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
 
-
-
-h3
- font-size: 40px
-
 .info a
  text-decoration: none
  font-size: 20px
@@ -84,18 +79,12 @@ h3
  &:hover
   color: blueviolet
 
-
 .info p
  font-size: 20px
  color: gray
-
-
-
 
 .info span
  top: 14px
  right: 680px
  font-size: 20px
-
-
 </style>
