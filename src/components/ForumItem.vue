@@ -72,7 +72,7 @@
                   <!-- Кнопка не нажмается, пока в textarea нет текста -->
                   <button class="button button-main">Отправить</button>
                   <!-- -->
-                  <button class="button button-main" @click="closeAnswer(comment.id)">Х</button>
+                  <button class="button button-main esc-btn" @click="closeAnswer(comment.id)">Х</button>
                 </div>
                 <!-- -->
               </div>
@@ -324,6 +324,9 @@
 
   .button
     margin-bottom: 5px
+
+  .esc-btn
+    margin-left: 5px
 
   .commentProps
     margin-bottom: 28px
