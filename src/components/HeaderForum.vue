@@ -52,7 +52,6 @@ export default {
 @import "../assets/variables"
 
 header
-  margin: -0.5rem -0.5rem 0 -0.5rem
   background-color: $dark_background_color
 
 #header-content
