@@ -45,7 +45,7 @@
         items: [],
       }
     },
-    mounted() {
+    mounted: function () {
       this.axios
         .get('https://jsonplaceholder.typicode.com/posts')
         .then(response => {
@@ -57,7 +57,7 @@
             return item;
           });
         });
-    },
+  },
     props: {}
   }
 </script>
