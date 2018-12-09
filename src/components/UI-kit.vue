@@ -122,6 +122,46 @@
         <p>
           <i class='icon-dots'></i>
         </p>
+        <p>
+          <i class='icon-facebook' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-google-plus' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-instagram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-telegram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-twitter' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-vkontakte' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-youtube' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-chat'></i>
+        </p>
+        <p>
+          <i class='icon-plus'></i>
+        </p>
+        <p>
+          <i class='icon-checkbox'></i>
+        </p>
+        <p>
+          <i class='icon-check'></i>
+        </p>
     </div>
 </template>
 

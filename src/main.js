@@ -11,10 +11,9 @@ import ForumList from "@/components/ForumList";
 import LogIn from "@/components/LogIn";
 import Registration from "@/components/Registration";
 import ForumAccount from "@/components/ForumAccount";
-import FooterForum from "@/components/FooterForum";
 import AddNewPost from "@/components/AddNewPost";
 import UIkit from "@/components/UI-kit";
-
+import Page404 from "@/components/Page404";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
@@ -24,21 +23,19 @@ Vue.config.productionTip = false;
 const router = new VueRouter({
   routes: [
     {path: '/', component: Example},
-    {path: '/forum-account', component: ForumAccount},
-    {path: '/forum-item', component: ForumItem},
-    {path: '/forum-list', component: ForumList},
-    {path: '/registration', component: Registration},
+    {path: '/profile', component: ForumAccount},
+    {path: '/post', component: ForumItem},
+    {path: '/forum', component: ForumList},
+    {path: '/signup', component: Registration},
     {path: '/login', component: LogIn},
-    {path: '/footer-forum', component: FooterForum},
-    {path: '/add-new-post', component: AddNewPost},
+    {path: '/create-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
-
-
+    {path: '/404', component: Page404},
 
 
 
 // редирект должен быть в самом низу
-    {path: '/*', redirect: '/' },
+    {path: '/*', redirect: '/404' },
 
   ]
 });

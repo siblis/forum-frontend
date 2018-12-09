@@ -1,14 +1,12 @@
 <template>
-  <div class="container">
-    <h3>ForumItem</h3>
     <div class="content row">
       <div class="main-content col-xs-12 col-md">
         <div class="post-content row">
 
-          <a href="#" class="arrow-home col-xs-12 start-xs"> <!-- сделать размер 15px -->
+          <router-link to="/" class="arrow-home col-xs-12 start-xs"> <!-- сделать размер 15px -->
             <i class='icon-arrow-back'></i>
             Главная
-          </a>
+          </router-link>
 
           <h1 class="postName col-xs-12">{{post.title}}</h1>
 
@@ -156,7 +154,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
