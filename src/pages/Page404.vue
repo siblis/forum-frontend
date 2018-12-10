@@ -1,15 +1,15 @@
 <template>
        <div class="main-content row">
-           <div class="main-text col-xs-4 col-md-5 ">
+           <div class="main-text center-md center-xs">
                <p class="head ">Ошибка 404</p>
-               <p>Похоже,что такой страницы не существует.</p>
-               <p>Не расстраивайтесь,сделайте шаг назад.</p>
+               <p>Похоже, что такой страницы не существует.</p>
+               <p>Не расстраивайтесь, сделайте шаг назад.</p>
                <br>
-               <a href="Example.vue"><button class="button button-default-big">Назад</button></a>
+               <a href="Example.vue"><button type="submit" class="button button-default-big">Назад</button></a>
                <p>Либо воспользуйтесь поиском ниже</p>
                <input type="search" placeholder="Поиск">
            </div>
-           <div class="main-img col-xs-12   col-md-5 end-md last-md">
+           <div class="main-img ">
                <img src="../assets/img/cat404.png" alt="">
            </div>
        </div>
@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        name: '404',
+        name: 'Page404',
         props: {}
     }
 </script>
@@ -25,7 +25,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 
-@import "../assets/variables.sass"
+@import "../assets/variables"
 
 *
   background-color: white
@@ -52,12 +52,15 @@
   cursor: pointer
 
 .main-text
-    margin-left: 137px
+
     margin-top: 73px
+
 
 .main-content
     padding-top: 151px
     padding-bottom: 151px
+    display: flex
+    justify-content: center
 
 input
     background: url("../assets/img/icons/search.png")no-repeat 4px 2px
@@ -66,6 +69,16 @@ input
 .head
     font-weight: bold
     font-size: 18px
+
+@media only screen and (max-width: 530px)
+    .main-img
+      display: none
+    .main-content
+      padding-top: 15px
+      padding-bottom: 15px
+    .main-text
+      margin-top: 0
+
 
 
 </style>

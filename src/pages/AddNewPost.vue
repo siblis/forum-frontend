@@ -62,7 +62,7 @@
 </script>
 
 <style lang="sass" scoped>
-  @import "../assets/variables.sass"
+  @import "../assets/variables"
 
   .add-post-content
     background-color: $background-color
