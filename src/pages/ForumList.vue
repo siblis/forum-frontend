@@ -64,7 +64,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
-  @import "../assets/variables.sass"
+  @import "../assets/variables"
   $topic_params_color: #4D4D4D
   $sm: 768px
   $md: 1024px
@@ -144,5 +144,5 @@
     @media (min-width: 320px) and (max-width: 768px)
       padding-left: 0
     @media (min-width: 769px)
-      padding-left: 70px
+      padding-left: 15px
 </style>
