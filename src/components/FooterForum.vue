@@ -1,5 +1,4 @@
 <template>
-  <div class="container">
     <footer>
       <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
         <symbol id="vk" viewBox="0 0 20 12">
@@ -89,7 +88,7 @@
       <div class="footer-content row">
         <div class="footer-info row col-xs-12 col-md-7">
           <div class="footer-blocks col-xs-12 last-xs center-xs col-sm-6 first-sm start-sm col-md-7">
-            &copy 2018 "IT-room" Форум для IT-специалистов
+            &copy; 2018 "IT-room" Форум для IT-специалистов
           </div>
           <div class="footer-blocks col-xs-12 center-xs col-sm-6 end-sm col-md-5 center-md">
             Контакты: 8-800-800-88-88
@@ -134,7 +133,6 @@
         </div>
       </div>
     </footer>
-  </div>
 </template>
 
 

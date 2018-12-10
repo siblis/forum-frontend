@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="ui-kit">
+      <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
         <symbol id="vk" viewBox="0 0 20 12">
           <path
             fill-rule="evenodd" clip-rule="evenodd" d="M9.63656 11.7596H10.8139C10.8139 11.7596 11.1695 11.7206
@@ -122,6 +122,46 @@
         <p>
           <i class='icon-dots'></i>
         </p>
+        <p>
+          <i class='icon-facebook' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-google-plus' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-instagram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-telegram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-twitter' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-vkontakte' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-youtube' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-chat'></i>
+        </p>
+        <p>
+          <i class='icon-plus'></i>
+        </p>
+        <p>
+          <i class='icon-checkbox'></i>
+        </p>
+        <p>
+          <i class='icon-check'></i>
+        </p>
     </div>
 </template>
 
@@ -131,4 +171,9 @@
         props: {}
     }
 </script>
+
+<style lang="sass" scoped>
+  .ui-kit
+    padding: 50px
+</style>
 
