@@ -4,7 +4,6 @@ import App from './App.vue';
 import VueRouter from "vue-router";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import VuePaginate from 'vue-paginate';
 import ForumItem from "@/pages/ForumItem";
 import Example from "@/pages/Example";
 import ForumList from "@/pages/ForumList";
@@ -17,7 +16,6 @@ import Page404 from "@/pages/Page404";
 
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
-Vue.use(VuePaginate);
 Vue.config.productionTip = false;
 
 const router = new VueRouter({
