@@ -2,8 +2,8 @@
        <div class="main-content row">
            <div class="main-text center-md center-xs">
                <p class="head ">Ошибка 404</p>
-               <p>Похоже,что такой страницы не существует.</p>
-               <p>Не расстраивайтесь,сделайте шаг назад.</p>
+               <p>Похоже, что такой страницы не существует.</p>
+               <p>Не расстраивайтесь, сделайте шаг назад.</p>
                <br>
                <a href="Example.vue"><button type="submit" class="button button-default-big">Назад</button></a>
                <p>Либо воспользуйтесь поиском ниже</p>
@@ -17,7 +17,7 @@
 
 <script>
     export default {
-        name: '404',
+        name: 'Page404',
         props: {}
     }
 </script>
@@ -25,7 +25,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 
-@import "../assets/variables.sass"
+@import "../assets/variables"
 
 *
   background-color: white
@@ -72,7 +72,13 @@ input
 
 @media only screen and (max-width: 530px)
     .main-img
-        display: none
+      display: none
+    .main-content
+      padding-top: 15px
+      padding-bottom: 15px
+    .main-text
+      margin-top: 0
+
 
 
 </style>
