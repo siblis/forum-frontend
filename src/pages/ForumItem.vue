@@ -1,6 +1,6 @@
 <template>
     <div class="content row">
-      <div class="main-content col-xs-12 col-md">
+      <div class="main-content col-xs-12 col-md-6">
         <div class="post-content row">
 
           <router-link to="/" class="arrow-home col-xs-12 start-xs"> <!-- сделать размер 15px -->
@@ -12,7 +12,7 @@
 
           <div class="tags row col-xs-12">
             <i class='icon-label'></i>
-            <a href="#" class="postTag">тэг</a>
+            <a href="#" class="postTag" v-for="tag in post.tags">{{tag}}</a>
           </div>
 
           <div class="post row" >
@@ -20,10 +20,10 @@
 
             <div class="postBody col-xs-12 col-sm">
               <div class="postProps row between-xs">
-                <a href="#" class="postUserName">{{user.name}}</a>
-                <div class="postTime">20.11.2018</div>
+                <a href="#" class="postUserName">{{userName}}</a>
+                <div class="postTime">{{post.created_at}}</div>
               </div>
-              <div class="postText">{{post.body}}</div>
+              <div class="postText">{{post.content}}</div>
             </div>
 
           </div>
@@ -32,7 +32,7 @@
 
         <div class="post-content">
           <h2 class="commentsCount">
-            Комментарии ({{userComments.length}})
+            Комментарии ({{commentsCount}})
           </h2>
           <div class="commentBlock" v-for="comment in userComments" :key="comment.id">
             <div class="post row">
@@ -170,16 +170,21 @@
         post: '',
         user: '',
         userId: '',
+        commentsCount: '',
+        userName: '',
         userComments: [],
         showAnswer: false,
        }
     },
     async mounted() {
       await this.axios
-        .get('https://jsonplaceholder.typicode.com/posts/1')
+        .get('http://api.forum.pocketmsg.ru/posts/11')
         .then((post) => {
+          console.log(post);
           this.post = post.data;
-          this.userId = post.data.userId;
+          this.userId = post.data.username.id;
+          this.commentsCount = post.data.comments.length;
+          this.userName = post.data.username.name;
         })
         .catch(error => alert(error));
       await  this.axios
@@ -190,8 +195,8 @@
         .catch(error => alert(error));
       await this.axios
         .get(`https://jsonplaceholder.typicode.com/posts/${this.userId}/comments`)
-        .then((user) => {
-          this.userComments = user.data;
+        .then((comment) => {
+          this.userComments = comment.data;
           // console.log(this.userComments);
         })
         .catch(error => alert(error));
@@ -229,16 +234,14 @@
 <style lang="sass" scoped>
   @import "../assets/variables"
 
-  .container
-    *
-      /*margin: 0*/
-      /*padding: 0*/
-      box-sizing: border-box
+  .content
     h2
       font-size: $h2_font_size
       font-weight: bolder
       line-height: 23px
       margin-bottom: 15px
+    .post
+      width: 100%
 
   h3
     color: #b90015
@@ -270,6 +273,7 @@
       padding: 13px 16px 15px
       border-radius: 4px
       background-color: $comment_background_color
+      word-wrap: break-word
     textarea
       min-height: 88px
       border: none
@@ -300,6 +304,8 @@
     .tags
       margin-bottom: 16px
       a
+        display: inline-block
+        margin-right: 4px
         font-size: $tags_font_size
         line-height: 15px
         color: $base_font_color
