@@ -5,16 +5,16 @@
       <h2 class="header-of-list">Список тем</h2>
       <paginate
         name="itemPages"
-        :list="items"
+        :list="post.data"
         :show-step-links="true"
         :per="7">
-        <div v-for="item in paginated('itemPages')" v-bind:key="item.id" class="post_unit row around-xs middle-xs">
+        <div v-for="item in paginated('itemPages')" v-bind:key="post.id" class="post_unit row around-xs middle-xs">
           <div class="list-1 list-of-topics col-xs-12 col-sm-8">
             <router-link to="/topic"><h4 class="header-of-topic">{{item.title}}</h4></router-link>
             <div class="topic-params row">
               <span v-if="item.tags" class="tags col-xs-6 col-lg-3"><nobr><i class='icon-label'></i> {{item.tags.join()}}</nobr></span>
-              <span v-if="item.commentTime" class="commentTime col-xs-6 col-lg-3"><nobr><i class='icon-clock'></i> {{item.commentTime}} минут назад</nobr></span>
-              <span v-if="item.watchCount" class="watchCount col-xs-6 col-lg-3"><nobr><i class='icon-eye'></i> {{item.watchCount}} просмотров</nobr></span>
+              <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-3"><nobr><i class='icon-clock'></i> {{item.created_at}} минут назад</nobr></span>
+              <span v-if="item.views" class="watchCount col-xs-6 col-lg-3"><nobr><i class='icon-eye'></i> {{item.views}} просмотров</nobr></span>
               <span class="watchCount col-xs-6 col-lg-3"><nobr><i class='icon-speak'></i> Ответить</nobr></span>
             </div>
           </div>
@@ -22,7 +22,7 @@
             <span class="watchNewCount"><i class='icon-speak' style="font-size: 1.5em"></i> Ответить</span>
           </div>
           <div class="list-3 col-xs-6 col-sm-2">
-            <p v-if="item.commentsCount" class="comments_count">{{item.commentsCount}} </p>
+            <p v-if="item.comments.length" class="comments_count">{{item.comments.length}} </p>
             <p class="comments_count">ответов</p>
           </div>
         </div>
@@ -43,22 +43,27 @@
       return {
         paginate: ['itemPages'],
         items: [],
+        post:'',
+        title:''
+
       }
     },
     mounted: function () {
       this.axios
-        .get('https://jsonplaceholder.typicode.com/posts')
-        .then(response => {
-          this.items = response.data.map(item => {
-            item.commentTime = 5;
-            item.watchCount = 25;
-            item.tags = ['tag1', 'tag2'];
-            item.commentsCount = 10;
-            return item;
-          });
-        });
+        .get('http://api.forum.pocketmsg.ru/posts/')
+          .then((post) => {
+              console.log(post);
+              this.post = post.data;
+              this.title = post.data.title;
+
+
+
+
+          })
   },
+
     props: {}
+
   }
 </script>
 
