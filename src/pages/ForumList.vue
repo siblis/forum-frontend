@@ -22,11 +22,20 @@
           </div>
         </div>
 
-        <button class="paginate-links" v-on:click="prevPage" :disabled="page === 1">prev</button>
-        <button class="paginate-links" v-for="(pageNumber,index) in pagesList"
-                :key="index" v-on:click="changePage(pageNumber)"
+        <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
+        <button class="button paginate-links" v-for="(pageNumber,index) in pagesList"
+                :key="index" v-on:click="changePage(pageNumber) + myFilter(page)"
+                v-bind:class="{ active: isActive }"
                 :disabled="pageNumber === '...' || page === pageNumber">{{pageNumber}}</button>
-        <button class="paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">next</button>
+        <button class="button paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.816667 1.175L4.64167 5L0.816667 8.825L2 10L7 5L2 0L0.816667 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
     </div>
     <div class="topic-block col-xs-12 col-md-3">
       здесь будет контент
@@ -42,7 +51,8 @@
         page: 1,
         total: 0,
         items: [],
-        pagesList: []
+        pagesList: [],
+        isActive: false
       }
     },
     mounted: function () {
@@ -50,10 +60,10 @@
     },
     methods: {
       loadPosts() {
-        this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
+        this.axios.put('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
           .then(response => {
             this.items = response.data.data;
-            this.total = response.data.total;
+            this.total = 300;
             this.pagination();
           });
       },
@@ -70,6 +80,12 @@
       changePage(page) {
         this.page = page;
         this.loadPosts();
+      },
+      myFilter(page) {
+        if (this.page = page) {
+          this.isActive = true;
+        }
+
       },
       pagination() {
         let current = this.page,
@@ -188,9 +204,18 @@
     text-align: center
 
   .paginate-links
-    background-color: #ff5252
+    background-color: $button_default_color
+    margin: 5px
+    cursor: pointer
+    border-radius: 5px
+    border-color: $button_default_color
+    width: 30px
+    height: 30px
     &:disabled
-      background-color: aqua
+      background-color: $button_default_color
+      opacity: 0.7
+    &.active
+      background-color: $button_main_big_color
 
   .list-of-topics,
   .post_unit
