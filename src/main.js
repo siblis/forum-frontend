@@ -20,6 +20,7 @@ Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.use(VuePaginate);
 Vue.config.productionTip = false;
+// для использования в компонентах относительных путей при обращении к API
 Vue.axios.defaults.baseURL = 'http://api.forum.pocketmsg.ru';
 
 const router = new VueRouter({
