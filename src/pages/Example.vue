@@ -3,7 +3,7 @@
     <h3>all pages</h3>
     <div class="links">
       <router-link to="/profile">Перейти к ForumAccount</router-link>
-      <router-link to="/post">Перейти к ForumItem</router-link>
+      <router-link to="/posts/70">Перейти к ForumItem</router-link>
       <router-link to="/forum">Перейти к ForumList</router-link>
       <router-link to="/signup">Перейти к Registration</router-link>
       <router-link to="/login">Перейти к LogIn</router-link>
