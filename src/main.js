@@ -17,6 +17,11 @@ import Page404 from "@/pages/Page404";
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
+const moment = require('moment');
+require('moment/locale/ru');
+Vue.use(require('vue-moment'), {
+  moment
+});
 
 const router = new VueRouter({
   routes: [
