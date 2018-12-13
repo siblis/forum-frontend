@@ -23,8 +23,14 @@
       <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
     </div>
     <div id="buttons">
-      <router-link to="/login" tag="button" id="enter_btn" class="auth_btn">Вход</router-link>
-      <router-link to="/signup" tag="button" id="reg_btn" class="auth_btn">Регистрация</router-link>
+      <router-link v-show="!isLoggedIn" to="/login" tag="button" id="enter_btn" class="auth_btn">Вход</router-link>
+      <router-link v-show="!isLoggedIn" to="/signup" tag="button" id="reg_btn" class="auth_btn">Регистрация</router-link>
+      <button v-show="isLoggedIn"
+              class="auth_btn bnt_signOut"
+              @click="logout()"
+      >
+        Выход
+      </button>
       <div id="user-field">
         <router-link to="/profile"><div id="user-ico"></div></router-link>
         <svg width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,9 +46,20 @@
 
 
 <script>
+import { AUTH_LOGOUT } from '../store/actions/auth'
 export default {
   name: 'HeaderForum',
-  props: {}
+  props: {},
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch(AUTH_LOGOUT)
+    },
+  }
 }
 </script>
 
@@ -106,7 +123,12 @@ header
   padding: 0
   margin-left: 21px
   border-radius: 5px
-  
+
+.bnt_signOut
+  cursor: pointer
+  width: 84px
+  margin-right: 30px
+
 #enter_btn, #reg_btn, #user-field
   cursor: pointer
 

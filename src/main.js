@@ -4,6 +4,7 @@ import App from './App.vue';
 import VueRouter from "vue-router";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import store from './store';
 import ForumItem from "@/pages/ForumItem";
 import Example from "@/pages/Example";
 import ForumList from "@/pages/ForumList";
@@ -17,6 +18,8 @@ import Page404 from "@/pages/Page404";
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
+// для использования в компонентах относительных путей при обращении к API
+Vue.axios.defaults.baseURL = 'http://api.forum.pocketmsg.ru';
 const moment = require('moment');
 require('moment/locale/ru');
 Vue.use(require('vue-moment'), {
@@ -51,4 +54,5 @@ const router = new VueRouter({
 new Vue({
   router: router,
   render: h => h(App),
+  store,
 }).$mount('#app');
