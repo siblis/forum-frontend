@@ -21,7 +21,7 @@
             <div class="postBody col-xs-12 col-sm">
               <div class="postProps row between-xs">
                 <a href="#" class="postUserName">{{userName}}</a>
-                <div class="postTime">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
+                <div class="postTime" v-if="post.created_at && !null">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
               </div>
               <div class="postText">{{post.content}}</div>
             </div>
