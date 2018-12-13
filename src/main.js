@@ -23,11 +23,16 @@ Vue.use(require('vue-moment'), {
   moment
 });
 
+Vue.filter('pluralize', function (number, titles) {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
+});
+
 const router = new VueRouter({
   routes: [
     {path: '/', component: Example},
     {path: '/profile', component: ForumAccount},
-    {path: '/posts/:postId', name: 'posts', component: ForumItem},
+    {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},
     {path: '/signup', component: Registration},
     {path: '/login', component: LogIn},
