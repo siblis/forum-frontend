@@ -31,6 +31,7 @@
         </div>
       </div>
       <div class="paginator">
+
       <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
         <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
@@ -183,7 +184,7 @@
         text-overflow: ellipsis
         overflow: hidden
         width: 100%
-        line-height: 18px
+        line-height: 22px
         white-space: nowrap
       .topic-params
         margin-bottom: 15px
