@@ -10,7 +10,7 @@
 
           <h1 class="postName col-xs-12">{{post.title}}</h1>
 
-          <div class="tags row col-xs-12">
+          <div class="tags row col-xs-12" v-if="post.tags && post.tags.length">
             <i class='icon-label'></i>
             <a href="#" class="postTag" v-for="tag in post.tags">{{tag}}</a>
           </div>
@@ -21,7 +21,7 @@
             <div class="postBody col-xs-12 col-sm">
               <div class="postProps row between-xs">
                 <a href="#" class="postUserName">{{userName}}</a>
-                <div class="postTime">{{post.created_at}}</div>
+                <div class="postTime" v-if="post.created_at && !null">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
               </div>
               <div class="postText">{{post.content}}</div>
             </div>
@@ -159,7 +159,7 @@
 <script>
   export default {
     name: 'ForumItem',
-    props: {},
+    props: ['postId'],
     data: function() {
       return {
         newComment: '',
@@ -178,7 +178,7 @@
     },
     async mounted() {
       await this.axios
-        .get('http://api.forum.pocketmsg.ru/posts/11')
+        .get('http://api.forum.pocketmsg.ru/posts/' + this.postId)
         .then((post) => {
           console.log(post);
           this.post = post.data;
