@@ -129,8 +129,6 @@ export default {
           this.$router.push('/');
         })
         .catch((err) => {
-          // eslint-disable-next-line
-          console.log(err);
           this.password = '';
           this.$v.$reset();
         });
