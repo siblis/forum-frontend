@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VuePaginate from 'vue-paginate';
+import store from './store';
 import ForumItem from "@/pages/ForumItem";
 import Example from "@/pages/Example";
 import ForumList from "@/pages/ForumList";
@@ -19,6 +20,7 @@ Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.use(VuePaginate);
 Vue.config.productionTip = false;
+Vue.axios.defaults.baseURL = 'http://api.forum.pocketmsg.ru';
 
 const router = new VueRouter({
   routes: [
@@ -43,4 +45,5 @@ const router = new VueRouter({
 new Vue({
   router: router,
   render: h => h(App),
+  store,
 }).$mount('#app');
