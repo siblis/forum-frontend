@@ -26,7 +26,7 @@
       <router-link v-show="!isLoggedIn" to="/login" tag="button" id="enter_btn" class="auth_btn">Вход</router-link>
       <router-link v-show="!isLoggedIn" to="/signup" tag="button" id="reg_btn" class="auth_btn">Регистрация</router-link>
       <button v-show="isLoggedIn"
-              class="button button-default"
+              class="auth_btn bnt_signOut"
               @click="logout()"
       >
         Выход
@@ -123,7 +123,12 @@ header
   padding: 0
   margin-left: 21px
   border-radius: 5px
-  
+
+.bnt_signOut
+  cursor: pointer
+  width: 84px
+  margin-right: 30px
+
 #enter_btn, #reg_btn, #user-field
   cursor: pointer
 
