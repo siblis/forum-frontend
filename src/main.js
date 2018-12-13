@@ -27,7 +27,7 @@ const router = new VueRouter({
   routes: [
     {path: '/', component: Example},
     {path: '/profile', component: ForumAccount},
-    {path: '/post', component: ForumItem},
+    {path: '/posts/:postId', name: 'posts', component: ForumItem},
     {path: '/forum', component: ForumList},
     {path: '/signup', component: Registration},
     {path: '/login', component: LogIn},

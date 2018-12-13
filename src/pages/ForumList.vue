@@ -5,7 +5,7 @@
       <h2 class="header-of-list">Список тем</h2>
         <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
           <div class="list-of-topics col-xs-12 col-sm-8">
-            <router-link to="/topic"><h4 class="header-of-topic">{{item.title}}</h4></router-link>
+            <router-link :to="{name: 'posts', params: {postId:item.id}}"><h4 class="header-of-topic">{{item.title}}</h4></router-link>
             <div class="topic-params row">
               <span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-3">
                 <nobr><i class='icon-label'></i> {{item.tags.join()}}</nobr>
@@ -25,7 +25,7 @@
             <span class="watchNewCount"><i class='icon-speak' style="font-size: 1.5em"></i> Ответить</span>
           </div>
           <div class="col-xs-6 col-sm-2">
-            <p v-if="item.comment" class="comments_count">{{item.commentsCount}} </p>
+            <p v-if="item.comments" class="comments_count">{{item.comments.length}} </p>
             <p class="comments_count">ответов</p>
           </div>
         </div>
@@ -77,6 +77,7 @@
 
         this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
           .then(response => {
+            console.log(this.items.comments);
             this.items = response.data.data;
             this.total = 300;
             this.pagination();
