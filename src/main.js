@@ -1,30 +1,39 @@
 import 'flexboxgrid/dist/flexboxgrid.css'
 import Vue from 'vue';
 import App from './App.vue';
-import VueRouter from "vue-router";
+import VueRouter from 'vue-router';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import VuePaginate from 'vue-paginate';
-import ForumItem from "@/pages/ForumItem";
-import Example from "@/pages/Example";
-import ForumList from "@/pages/ForumList";
-import LogIn from "@/pages/LogIn";
-import Registration from "@/pages/Registration";
-import ForumAccount from "@/pages/ForumAccount";
-import AddNewPost from "@/pages/AddNewPost";
-import UIkit from "@/pages/UI-kit";
-import Page404 from "@/pages/Page404";
+import store from './store';
+import moment from 'moment';
+import VueMoment from 'vue-moment';
+import pluralize from './utils/pluralize';
+import ForumItem from '@/pages/ForumItem';
+import Example from '@/pages/Example';
+import ForumList from '@/pages/ForumList';
+import LogIn from '@/pages/LogIn';
+import Registration from '@/pages/Registration';
+import ForumAccount from '@/pages/ForumAccount';
+import AddNewPost from '@/pages/AddNewPost';
+import UIkit from '@/pages/UI-kit';
+import Page404 from '@/pages/Page404';
+
+Vue.use(VueRouter);
+Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios);
-Vue.use(VueRouter);
-Vue.use(VuePaginate);
-Vue.config.productionTip = false;
+Vue.axios.defaults.baseURL = 'http://api.forum.pocketmsg.ru';
+
+moment.locale('ru');
+Vue.use(VueMoment, { moment });
+
+Vue.filter('pluralize', pluralize);
 
 const router = new VueRouter({
   routes: [
     {path: '/', component: Example},
     {path: '/profile', component: ForumAccount},
-    {path: '/post', component: ForumItem},
+    {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},
     {path: '/signup', component: Registration},
     {path: '/login', component: LogIn},
@@ -41,6 +50,7 @@ const router = new VueRouter({
 });
 
 new Vue({
-  router: router,
+  router,
   render: h => h(App),
+  store,
 }).$mount('#app');

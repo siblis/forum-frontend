@@ -19,7 +19,8 @@
             <a class="social-registration-item google-plus" href="/auth/google-plus">
               <i class='icon-google-plus'></i>
             </a>
-            <a class="social-registration-item vkontakte" href="/auth/vkontakte">
+            <a class="social-registration-item vkontakte" href="/auth/vkontakte"> 10 часов назад
+
               <i class='icon-vkontakte'></i>
             </a>
             <a class="social-registration-item facebook" href="/auth/facebook">
