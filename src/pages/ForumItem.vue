@@ -463,6 +463,7 @@
 
   .left-content
     display: none
+    padding: 0
     @media (min-width: 1024px) // не придумал, как скрыть блок через flexboxgrid
       display: block
     .side-bar
