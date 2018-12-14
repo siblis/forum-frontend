@@ -36,19 +36,21 @@
                       id="email"
                       type="email"
                       label-text="E-mail"
+                      autofocus="true"
                       :input-error="getFieldErrorMessage('email')"                                    
-          ></form-input>
+          />
           <form-input :value="password"
                       v-model.trim="$v.password.$model"
                       id="password"
                       type="password"
                       label-text="Пароль"
                       :input-error="getFieldErrorMessage('password')"                                    
-          ></form-input>
+          />
           <input  class="button button-main-big"
                   type="submit"
                   value="Войти"
-                  :disabled="authStatus === 'PENDING'">
+                  :disabled="authStatus === 'PENDING'"
+          />
         </form>
         <a href='/pass/recovery' class='recovery-href'>Забыли пароль?</a>
       </div>
@@ -129,8 +131,6 @@ export default {
           this.$router.push('/');
         })
         .catch((err) => {
-          // eslint-disable-next-line
-          console.log(err);
           this.password = '';
           this.$v.$reset();
         });
