@@ -30,7 +30,7 @@
             </a>
           </div>
         </div>
-        <form @submit.prevent="sendRegData()">
+        <form @submit.prevent="sendAuthData()">
           <form-input :value="email.value"
                       v-model="$v.email.$model"
                       id="email"
@@ -48,7 +48,7 @@
           <input  class="button button-main-big"
                   type="submit"
                   value="Войти"
-                  :disabled="submitStatus === 'PENDING'">
+                  :disabled="authStatus === 'PENDING'">
         </form>
         <a href='/pass/recovery' class='recovery-href'>Забыли пароль?</a>
       </div>
@@ -61,19 +61,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import FormInput from '../components/FormInput.vue';
 import { validationMixin } from 'vuelidate';
 import { email, required } from 'vuelidate/lib/validators';
-
-const errors = {
-  email: {
-    required: 'Это поле обязательно для заполнения',
-    email: 'Введте пожалуйста корректный email',
-  },
-  password: {
-    required: 'Это поле обязательно для заполнения',
-  },
-};
+import { AUTH_LOGIN } from '../store/actions/auth';
 
 export default {
   name: 'LogIn',
@@ -85,7 +77,6 @@ export default {
     return {
       email: '',
       password: '',
-      submitStatus: null,
     }
   },
   validations: {
@@ -98,31 +89,51 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'isLoggedIn',
+      'authStatus',
+    ]),
   },
   methods: {
     getFieldErrorMessage(field) {
+      const errors = {
+        email: {
+          required: 'Это поле обязательно для заполнения',
+          email: 'Введте пожалуйста корректный email',
+        },
+        password: {
+          required: 'Это поле обязательно для заполнения',
+        },
+      };
+
       if (!this.$v[field].$error) {
         return '';
       }
+
       const errorKey = Object.keys(errors[field]).find(key => !this.$v[field][key]);
       return errors[field][errorKey] || 'Ошибка ввода';
     },
-    sendRegData() {
+    sendAuthData() {
       this.$v.$touch();
       if (this.$v.$invalid) {
-        this.submitStatus = 'ERROR';
         return;
       }
-      const data = {
+
+      const credentials = {
         email: this.email,
         password: this.password,
       };
-      this.submitStatus = 'PENDING';
-      // eslint-disable-next-line
-      console.log(`Try send: ${JSON.stringify(data)}`);
-      setTimeout(() => {
-        this.submitStatus = 'OK';
-      }, 2000);
+
+      this.$store.dispatch(AUTH_LOGIN, credentials)
+        .then((response) => {
+          this.$router.push('/');
+        })
+        .catch((err) => {
+          // eslint-disable-next-line
+          console.log(err);
+          this.password = '';
+          this.$v.$reset();
+        });
     },
   },
 }
