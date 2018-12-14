@@ -125,7 +125,7 @@ header
   border-radius: 50%
   margin-right: 15px
   
-@media only screen and (max-width: 1192px)
+@media only screen and (max-width: 1193px)
   #header-content
     justify-content: center
   #logo-img
