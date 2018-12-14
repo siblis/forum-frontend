@@ -49,8 +49,20 @@ const router = new VueRouter({
   ]
 });
 
-new Vue({
+const app = new Vue({
   router,
   render: h => h(App),
   store,
-}).$mount('#app');
+});
+
+// если есть токен, то при запросах axios будет включать заголовок Authorization: 'Bearer <токен>'
+app.axios.interceptors.request.use(config => {
+  if (app.$store.getters.isLoggedIn) {
+    config.headers = {
+      Authorization: app.$store.getters.authHeaderValue,
+    };
+  }
+  return config;
+});
+
+app.$mount('#app');

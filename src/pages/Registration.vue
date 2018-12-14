@@ -19,8 +19,7 @@
             <a class="social-registration-item google-plus" href="/auth/google-plus">
               <i class='icon-google-plus'></i>
             </a>
-            <a class="social-registration-item vkontakte" href="/auth/vkontakte"> 10 часов назад
-
+            <a class="social-registration-item vkontakte" href="/auth/vkontakte">
               <i class='icon-vkontakte'></i>
             </a>
             <a class="social-registration-item facebook" href="/auth/facebook">
@@ -38,35 +37,35 @@
                       id="userName"
                       type="text"
                       label-text="Имя"
+                      :autofocus="true"
                       :input-error="getFieldErrorMessage('userName')"                                    
-          ></form-input>
+          />
           <form-input :value="email"
                       v-model.trim="$v.email.$model"
                       id="email"
                       type="email"
                       label-text="Почта"
                       :input-error="getFieldErrorMessage('email')"                                    
-          ></form-input>
+          />
           <form-input :value="password"
                       v-model.trim="$v.password.$model"
                       id="password"
                       type="password"
                       label-text="Пароль"
                       :input-error="getFieldErrorMessage('password')"                                    
-          ></form-input>
+          />
           <form-input :value="confirmPassword"
                       v-model.trim="$v.confirmPassword.$model"
                       id="confirmPassword"
                       type="password"
                       label-text="Подтвердить пароль"
                       :input-error="getFieldErrorMessage('confirmPassword')"                                    
-          ></form-input>
-
+          />
           <input  class="button button-main-big"
                   type="submit"
                   value="Зарегистрироваться"
-                  :disabled="submitStatus === 'PENDING'">
-          
+                  :disabled="isFormBlocked"
+          />
           <div class="checkbox-wrap">
             <input  type="checkbox"
                     id="isAccepted"
@@ -83,27 +82,9 @@
 import FormInput from '../components/FormInput.vue';
 import { validationMixin } from 'vuelidate';
 import { email, required, minLength , sameAs, helpers } from 'vuelidate/lib/validators';
+import { REG_REQUEST } from '../store/actions';
 
 const alpha = helpers.regex('alpha', /^([а-яё -]+|[a-z ]+)$/i);
-
-const errors = {
-  userName: {
-    required: 'Это поле обязательно для заполнения',
-    alpha: 'Имя может состоять только из букв одного алфавита',
-    minLength: 'Имя должно содержать не менее 4 симолов', 
-  },
-  email: {
-    required: 'Это поле обязательно для заполнения',
-    email: 'Введте пожалуйста корректный email',
-  },
-  password: {
-    required: 'Это поле обязательно для заполнения',
-    minLength: 'Минимальная длина пароля 8 символов',
-  },
-  confirmPassword: {
-    sameAsPassword: 'Пароли не совпадают',
-  },
-};
 
 export default {
   name: 'Registration',
@@ -141,9 +122,32 @@ export default {
     },
   },
   computed: {
+    isFormBlocked() {
+      return this.$store.getters.isAuthBlocked
+          || this.$store.getters.isLoadProfileBlocked
+          || this.$store.getters.isRegBlocked
+    },
   },
   methods: {
     getFieldErrorMessage(field) {
+      const errors = {
+        userName: {
+          required: 'Это поле обязательно для заполнения',
+          alpha: 'Имя может состоять только из букв одного алфавита',
+          minLength: 'Имя должно содержать не менее 4 симолов', 
+        },
+        email: {
+          required: 'Это поле обязательно для заполнения',
+          email: 'Введте пожалуйста корректный email',
+        },
+        password: {
+          required: 'Это поле обязательно для заполнения',
+          minLength: 'Минимальная длина пароля 8 символов',
+        },
+        confirmPassword: {
+          sameAsPassword: 'Пароли не совпадают',
+        },
+      };  
       if (!this.$v[field].$error) {
         return '';
       }
@@ -153,29 +157,22 @@ export default {
     sendRegData() {
       this.$v.$touch();
       if (this.$v.$invalid || !this.isAccepted) {
-        this.submitStatus = 'ERROR';
         return;
       }
       const data = {
         name: this.userName,
-        lastName: this.userLastName,
         email: this.email,
         password: this.password,
-        isAccepted: this.isAccepted,
+        password_confirmation: this.confirmPassword,
+        // isAccepted: this.isAccepted,
       };
-      this.submitStatus = 'PENDING';
-      // eslint-disable-next-line
-      console.log(`Try send: ${JSON.stringify(data)}`);
-      setTimeout(() => {
-        this.submitStatus = 'OK';
-        this.userName = '';
-        this.userLastName = '';
-        this.email = '';
-        this.password = '';
-        this.confirmPassword = '';
-        this.isAccepted = false;
-        this.$v.$reset();
-      }, 2000);
+      this.$store.dispatch(REG_REQUEST, data)
+        .then((response) => {
+          this.$router.push('/');
+        })
+        .catch((err) => {
+          this.$v.$reset();
+        });
     },
   },
 }

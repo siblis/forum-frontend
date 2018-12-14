@@ -1,13 +1,10 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { getTokenAuthHeaderValue } from '../../utils/token';
-import { PROFILE_LOAD, PROFILE_CLEAR } from '../actions/profile';
-import { AUTH_LOGOUT } from '../actions/auth';
+import { PROFILE_LOAD, AUTH_LOGOUT, PROFILE_TRY_TO_LOAD } from '../actions';
 
 const PROFILE_REQUEST_MUT = 'PROFILE_REQUEST_MUT';
 const PROFILE_SUCCESS_MUT = 'PROFILE_SUCCESS_MUT';
 const PROFILE_ERROR_MUT = 'PROFILE_ERROR_MUT';
-const PROFILE_CLEAR_MUT = 'PROFILE_CLEAR_MUT';
 
 const initialState = {
   status: '',
@@ -27,27 +24,19 @@ const mutations = {
     state.status = 'ERROR';
     state.errorMessage = message;
   },
-  [PROFILE_CLEAR_MUT]: (state) => {
-    state.status = '';
-    state.errorMessage = '';
-    state.profile = {};
-  },
 };
 
 const getters = {
-  getProfile: state => state.profile,
-  isProfileLoaded: state => !!state.profile.name,
+  profile: state => state.profile,
+  isProfileLoaded: state => !!state.profile.id,
+  isLoadProfileBlocked: state => state.status === 'PENDING',
 };
 
 const actions = {
   [PROFILE_LOAD]: ({ commit, dispatch }) => {
     commit(PROFILE_REQUEST_MUT);
-    Vue.axios.post('users/me', {
-      // crossDomain: true,
-      headers: {
-        Authorization: getTokenAuthHeaderValue(),
-      },
-    })
+
+    Vue.axios.get('users/me')
       .then((response) => {
         commit(PROFILE_SUCCESS_MUT, response.data);
       })
@@ -56,7 +45,11 @@ const actions = {
         dispatch(AUTH_LOGOUT);
       });
   },
-  [PROFILE_CLEAR]: ({ commit }) => commit(PROFILE_CLEAR_MUT),
+  [PROFILE_TRY_TO_LOAD]: ({ dispatch, getters, rootGetters }) => {
+    if (rootGetters.isLoggedIn && !getters.isProfileLoaded) {
+      dispatch(PROFILE_LOAD);
+    }
+  },
 };
 
 export default {

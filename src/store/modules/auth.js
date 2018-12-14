@@ -1,8 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { AUTH_LOGIN, AUTH_LOGOUT } from '../actions/auth';
-import { PROFILE_LOAD } from '../actions/profile';
+import { AUTH_LOGIN, AUTH_LOGOUT, PROFILE_LOAD } from '../actions';
 import { getToken, setToken, removeToken } from '../../utils/token';
 
 const AUTH_REQUEST_MUT = 'AUTH_REQUEST_MUT';
@@ -38,8 +37,9 @@ const mutations = {
 
 const getters = {
   isLoggedIn: state => state.token !== '',
+  authHeaderValue: (state, getters) => getters.isLoggedIn ? `Bearer ${state.token}` : null,
   authStatus: state => state.status,
-  // getTokenAuthHeaderValue: state => state.token ? `Bearer ${state.token}` : null  // TO-DO
+  isAuthBlocked: state => state.status === 'PENDING',
 };
 
 const actions = {
