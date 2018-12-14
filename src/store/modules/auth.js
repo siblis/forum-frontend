@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { AUTH_LOGIN, AUTH_LOGOUT, PROFILE_LOAD } from '../actions';
+import { AUTH_LOGIN, AUTH_LOGOUT, PROFILE_LOAD, PROFILE_CLEAR } from '../actions';
 import { getToken, setToken, removeToken } from '../../utils/token';
 
 const AUTH_REQUEST_MUT = 'AUTH_REQUEST_MUT';
@@ -45,7 +45,7 @@ const getters = {
 const actions = {
   [AUTH_LOGIN]: ({ commit, dispatch, getters }, credentials) => {
     if (getters.isLoggedIn) {
-      commit(AUTH_LOGOUT_MUT);
+      dispatch(AUTH_LOGOUT);
     }
 
     commit(AUTH_REQUEST_MUT);
@@ -66,9 +66,10 @@ const actions = {
         throw new Error(err.message);
       });
   },
-  [AUTH_LOGOUT]: ({ commit }) => {
+  [AUTH_LOGOUT]: ({ commit, dispatch }) => {
     commit(AUTH_LOGOUT_MUT);
     commit(AUTH_CLEAR_MUT);
+    dispatch(PROFILE_CLEAR);
     removeToken();
   },
 };

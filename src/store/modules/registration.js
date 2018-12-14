@@ -15,7 +15,10 @@ const initialState = {
 const mutations = {
   [REG_REQUEST_MUT]: state => state.status = 'PENDING',
   [REG_SUCCESS_MUT]: state => state.status = 'SUCCESS',
-  [REG_ERROR_MUT]: state => state.status = 'ERROR',
+  [REG_ERROR_MUT]: (state, message) => {
+    state.status = 'ERROR';
+    state.errorMessage = message;
+  },
 };
 
 const getters = {
