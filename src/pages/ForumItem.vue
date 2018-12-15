@@ -25,7 +25,7 @@
               </div>
               <div class="postText">{{post.content}}</div>
               <div class="deletePost row end-xs">
-                <button class="button button-main" v-if="token && (post.user_id === my.id)"  @click="delConfirm">Удалить</button>
+                <button class="button button-main" v-if="post.user_id === my.id"  @click="delConfirm">Удалить</button>
               </div>
             </div>
           </div>
@@ -171,7 +171,6 @@
 </template>
 
 <script>
-  import { getTokenAuthHeaderValue } from '../utils/token';
 
   export default {
     name: 'ForumItem',
@@ -184,27 +183,14 @@
         }
         ],
         post: '',
-        my:'',
         user: '',
         userId: '',
         commentsCount: '',
         userName: '',
         userComments: [],
-        token: getTokenAuthHeaderValue(),
        }
     },
     async mounted() {
-      await this.axios
-        .post(
-          'users/me',
-          {key:'value'},
-          {headers: {'Authorization': this.token}}
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.my = response.data;
-        })
-        .catch(error => console.log(error));
       await this.axios
         .get('posts/' + this.postId)
         .then((post) => {
@@ -229,12 +215,16 @@
         })
         .catch(error => console.log(error));
     },
+    computed:{
+      my() {
+        return this.$store.getters.profile;
+      }
+    },
     methods: {
       async delPost () {
         await this.axios
           .delete(
             `posts/${this.post.id}`,
-            {headers: {'Authorization': this.token}}
           )
           .then((response) => {
             document.querySelector('.del-confirm').classList.add('invisible');
