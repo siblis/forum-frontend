@@ -8,12 +8,12 @@
             Главная
           </router-link>
 
-          <h1 class="postName col-xs-12">{{post.title}}</h1>
+          <!--<h1 class="postName col-xs-12">{{post.title}}</h1>-->
 
-          <div class="tags row col-xs-12" v-if="post.tags && post.tags.length">
-            <i class='icon-label'></i>
-            <a href="#" class="postTag" v-for="(tag, i) in post.tags" :key="i">{{tag}}</a>
-          </div>
+          <!--<div class="tags row col-xs-12" v-if="post.tags && post.tags.length">-->
+            <!--<i class='icon-label'></i>-->
+            <!--<a href="#" class="postTag" v-for="(tag, i) in post.tags" :key="i">{{tag}}</a>-->
+          <!--</div>-->
 
           <div class="post row" >
             <div class="userImg">U</div>
@@ -25,7 +25,7 @@
               </div>
               <div class="postText">{{post.content}}</div>
               <div class="deletePost row end-xs">
-                <button class="button button-main" v-if="token && (post.user_id === my.id)"  @click="delConfirm">Удалить</button>
+                <button class="button button-main" v-if="(post.user_id === my.id)"  @click="delConfirm">Удалить</button>
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@
 </template>
 
 <script>
-  import { getTokenAuthHeaderValue } from '../utils/token';
+  // import { getTokenAuthHeaderValue } from '../utils/token';
 
   export default {
     name: 'ForumItem',
@@ -190,15 +190,15 @@
         commentsCount: '',
         userName: '',
         userComments: [],
-        token: getTokenAuthHeaderValue(),
+        // token: getTokenAuthHeaderValue(),
        }
     },
     async mounted() {
       await this.axios
-        .post(
+        .get(
           'users/me',
-          {key:'value'},
-          {headers: {'Authorization': this.token}}
+          // {key:'value'},
+          // {headers: {'Authorization': this.token}}
         )
         .then((response) => {
           console.log(response.data);
@@ -210,31 +210,31 @@
         .then((post) => {
           console.log(post.data);
           this.post = post.data;
-          this.userId = post.data.username.id;
-          this.commentsCount = post.data.comments.length;
+          // this.userId = post.data.username.id;
+          // this.commentsCount = post.data.comments.length;
           this.userName = post.data.username.name;
         })
         .catch(error => console.log(error));
-      await this.axios
-        .get(`users/${this.userId}`)
-        .then((user) => {
-          this.user = user.data;
-        })
-        .catch(error => console.log(error));
-      await this.axios
-        .get(`posts/${this.userId}/comments`)
-        .then((comment) => {
-          this.userComments = comment.data;
-          // console.log(this.userComments);
-        })
-        .catch(error => console.log(error));
+      // await this.axios
+      //   .get(`users/${this.userId}`)
+      //   .then((user) => {
+      //     this.user = user.data;
+      //   })
+      //   .catch(error => console.log(error));
+      // await this.axios
+      //   .get(`posts/${this.userId}/comments`)
+      //   .then((comment) => {
+      //     this.userComments = comment.data;
+      //     // console.log(this.userComments);
+      //   })
+      //   .catch(error => console.log(error));
     },
     methods: {
       async delPost () {
         await this.axios
           .delete(
             `posts/${this.post.id}`,
-            {headers: {'Authorization': this.token}}
+            // {headers: {'Authorization': this.token}}
           )
           .then((response) => {
             document.querySelector('.del-confirm').classList.add('invisible');

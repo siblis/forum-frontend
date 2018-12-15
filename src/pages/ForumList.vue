@@ -10,7 +10,7 @@
           <div class="topic-params row">
             <!--скрыла, пока не приходят теги-->
             <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">-->
-              <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
+            <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
             <!--</span>-->
             <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-4">
               <nobr><i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }} </nobr>
@@ -33,21 +33,21 @@
         </div>
       </div>
       <div class="paginator">
-      <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
-        <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
-        </svg>
-      </button>
-      <button class="button paginate-links" v-for="(pageNumber,index) in pagesList"
-              :key="index" v-on:click="changePage(pageNumber)"
-              v-bind:class="{ active: page === pageNumber }"
-              :disabled="pageNumber === '...' || page === pageNumber">{{pageNumber}}
-      </button>
-      <button class="button paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">
-        <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.816667 1.175L4.64167 5L0.816667 8.825L2 10L7 5L2 0L0.816667 1.175Z" fill="#4D4D4D"/>
-        </svg>
-      </button>
+        <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
+        <button class="button paginate-links" v-for="(pageNumber,index) in pagesList"
+                :key="index" v-on:click="changePage(pageNumber)"
+                v-bind:class="{ active: page === pageNumber }"
+                :disabled="pageNumber === '...' || page === pageNumber">{{pageNumber}}
+        </button>
+        <button class="button paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.816667 1.175L4.64167 5L0.816667 8.825L2 10L7 5L2 0L0.816667 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
       </div>
     </div>
     <div class="topic-block col-xs-12 col-md-3">
@@ -209,6 +209,7 @@
     width: 100%
     padding: 200px 0
     text-align: center
+
   .paginator
     margin: 35px 20px 40px 50px
     .paginate-links
