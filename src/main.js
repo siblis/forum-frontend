@@ -9,7 +9,7 @@ import moment from 'moment';
 import VueMoment from 'vue-moment';
 import pluralize from './utils/pluralize';
 import ForumItem from '@/pages/ForumItem';
-import Example from '@/pages/Example';
+// import Example from '@/pages/Example';
 import ForumList from '@/pages/ForumList';
 import LogIn from '@/pages/LogIn';
 import Registration from '@/pages/Registration';
@@ -31,7 +31,7 @@ Vue.filter('pluralize', pluralize);
 
 const router = new VueRouter({
   routes: [
-    {path: '/', component: Example},
+    {path: '/', component: ForumList},
     {path: '/profile', component: ForumAccount},
     {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},
