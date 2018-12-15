@@ -153,6 +153,13 @@
     color: $text_background_color
     font-size: $medium_font_size
 
+  footer
+    position: fixed
+    left: 0
+    bottom: 0
+    min-height: 64px
+    width: 100%
+
   .footer-content
     padding: 22px 15px 0
 
