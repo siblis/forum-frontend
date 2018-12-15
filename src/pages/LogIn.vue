@@ -36,7 +36,7 @@
                       id="email"
                       type="email"
                       label-text="E-mail"
-                      autofocus="true"
+                      :autofocus="true"
                       :input-error="getFieldErrorMessage('email')"                                    
           />
           <form-input :value="password"
@@ -49,7 +49,7 @@
           <input  class="button button-main-big"
                   type="submit"
                   value="Войти"
-                  :disabled="authStatus === 'PENDING'"
+                  :disabled="isFormBlocked"
           />
         </form>
         <a href='/pass/recovery' class='recovery-href'>Забыли пароль?</a>
@@ -63,11 +63,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import FormInput from '../components/FormInput.vue';
 import { validationMixin } from 'vuelidate';
 import { email, required } from 'vuelidate/lib/validators';
-import { AUTH_LOGIN } from '../store/actions/auth';
+import { AUTH_LOGIN } from '../store/actions';
 
 export default {
   name: 'LogIn',
@@ -91,10 +90,11 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
-      'isLoggedIn',
-      'authStatus',
-    ]),
+    isFormBlocked() {
+      return this.$store.getters.isAuthBlocked
+          || this.$store.getters.isLoadProfileBlocked
+          || this.$store.getters.isRegBlocked
+    },
   },
   methods: {
     getFieldErrorMessage(field) {
@@ -127,10 +127,10 @@ export default {
       };
 
       this.$store.dispatch(AUTH_LOGIN, credentials)
-        .then((response) => {
+        .then(() => {
           this.$router.push('/');
         })
-        .catch((err) => {
+        .catch(() => {
           this.password = '';
           this.$v.$reset();
         });
