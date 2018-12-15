@@ -8,8 +8,10 @@
             :id="id"
             :type="type || 'text'"    
             :placeholder="placeholder || ''"
+            :autofocus="autofocus"
             :value="value"
-            v-on="inputListeners">
+            v-on="inputListeners"
+    />
 
     <div  class='feedback'
           :class="{ invisible: !inputError }">
@@ -26,6 +28,7 @@ export default {
     id: String,
     type: String,
     placeholder: String,
+    autofocus: Boolean,
     labelText: String,
     inputError: String
   },

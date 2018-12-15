@@ -46,7 +46,7 @@
 
 
 <script>
-import { AUTH_LOGOUT } from '../store/actions/auth'
+import { AUTH_LOGOUT } from '../store/actions'
 export default {
   name: 'HeaderForum',
   props: {},
@@ -147,7 +147,7 @@ header
   border-radius: 50%
   margin-right: 15px
   
-@media only screen and (max-width: 1192px)
+@media only screen and (max-width: 1193px)
   #header-content
     justify-content: center
   #logo-img

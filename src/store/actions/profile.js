@@ -1,2 +1,0 @@
-export const PROFILE_LOAD = 'PROFILE_LOAD';
-export const PROFILE_CLEAR = 'PROFILE_CLEAR';

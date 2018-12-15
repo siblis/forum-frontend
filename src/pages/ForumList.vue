@@ -8,9 +8,10 @@
           <router-link :to="{name: 'posts', params: {postId:item.id}}"><h4 class="header-of-topic">{{item.title}}</h4>
           </router-link>
           <div class="topic-params row">
-            <span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">
-              <nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>
-            </span>
+            <!--скрыла, пока не приходят теги-->
+            <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">-->
+              <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
+            <!--</span>-->
             <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-4">
               <nobr><i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }} </nobr>
             </span>
@@ -26,12 +27,12 @@
         <!--<span class="watchNewCount"><i class='icon-speak' style="font-size: 1.5em"></i> Ответить</span>-->
         <!--</div>-->
         <div class="col-xs-12 col-sm-2">
-          <p v-if="item.comments" class="comments_count">{{item.comments.length}} </p>
-          <p class="comments_count">{{ item.comments.length | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
+          <!--скрыла, пока не приходят комменты -->
+          <!--<p v-if="item.comments" class="comments_count">{{item.comments.length}} </p>-->
+          <!--<p class="comments_count">{{ item.comments.length | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>-->
         </div>
       </div>
       <div class="paginator">
-
       <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
         <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
@@ -78,6 +79,7 @@
             this.pagination();
           })
           .catch(error => alert(error));
+        // для тестов бэкэнда
         // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:1,
         //   category_id:4,
         //   title: 'weeerr',

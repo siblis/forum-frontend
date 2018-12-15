@@ -12,7 +12,7 @@
 
           <div class="tags row col-xs-12" v-if="post.tags && post.tags.length">
             <i class='icon-label'></i>
-            <a href="#" class="postTag" v-for="tag in post.tags">{{tag}}</a>
+            <a href="#" class="postTag" v-for="(tag, i) in post.tags" :key="i">{{tag}}</a>
           </div>
 
           <div class="post row" >
@@ -463,6 +463,7 @@
 
   .left-content
     display: none
+    padding: 0
     @media (min-width: 1024px) // не придумал, как скрыть блок через flexboxgrid
       display: block
     .side-bar
