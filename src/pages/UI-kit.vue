@@ -1,5 +1,5 @@
 <template>
-    <footer>
+    <div class="ui-kit">
       <svg class="social-icons" display="none" xmlns="http://www.w3.org/2000/svg">
         <symbol id="vk" viewBox="0 0 20 12">
           <path
@@ -85,97 +85,95 @@
              15.4999 7.74997V6.19997H7.74997Z"/>
         </symbol>
       </svg>
-      <div class="footer-content row">
-        <div class="footer-info row col-xs-12 col-md-7">
-          <div class="footer-blocks col-xs-12 last-xs center-xs col-sm-6 first-sm start-sm col-md-7">
-            &copy; 2018 "IT-room" Форум для IT-специалистов
-          </div>
-          <div class="footer-blocks col-xs-12 center-xs col-sm-6 end-sm col-md-5 center-md">
-            Контакты: 8-800-800-88-88
-          </div>
-        </div>
-        <div class="footer-icons row col-xs-12 first-xs center-xs col-md-5 end-md last-md">
-          <a class="ico-link" target="_blank">
-            <svg class="ico-vk">
-              <use xlink:href="#vk"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-facebook">
-              <use xlink:href="#facebook"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-twitter">
-              <use xlink:href="#twitter"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-instagram">
-              <use xlink:href="#instagram"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-telegram">
-              <use xlink:href="#telegram"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-youtube">
-              <use xlink:href="#youtube"></use>
-            </svg>
-          </a>
-          <a class="ico-link" target="_blank">
-            <svg class="ico-google">
-              <use xlink:href="#google"></use>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </footer>
+        <!-- использовать:
+          <svg class="some-class">
+            <use xlink:href="#symbol-id"></use>
+          </svg>
+        -->
+        <button class="button button-default">Вход</button>
+        <br>
+        <button class="button button-default">Регистрация</button>
+        <br>
+        <button class="button button-default-big">Опубликовать тему</button>
+        <br>
+        <button class="button button-default-big">Отмена</button>
+        <br>
+        <button class="button button-main">Добавить тему  +</button>
+        <br>
+        <button class="button button-main-big">Войти</button>
+        <p>
+          <i class='icon-label' style="color: #ff0000; font-size: 2em"></i>
+          стили естественно можно задавать классом, работет и font-size и color
+        </p>
+        <p>
+          <i class='icon-clock' style="color: #757575"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-eye' style="color: #757575"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-speak'></i>
+        </p>
+        <p>
+          <i class='icon-arrow-back'></i>
+        </p>
+        <p>
+          <i class='icon-dots'></i>
+        </p>
+        <p>
+          <i class='icon-facebook' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-google-plus' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-instagram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-telegram' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-twitter' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-vkontakte' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-youtube' style="color: #fff"></i>
+          здесь цвет для соответствия дизайну
+        </p>
+        <p>
+          <i class='icon-chat'></i>
+        </p>
+        <p>
+          <i class='icon-plus'></i>
+        </p>
+        <p>
+          <i class='icon-checkbox'></i>
+        </p>
+        <p>
+          <i class='icon-check'></i>
+        </p>
+    </div>
 </template>
 
-
 <script>
-  export default {
-    name: 'FooterForum',
-    props: {}
-  }
+    export default {
+        name: 'UIkit',
+        props: {}
+    }
 </script>
 
-
 <style lang="sass" scoped>
-
-  @import "../assets/variables.sass"
-
-  *
-    background-color: $dark_background_color
-    color: $text_background_color
-    font-size: $medium_font_size
-
-  .footer-content
-    padding: 22px 15px 0
-
-  .footer-info
-    .footer-blocks
-      margin-bottom: 22px
-      line-height: 20px
-
-  .footer-icons
-    margin-bottom: 22px
-
-  .ico-link
-    height: 20px
-    width: 20px
-    cursor: pointer
-    &:not(:last-child)
-      margin-right: 12px
-    svg
-      width: 100%
-      height: 100%
-      fill: $text_background_color
-    &:hover
-      svg
-        fill: $background-color
-
+  .ui-kit
+    padding: 50px
 </style>
+
