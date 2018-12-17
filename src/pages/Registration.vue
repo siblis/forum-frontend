@@ -183,9 +183,9 @@ export default {
 @import "../assets/variables"
 
 .registration-card-wrap
-  padding: 93px 0
+  padding: 93px 10px
   @media screen and ( max-width: 480px )
-    padding: 10px 0
+    padding: 10px
 .registration-card
   max-width: 500px
   margin: 0 auto
@@ -252,18 +252,24 @@ export default {
       color: $button_hover_color
     &:active
       color: $auth_form_social_hover_color
-  & .google-plus
-    font-size: 1.06rem
   & .vkontakte
-    font-size: 0.745rem
     margin-left: 17.4px
   & .facebook
-    font-size: 1.25rem
     align-self: flex-start
     margin-left: 28.6px
   & .twitter
-    font-size: 0.925rem
     margin-left: 30.6px
+
+i.icon
+  &-google-plus
+    font-size: 1.06rem
+  &-vkontakte
+    font-size: 0.745rem
+  &-facebook
+    font-size: 1.25rem
+    align-self: flex-start
+  &-twitter
+    font-size: 0.925rem
 
 input[type="submit"]
   margin-top: 8px
