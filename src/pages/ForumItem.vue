@@ -12,7 +12,7 @@
 
           <div class="tags row col-xs-12" v-if="post.tags && post.tags.length">
             <i class='icon-label'></i>
-            <a href="#" class="postTag" v-for="tag in post.tags">{{tag}}</a>
+            <a href="#" class="postTag" v-for="(tag, i) in post.tags" :key="i">{{tag}}</a>
           </div>
 
           <div class="post row" >
@@ -24,8 +24,10 @@
                 <div class="postTime" v-if="post.created_at && !null">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
               </div>
               <div class="postText">{{post.content}}</div>
+              <div class="deletePost row end-xs">
+                <button class="button button-main" v-if="post.user_id === my.id"  @click="delConfirm">Удалить</button>
+              </div>
             </div>
-
           </div>
 
         </div>
@@ -153,10 +155,23 @@
           </div>
         </div>
       </div>
+      <div class="del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
+        <p class="col-xs-12">Вы уверены, что хотите удалить пост? Все комментарии тоже будут удалены.</p>
+        <button class="button button-main col-xs-12 col-sm-5" @click="delPost">Удалить</button>
+        <button class="button button-main col-xs-12 col-sm-5" @click="clsConfirm">Отмена</button>
+      </div>
+      <div class="after-del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
+        <p class="col-xs-12">Пост удалён.</p>
+        <router-link class="col-xs-12 col-sm-7" to="/forum">
+          <button class="button button-main confirm-link">Ок</button>
+        </router-link>
+      </div>
+      <div class="shadow invisible"></div>
     </div>
 </template>
 
 <script>
+
   export default {
     name: 'ForumItem',
     props: ['postId'],
@@ -173,41 +188,58 @@
         commentsCount: '',
         userName: '',
         userComments: [],
-        showAnswer: false,
        }
     },
     async mounted() {
       await this.axios
-        .get('http://api.forum.pocketmsg.ru/posts/' + this.postId)
+        .get('posts/' + this.postId)
         .then((post) => {
-          console.log(post);
+          console.log(post.data);
           this.post = post.data;
           this.userId = post.data.username.id;
           this.commentsCount = post.data.comments.length;
           this.userName = post.data.username.name;
         })
-        .catch(error => alert(error));
-      await  this.axios
-        .get(`https://jsonplaceholder.typicode.com/users/${this.userId}`)
+        .catch(error => console.log(error));
+      await this.axios
+        .get(`users/${this.userId}`)
         .then((user) => {
           this.user = user.data;
         })
-        .catch(error => alert(error));
+        .catch(error => console.log(error));
       await this.axios
-        .get(`https://jsonplaceholder.typicode.com/posts/${this.userId}/comments`)
+        .get(`posts/${this.userId}/comments`)
         .then((comment) => {
           this.userComments = comment.data;
           // console.log(this.userComments);
         })
-        .catch(error => alert(error));
+        .catch(error => console.log(error));
+    },
+    computed:{
+      my() {
+        return this.$store.getters.profile;
+      }
     },
     methods: {
-      addComment: function () {
-        this.comments.push({
-          textComment: this.newComment,
-
-        });
-        this.newComment = "";
+      async delPost () {
+        await this.axios
+          .delete(
+            `posts/${this.post.id}`,
+          )
+          .then((response) => {
+            document.querySelector('.del-confirm').classList.add('invisible');
+            document.querySelector('.after-del-confirm').classList.remove('invisible');
+            return response;
+          })
+          .catch(error => console.log(error));
+      },
+      delConfirm () {
+        document.querySelector('.del-confirm').classList.remove('invisible');
+        document.querySelector('.shadow').classList.remove('invisible');
+      },
+      clsConfirm () {
+        document.querySelector('.del-confirm').classList.add('invisible');
+        document.querySelector('.shadow').classList.add('invisible');
       },
       openAnswer(id, name) {
         // this.newComment[id] += `${name}, `;
@@ -224,6 +256,13 @@
         document.querySelector(`#my-answer-${id}`).classList.add('invisible');
         document.querySelector(`#comment-props-${id}`).classList.remove('invisible');
         // this.newComment[id] = '';
+      },
+      addComment: function () {
+        this.comments.push({
+          textComment: this.newComment,
+
+        });
+        this.newComment = "";
       },
      },
   }
@@ -414,12 +453,42 @@
 
   .left-content
     display: none
+    padding: 0
     @media (min-width: 1024px) // не придумал, как скрыть блок через flexboxgrid
       display: block
     .side-bar
       background-color: $aside_background_color
       height: 100%
 
+  .del-confirm, .after-del-confirm
+    padding-top: 15px
+    padding-bottom: 15px
+    position: fixed
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    background: $text_background_color
+    border-radius: 4px
+    min-width: 300px
+    z-index: 1100
+    max-height: 100%
+  .after-del-confirm
+    a
+      padding: 0
+    .confirm-link
+      width: 100%
+      height: 100%
+      margin: 0
+
+  .shadow
+    position: fixed
+    top: 0
+    left: 0
+    height: 100%
+    width: 100%
+    z-index: 1000
+    background: $comment_background_color
+    opacity: 0.5
 
   .invisible
     display: none

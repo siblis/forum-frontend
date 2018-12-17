@@ -10,6 +10,7 @@
 <script>
   import FooterForum from "@/components/FooterForum";
   import HeaderForum from "@/components/HeaderForum";
+  import { PROFILE_TRY_TO_LOAD } from './store/actions';
   export default {
     name: 'app',
     components: {
@@ -19,6 +20,11 @@
     data: () => {
       return {
       }
+    },
+    created() {
+      // если в хранилище есть токен и профиль отсутствует,
+      // будет произведена попытка получить профиль с сервера
+      this.$store.dispatch(PROFILE_TRY_TO_LOAD);
     }
   }
 </script>
