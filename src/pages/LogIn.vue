@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>
+  <div>
     <div class='auth-card-wrap'>
       <div class='auth-card'>
         <div class='logo-block'>
