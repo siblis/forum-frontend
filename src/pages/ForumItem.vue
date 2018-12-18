@@ -1,29 +1,31 @@
 <template>
-    <div class="content row">
+  <div class="content row">
       <div class="main-content col-xs-12 col-md-6">
-        <div class="post-content row">
+        <router-link to="/" class="arrow-home col-xs-12 start-xs">
+          <i class='icon-arrow-back'></i>
+          <span class='arrow-home-text'>Главная</span>
+        </router-link>
+        <div class="post-card">
 
-          <router-link to="/" class="arrow-home col-xs-12 start-xs"> <!-- сделать размер 15px -->
-            <i class='icon-arrow-back'></i>
-            Главная
-          </router-link>
+          <h1 class="post-title col-xs-12">{{ post.title }}</h1>
 
-          <h1 class="postName col-xs-12">{{post.title}}</h1>
-
-          <div class="tags row col-xs-12" v-if="post.tags && post.tags.length">
-            <i class='icon-label'></i>
-            <a href="#" class="postTag" v-for="(tag, i) in post.tags" :key="i">{{tag}}</a>
+          <div class="post-tags row col-xs-12" v-if="hasTags">
+            <i class='post-tags-label icon-label'></i>
+            <a href="#" class="post-tag" v-for="(tag, i) in post.tags" :key="i">{{ tag }}</a>
           </div>
 
-          <div class="post row" >
-            <div class="userImg">U</div>
+          <div class="post-block">
+            <div class='row between-xs bottom-xs'>
+              <dir class="post-user-block col-xs-8 row bottom-xs">
+                <div class="post-user-img">U</div>
+                <a href="#" class="post-user-name">{{ authorName }}</a>
+              </dir>
+              <div class="post-time col-xs-4 end-xs" v-if="post.created_at">{{ [post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
+            </div>
 
-            <div class="postBody col-xs-12 col-sm">
-              <div class="postProps row between-xs">
-                <a href="#" class="postUserName">{{userName}}</a>
-                <div class="postTime" v-if="post.created_at && !null">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
-              </div>
-              <div class="postText">{{post.content}}</div>
+            <div class="post-body col-xs-12 col-sm">
+              <div class="post-content">{{ post.content }}</div>
+              <div class="postProps row between-xs"></div>
               <div class="deletePost row end-xs">
                 <button class="button button-main" v-if="post.user_id === my.id"  @click="delConfirm">Удалить</button>
               </div>
@@ -32,7 +34,7 @@
 
         </div>
 
-        <div class="post-content">
+        <div class="post-card">
           <h2 class="commentsCount">
             Комментарии ({{commentsCount}})
           </h2>
@@ -92,7 +94,7 @@
         </div>
 
         <!-- div скрывается, если не зарегистрирован :class="{invisible : loggedIn}" -->
-        <div  class="post-content" >
+        <div  class="post-card" >
 
           <h2>Оставить комментарий</h2>
 
@@ -167,11 +169,10 @@
         </router-link>
       </div>
       <div class="shadow invisible"></div>
-    </div>
+  </div>
 </template>
 
 <script>
-
   export default {
     name: 'ForumItem',
     props: ['postId'],
@@ -183,10 +184,9 @@
         }
         ],
         post: '',
-        user: '',
-        userId: '',
+        authorId: '',
+        authorName: '',
         commentsCount: '',
-        userName: '',
         userComments: [],
        }
     },
@@ -196,9 +196,16 @@
         .then((post) => {
           console.log(post.data);
           this.post = post.data;
-          this.userId = post.data.username.id;
-          this.commentsCount = post.data.comments.length;
-          this.userName = post.data.username.name;
+          this.authorId = post.data.username.id;
+          this.authorName = post.data.username.name;
+          // this.commentsCount = post.data.comments.length;
+          // this.userName = post.data.username.name;
+          // fake
+          this.post.title = 'Программирование микроконтроллеров';
+          this.post.tags = ['язык программирования', 'обучение', 'микроконтроллеры'];
+          this.authorName = 'Ной Кун';
+          this.post.content = 'Здравствуйте, хочу научиться программированию микроконтроллеров. Учусь на специальности Автомобилестроение по направлению электроника. Научиться программированию микроконтроллеров будет полезно в работе с автомобилями, в частности с ЭБУ. Знаю, что используют язык Си. Также некоторые начинают учиться этому на Ардуино, как мне говорили. Подскажите, с чего начинать и чем продолжать, пожалуйстапожалуйстапожалуйстапожалуйста';
+          // end fake
         })
         .catch(error => console.log(error));
       await this.axios
@@ -218,7 +225,10 @@
     computed:{
       my() {
         return this.$store.getters.profile;
-      }
+      },
+      hasTags() {
+        return this.post.tags && this.post.tags.length > 0
+      },
     },
     methods: {
       async delPost () {
@@ -286,33 +296,20 @@
     color: #b90015
 
   .main-content
-    margin-top: 38px
+    margin: 0
+    padding: 0 15px
     *
       margin: 0
       padding: 0
-      &:not(button)
+      &:not(button),
         background-color: $text_background_color
-    .userImg // заменить на фото
-      height: 32px
-      border-radius: 50%
-      width: 32px
-      background-color: grey
-      text-align: center
-      line-height: 32px
-      margin-right: 16px
-      margin-bottom: 8px
-    .postUserName
-      line-height: 14px
-      text-decoration: none
-      margin-bottom: 9px
-      &:hover
-        opacity: 0.5
-    .postText
-      margin-bottom: 12px
-      padding: 13px 16px 15px
+
+    .post-content
+      padding: 15px
       border-radius: 4px
       background-color: $comment_background_color
       word-wrap: break-word
+
     textarea
       min-height: 88px
       border: none
@@ -320,42 +317,92 @@
       overflow: auto
       &:focus
         outline: none
-
-  .post-content
-    padding: 10px 28px 24px 16px
-    margin-bottom: 17px
     .arrow-home
-      margin-top: -48px
-      margin-bottom: 10px
-      line-height: 38px
+      display: flex
+      align-items: center
+      padding: 10px 0
+      font-size: 16px
       text-decoration: none
       background-color: $background-color
+      &-text
+        display: inline-block
+        height: 18px
+        font-weight: 500
+        line-height: 18px
+        background-color: inherit
       &:hover
         opacity: 0.5
       .icon-arrow-back
-        background-color: $background-color
-        margin-right: 5px
-    h1
-      font-size: $h1_font_size
-      line-height: 33px
-      font-weight: bold
-      margin-bottom: 14px
-    .tags
-      margin-bottom: 16px
-      a
-        display: inline-block
-        margin-right: 4px
-        font-size: $tags_font_size
-        line-height: 15px
-        color: $base_font_color
+        opacity: 0.5 
+        background-color: inherit
+        margin-right: 11px
+
+  .post-card
+    padding: 20px
+    margin-bottom: 17px
+    
+  .post-title
+    font-size: $forun_item_title_size
+    word-wrap: break-word
+    line-height: normal
+    font-weight: 500
+    margin-bottom: 2px
+    @media screen and ( max-width: 420px )
+      font-size: $forun_item_title_size__samll
+
+  .post-tags
+    margin-bottom: 14px
+    &-label
+      font-size: 11px
+      line-height: 15px
+      color: $base_font_color
+      opacity: 0.5
+      margin-right: 8px
+  
+  .post-tag
+    display: inline-block
+    font-size: $forun_item_secondary_font_size
+    line-height: 15px
+    color: $base_font_color
+    opacity: 0.5
+    text-decoration: none
+    &:hover
+      opacity: 1
+    &:not(:last-child)
+      margin-right: 2px
+      &:after
+        content: ","
+
+  .post-block
+    display: flex
+    flex-direction: column
+    align-items: stretch
+
+    .post-user-img // заменить на фото
+      height: 32px
+      width: 32px
+      border-radius: 50%
+      background-color: $topic_block_background
+      text-align: center
+      line-height: 32px
+      margin-right: 8px
+    
+    .post-user-name
+      font-size: $forun_item_secondary_font_size
+      text-decoration: none
+      margin-bottom: 6px
+      &:hover
         opacity: 0.5
-        text-decoration: none
-        &:hover
-          opacity: 1
-      .icon-label
-        color: $base_font_color
-        opacity: 0.5
-        margin-right: 4px
+
+    .post-time
+      margin-bottom: 6px
+      font-size: $forun_item_secondary_font_size
+  
+  .post-body
+    padding-left: 40px
+    @media screen and ( max-width: 420px )
+      padding-left: 0
+      padding-top: 15px
 
   .postProps
     font-size: $tags_font_size
@@ -421,7 +468,8 @@
         .icon-speak
           color: $base_font_color
   .right-content
-    padding-top: 38px
+    margin: 0
+    padding: 38px 0 0
     *
       margin: 0
       padding: 0
