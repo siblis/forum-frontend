@@ -34,12 +34,9 @@ export default {
   },
   computed: {
     inputListeners() {
-      const vm = this;
       return {
         ...this.$listeners,
-        input(event) {
-          vm.$emit("input", event.target.value);
-        }
+        input: event => this.$emit("input", event.target.value),
       };
     }
   }

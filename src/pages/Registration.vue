@@ -100,7 +100,6 @@ export default {
       password: '',
       confirmPassword:'',
       isAccepted: false,
-      submitStatus: null,
     };
   },
   validations: {
@@ -126,6 +125,7 @@ export default {
       return this.$store.getters.isAuthBlocked
           || this.$store.getters.isLoadProfileBlocked
           || this.$store.getters.isRegBlocked
+          || !this.isAccepted
     },
   },
   methods: {
@@ -164,7 +164,6 @@ export default {
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmPassword,
-        // isAccepted: this.isAccepted,
       };
       this.$store.dispatch(REG_REQUEST, data)
         .then((response) => {
@@ -184,14 +183,14 @@ export default {
 
 .registration-card-wrap
   padding: 93px 10px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 10px
 .registration-card
   max-width: 500px
   margin: 0 auto
   background-color: $text_background_color
   padding: 47px 60px 40px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 30px 10px 10px
   
   & form
@@ -249,9 +248,9 @@ export default {
     background-color: inherit
     cursor: pointer
     &:hover
-      color: $button_hover_color
-    &:active
       color: $auth_form_social_hover_color
+    &:active
+      color: $button_hover_color
   & .vkontakte
     margin-left: 17.4px
   & .facebook
@@ -274,6 +273,9 @@ i.icon
 input[type="submit"]
   margin-top: 8px
   margin-bottom: 11px
+  &:focus
+    outline: none
+    box-shadow: 0px 2px 3px $auth_form_social_hover_color
 
 .checkbox-wrap
     background-color: inherit
@@ -312,4 +314,8 @@ input[type="checkbox"]
       position: absolute
       left: -15px
       top: -1px
+  &:focus
+    outline: none
+    &>+label:before
+      color: $auth_form_social_hover_color
 </style>

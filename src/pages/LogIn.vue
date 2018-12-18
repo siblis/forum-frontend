@@ -145,15 +145,16 @@ export default {
 
 .auth-card-wrap
   padding: 131px 10px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 10px
 .auth-card
   max-width: 500px
   margin: 0 auto 29px
   background-color: $text_background_color
   padding: 47px 60px 40px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 30px 10px 10px
+    margin-bottom: 10px
   
   & form
     display: flex
@@ -224,9 +225,9 @@ export default {
     background-color: inherit
     cursor: pointer
     &:hover
-      color: $button_hover_color
-    &:active
       color: $auth_form_social_hover_color
+    &:active
+      color: $button_hover_color
   & .vkontakte
     margin-left: 17.4px
   & .facebook
@@ -249,12 +250,20 @@ i.icon
 input[type="submit"]
   margin-top: 8px
   margin-bottom: 11px
+  &:focus
+    outline: none
+    box-shadow: 0px 2px 3px $auth_form_social_hover_color
 
-.recovery-href
+.recovery-href,
+.aside-card-link
   background-color: inherit
-  font-size: 15px
+  font-size: 1rem
   color: $auth_form_label_text_color
   text-decoration: none
+  outline: none
   &:hover
     color: $base_font_color
+    text-decoration: underline
+  &:focus
+    text-decoration: underline
 </style>
