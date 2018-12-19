@@ -80,17 +80,17 @@
           })
           .catch(error => alert(error));
         // для тестов бэкэнда
-        // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:1,
-        //   category_id:4,
-        //   title: 'weeerr',
-        //   description: 'text23',
-        //   content: 'text45',
-        //   tags_array: ["asd"]})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
+        this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
+          category_id:4,
+          title: 'weeerr',
+          description: 'text23',
+          content: 'text45',
+          tags_array: ["asd"]})
+          .then(response => {
+            this.items = response.data.data;
+            this.total = response.data.total;
+            this.pagination();
+          })
         //   .catch(error => alert(error));
         // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
         //   description: 'text',
