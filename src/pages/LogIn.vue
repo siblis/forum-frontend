@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>
+  <div>
     <div class='auth-card-wrap'>
       <div class='auth-card'>
         <div class='logo-block'>
@@ -144,16 +144,17 @@ export default {
 @import "../assets/variables"
 
 .auth-card-wrap
-  padding: 131px 0
-  @media screen and ( max-width: 480px )
-    padding: 10px 0
+  padding: 131px 10px
+  @media screen and ( max-width: 540px )
+    padding: 10px
 .auth-card
   max-width: 500px
   margin: 0 auto 29px
   background-color: $text_background_color
   padding: 47px 60px 40px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 30px 10px 10px
+    margin-bottom: 10px
   
   & form
     display: flex
@@ -224,31 +225,45 @@ export default {
     background-color: inherit
     cursor: pointer
     &:hover
-      color: $button_hover_color
-    &:active
       color: $auth_form_social_hover_color
-  & .google-plus
-    font-size: 1.06rem
+    &:active
+      color: $button_hover_color
   & .vkontakte
-    font-size: 0.745rem
     margin-left: 17.4px
   & .facebook
-    font-size: 1.25rem
     align-self: flex-start
     margin-left: 28.6px
   & .twitter
-    font-size: 0.925rem
     margin-left: 30.6px
+
+i.icon
+  &-google-plus
+    font-size: 1.06rem
+  &-vkontakte
+    font-size: 0.745rem
+  &-facebook
+    font-size: 1.25rem
+    align-self: flex-start
+  &-twitter
+    font-size: 0.925rem
 
 input[type="submit"]
   margin-top: 8px
   margin-bottom: 11px
+  &:focus
+    outline: none
+    box-shadow: 0px 2px 3px $auth_form_social_hover_color
 
-.recovery-href
+.recovery-href,
+.aside-card-link
   background-color: inherit
-  font-size: 15px
+  font-size: 1rem
   color: $auth_form_label_text_color
   text-decoration: none
+  outline: none
   &:hover
     color: $base_font_color
+    text-decoration: underline
+  &:focus
+    text-decoration: underline
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>
+  <div>
     <div class='registration-card-wrap'>
       <div class='registration-card'>
         <div class='logo-block'>
@@ -100,7 +100,6 @@ export default {
       password: '',
       confirmPassword:'',
       isAccepted: false,
-      submitStatus: null,
     };
   },
   validations: {
@@ -126,6 +125,7 @@ export default {
       return this.$store.getters.isAuthBlocked
           || this.$store.getters.isLoadProfileBlocked
           || this.$store.getters.isRegBlocked
+          || !this.isAccepted
     },
   },
   methods: {
@@ -164,7 +164,6 @@ export default {
         email: this.email,
         password: this.password,
         password_confirmation: this.confirmPassword,
-        // isAccepted: this.isAccepted,
       };
       this.$store.dispatch(REG_REQUEST, data)
         .then((response) => {
@@ -183,15 +182,15 @@ export default {
 @import "../assets/variables"
 
 .registration-card-wrap
-  padding: 93px 0
-  @media screen and ( max-width: 480px )
-    padding: 10px 0
+  padding: 93px 10px
+  @media screen and ( max-width: 540px )
+    padding: 10px
 .registration-card
   max-width: 500px
   margin: 0 auto
   background-color: $text_background_color
   padding: 47px 60px 40px
-  @media screen and ( max-width: 480px )
+  @media screen and ( max-width: 540px )
     padding: 30px 10px 10px
   
   & form
@@ -249,25 +248,34 @@ export default {
     background-color: inherit
     cursor: pointer
     &:hover
-      color: $button_hover_color
-    &:active
       color: $auth_form_social_hover_color
-  & .google-plus
-    font-size: 1.06rem
+    &:active
+      color: $button_hover_color
   & .vkontakte
-    font-size: 0.745rem
     margin-left: 17.4px
   & .facebook
-    font-size: 1.25rem
     align-self: flex-start
     margin-left: 28.6px
   & .twitter
-    font-size: 0.925rem
     margin-left: 30.6px
+
+i.icon
+  &-google-plus
+    font-size: 1.06rem
+  &-vkontakte
+    font-size: 0.745rem
+  &-facebook
+    font-size: 1.25rem
+    align-self: flex-start
+  &-twitter
+    font-size: 0.925rem
 
 input[type="submit"]
   margin-top: 8px
   margin-bottom: 11px
+  &:focus
+    outline: none
+    box-shadow: 0px 2px 3px $auth_form_social_hover_color
 
 .checkbox-wrap
     background-color: inherit
@@ -306,4 +314,8 @@ input[type="checkbox"]
       position: absolute
       left: -15px
       top: -1px
+  &:focus
+    outline: none
+    &>+label:before
+      color: $auth_form_social_hover_color
 </style>
