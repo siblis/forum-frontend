@@ -188,14 +188,16 @@
 <style lang="sass" scoped>
   @import "../assets/variables"
   $topic_params_color: #4D4D4D
+  $xs: 320px
   $sm: 768px
   $md: 1024px
 
   .button-main
-    margin: 23px 25px
+    margin: 25px 25px 0 25px
 
   .header-of-list
     margin-left: 50px
+    margin-top: 25px
 
   .post_unit
     line-height: 6px
@@ -252,9 +254,9 @@
 
   .list-of-topics,
   .post_unit
-    @media (min-width: 320px) and (max-width: 768px)
+    @media (min-width: $xs) and (max-width: $sm)
       padding-left: 0
-    @media (min-width: 769px)
+    @media (min-width: $sm + 1px)
       padding-left: 40px
 
   .invisible
