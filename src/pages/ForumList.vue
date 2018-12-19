@@ -1,7 +1,7 @@
 <template>
   <div class="row between-md top-xs">
     <div class="col-xs-12 col-md-9 col-lg-9">
-      <router-link to="/create-post" tag="button" class="button button-main">Добавить тему +</router-link>
+      <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +</router-link>
       <h2 class="header-of-list">Список тем</h2>
       <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
         <div class="list-of-topics col-xs-12 col-sm-8">
@@ -64,12 +64,25 @@
         page: 1,
         total: 0,
         items: [],
-        pagesList: []
+        userId: '',
+        pagesList: [],
+        user:''
       }
     },
-    mounted: function () {
+
+     mounted  () {
       this.loadPosts();
+         this.axios
+             .get(`users/me`)
+             .then(user => {
+                 this.user = user.data.id;
+                 console.log(user.data.id);
+
+
+             })
+             .catch(error => console.log(error));
     },
+
     methods: {
       loadPosts() {
         this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
@@ -79,6 +92,8 @@
             this.pagination();
           })
           .catch(error => alert(error));
+
+
         // для тестов бэкэнда
         // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:1,
         //   category_id:4,
@@ -108,6 +123,9 @@
         //     this.pagination();
         //   })
       },
+
+
+
       nextPage() {
         this.page += 1;
         this.loadPosts();
@@ -155,10 +173,15 @@
     computed: {
       numberOfPage: function () {
         return Math.ceil(this.total / 15);
-      }
+      },
+        isLoggedIn() {
+            return this.$store.getters.isLoggedIn
+        },
     },
+
     props: {}
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -233,4 +256,8 @@
       padding-left: 0
     @media (min-width: 769px)
       padding-left: 40px
+
+  .invisible
+    display: none
+    margin-bottom: 0
 </style>
