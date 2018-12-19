@@ -102,7 +102,7 @@ header
   background-color: $background-color
   
 #search
-  min-width: 607px
+  max-width: 250px
   
 #search_line
   height: 32px
@@ -147,13 +147,13 @@ header
   border-radius: 50%
   margin-right: 15px
   
-@media only screen and (max-width: 1193px)
+@media only screen and (max-width: 1025px)
   #header-content
     justify-content: center
   #logo-img
     margin-top: 10px
   #buttons
-    margin-bottom: 10px
+    margin: 10px
     
 @media only screen and (max-width: 843px)
   #buttons
@@ -162,8 +162,6 @@ header
 @media only screen and (max-width: 656px)
   #header-content
     padding: 0 5px
-  #search
-    min-width: 100%
     
 @media only screen and (max-width: 375px)
   #buttons

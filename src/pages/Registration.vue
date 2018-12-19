@@ -182,7 +182,7 @@ export default {
 @import "../assets/variables"
 
 .registration-card-wrap
-  padding: 93px 10px
+  padding: 50px 10px
   @media screen and ( max-width: 540px )
     padding: 10px
 .registration-card

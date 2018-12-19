@@ -144,7 +144,7 @@ export default {
 @import "../assets/variables"
 
 .auth-card-wrap
-  padding: 131px 10px
+  padding: 50px 10px
   @media screen and ( max-width: 540px )
     padding: 10px
 .auth-card

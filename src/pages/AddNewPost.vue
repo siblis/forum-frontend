@@ -1,5 +1,5 @@
 <template>
-  <div class="add-post-content">
+  <div class="add-post-content ">
     <h3 class="add-post-title">Создание новой темы</h3>
     <div class="create-new-post row between-xs">
       <div class="form-wrap col-xs-12 col-md-8">
