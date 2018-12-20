@@ -1,7 +1,7 @@
 <template>
   <div class="row between-md top-xs">
     <div class="col-xs-12 col-md-9 col-lg-9">
-      <router-link to="/create-post" tag="button" class="button button-main">Добавить тему +</router-link>
+      <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +</router-link>
       <h2 class="header-of-list">Список тем</h2>
       <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
         <div class="list-of-topics col-xs-12 col-sm-8">
@@ -10,7 +10,7 @@
           <div class="topic-params row">
             <!--скрыла, пока не приходят теги-->
             <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">-->
-              <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
+            <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
             <!--</span>-->
             <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-4">
               <nobr><i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }} </nobr>
@@ -33,21 +33,21 @@
         </div>
       </div>
       <div class="paginator">
-      <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
-        <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
-        </svg>
-      </button>
-      <button class="button paginate-links" v-for="(pageNumber,index) in pagesList"
-              :key="index" v-on:click="changePage(pageNumber)"
-              v-bind:class="{ active: page === pageNumber }"
-              :disabled="pageNumber === '...' || page === pageNumber">{{pageNumber}}
-      </button>
-      <button class="button paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">
-        <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.816667 1.175L4.64167 5L0.816667 8.825L2 10L7 5L2 0L0.816667 1.175Z" fill="#4D4D4D"/>
-        </svg>
-      </button>
+        <button class="button paginate-links" v-on:click="prevPage" :disabled="page === 1">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.18333 1.175L2.35833 5L6.18333 8.825L5 10L0 5L5 0L6.18333 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
+        <button class="button paginate-links" v-for="(pageNumber,index) in pagesList"
+                :key="index" v-on:click="changePage(pageNumber)"
+                v-bind:class="{ active: page === pageNumber }"
+                :disabled="pageNumber === '...' || page === pageNumber">{{pageNumber}}
+        </button>
+        <button class="button paginate-links" v-on:click="nextPage" :disabled="page >= numberOfPage">
+          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.816667 1.175L4.64167 5L0.816667 8.825L2 10L7 5L2 0L0.816667 1.175Z" fill="#4D4D4D"/>
+          </svg>
+        </button>
       </div>
     </div>
     <div class="topic-block col-xs-12 col-md-3">
@@ -64,12 +64,25 @@
         page: 1,
         total: 0,
         items: [],
-        pagesList: []
+        userId: '',
+        pagesList: [],
+        user:''
       }
     },
-    mounted: function () {
+
+     mounted  () {
       this.loadPosts();
+         this.axios
+             .get(`users/me`)
+             .then(user => {
+                 this.user = user.data.id;
+                 console.log(user.data.id);
+
+
+             })
+             .catch(error => console.log(error));
     },
+
     methods: {
       loadPosts() {
         this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
@@ -79,18 +92,20 @@
             this.pagination();
           })
           .catch(error => alert(error));
+
+
         // для тестов бэкэнда
-        // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:1,
-        //   category_id:4,
-        //   title: 'weeerr',
-        //   description: 'text23',
-        //   content: 'text45',
-        //   tags_array: ["asd"]})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
+        this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
+          category_id:4,
+          title: 'weeerr',
+          description: 'text23',
+          content: 'text45',
+          tags_array: ["asd"]})
+          .then(response => {
+            this.items = response.data.data;
+            this.total = response.data.total;
+            this.pagination();
+          })
         //   .catch(error => alert(error));
         // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
         //   description: 'text',
@@ -108,6 +123,9 @@
         //     this.pagination();
         //   })
       },
+
+
+
       nextPage() {
         this.page += 1;
         this.loadPosts();
@@ -155,24 +173,31 @@
     computed: {
       numberOfPage: function () {
         return Math.ceil(this.total / 15);
-      }
+      },
+        isLoggedIn() {
+            return this.$store.getters.isLoggedIn
+        },
     },
+
     props: {}
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
   @import "../assets/variables"
   $topic_params_color: #4D4D4D
+  $xs: 320px
   $sm: 768px
   $md: 1024px
 
   .button-main
-    margin: 23px 25px
+    margin: 25px 25px 0 25px
 
   .header-of-list
     margin-left: 50px
+    margin-top: 25px
 
   .post_unit
     line-height: 6px
@@ -209,6 +234,7 @@
     width: 100%
     padding: 200px 0
     text-align: center
+
   .paginator
     margin: 35px 20px 40px 50px
     .paginate-links
@@ -228,8 +254,12 @@
 
   .list-of-topics,
   .post_unit
-    @media (min-width: 320px) and (max-width: 768px)
+    @media (min-width: $xs) and (max-width: $sm)
       padding-left: 0
-    @media (min-width: 769px)
+    @media (min-width: $sm + 1px)
       padding-left: 40px
+
+  .invisible
+    display: none
+    margin-bottom: 0
 </style>
