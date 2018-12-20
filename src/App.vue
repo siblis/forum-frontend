@@ -1,8 +1,8 @@
 
 <template>
-  <div class="container-fluid">
+  <div class="container">
     <forum-header></forum-header>
-    <router-view></router-view>
+    <router-view class="main-app-content"></router-view>
     <forum-footer></forum-footer>
   </div>
 </template>

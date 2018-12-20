@@ -95,17 +95,17 @@
 
 
         // для тестов бэкэнда
-        // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:1,
-        //   category_id:4,
-        //   title: 'weeerr',
-        //   description: 'text23',
-        //   content: 'text45',
-        //   tags_array: ["asd"]})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
+        this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
+          category_id:4,
+          title: 'weeerr',
+          description: 'text23',
+          content: 'text45',
+          tags_array: ["asd"]})
+          .then(response => {
+            this.items = response.data.data;
+            this.total = response.data.total;
+            this.pagination();
+          })
         //   .catch(error => alert(error));
         // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
         //   description: 'text',
@@ -188,14 +188,16 @@
 <style lang="sass" scoped>
   @import "../assets/variables"
   $topic_params_color: #4D4D4D
+  $xs: 320px
   $sm: 768px
   $md: 1024px
 
   .button-main
-    margin: 23px 25px
+    margin: 25px 25px 0 25px
 
   .header-of-list
     margin-left: 50px
+    margin-top: 25px
 
   .post_unit
     line-height: 6px
@@ -252,9 +254,9 @@
 
   .list-of-topics,
   .post_unit
-    @media (min-width: 320px) and (max-width: 768px)
+    @media (min-width: $xs) and (max-width: $sm)
       padding-left: 0
-    @media (min-width: 769px)
+    @media (min-width: $sm + 1px)
       padding-left: 40px
 
   .invisible
