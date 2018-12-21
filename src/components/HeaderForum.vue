@@ -68,9 +68,6 @@ export default {
 <style lang="sass" scoped>
 @import "../assets/variables"
 
-header
-  background-color: $dark_background_color
-
 #header-content
   width: 100%
   min-height: 60px

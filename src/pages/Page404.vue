@@ -30,9 +30,11 @@
   @import "../assets/variables"
 
   *
-    background-color: white
     color: black
     font-size: $medium_font_size
+
+  .container
+    background-color: white
 
   .button
     border-style: solid

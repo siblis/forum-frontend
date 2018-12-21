@@ -17,6 +17,7 @@ import ForumAccount from '@/pages/ForumAccount';
 import AddNewPost from '@/pages/AddNewPost';
 import UIkit from '@/pages/UI-kit';
 import Page404 from '@/pages/Page404';
+import EditPost from '@/pages/EditPost';
 
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
@@ -40,6 +41,7 @@ const router = new VueRouter({
     {path: '/create-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
     {path: '/404', component: Page404},
+    {path: '/edit-post/:postId', name: 'post', component: EditPost, props: true},
 
 
 

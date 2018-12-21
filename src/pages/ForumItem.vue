@@ -24,8 +24,13 @@
                 <div class="postTime" v-if="post.created_at && !null">{{[post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}</div>
               </div>
               <div class="postText">{{post.content}}</div>
-              <div class="deletePost row end-xs">
-                <button class="button button-main" v-if="post.user_id === my.id"  @click="delConfirm">Удалить</button>
+              <div class="postButtons row end-xs">
+                <div class="editPostButton" v-show="isLoggedIn">
+                  <router-link :to="{name: 'post', params: {postId:postId}}" tag="button" class="button button-main" v-if="post.user_id === my.id">Редактировать</router-link>
+                </div>
+                <div class="deletePostButton">
+                  <button class="button button-main" v-if="post.user_id === my.id"  @click="delConfirm">Удалить</button>
+                </div>
               </div>
             </div>
           </div>
@@ -187,7 +192,7 @@
         userId: '',
         commentsCount: '',
         userName: '',
-        userComments: [],
+        userComments: []
        }
     },
     async mounted() {
@@ -218,7 +223,10 @@
     computed:{
       my() {
         return this.$store.getters.profile;
-      }
+      },
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn
+      },
     },
     methods: {
       async delPost () {
@@ -313,6 +321,10 @@
       border-radius: 4px
       background-color: $comment_background_color
       word-wrap: break-word
+    .postButtons
+      display: flex
+      .editPostButton
+        margin-right: 5px
     textarea
       min-height: 88px
       border: none
