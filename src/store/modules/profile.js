@@ -35,6 +35,8 @@ const mutations = {
 const getters = {
   profile: state => state.profile,
   isProfileLoaded: state => !!state.profile.id,
+  isMyProfileId: (state, getters) => id => getters.isProfileLoaded && state.progile.id === id,
+  isAdmin: (state, getters) => getters.isProfileLoaded && state.progile.role === 'admin',
   isLoadProfileBlocked: state => state.status === 'PENDING',
 };
 
