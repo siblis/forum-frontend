@@ -69,7 +69,9 @@
         comments:''
       }
     },
-
+    mounted: function () {
+      this.loadPosts();
+    },
     methods: {
       loadPosts() {
         this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
