@@ -28,8 +28,8 @@
         <!--</div>-->
         <div class="col-xs-12 col-sm-2">
           <!--скрыла, пока не приходят комменты -->
-          <!--<p v-if="item.comments" class="comments_count">{{item.comments.length}} </p>-->
-          <!--<p class="comments_count">{{ item.comments.length | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>-->
+          <p  class="comments_count">{{item.comments}} </p>
+          <p class="comments_count">{{ item.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
         </div>
       </div>
       <div class="paginator">
@@ -66,21 +66,14 @@
         items: [],
         userId: '',
         pagesList: [],
-        user:''
+        user:'',
+        comments:''
       }
     },
 
      mounted  () {
       this.loadPosts();
-         this.axios
-             .get(`users/me`)
-             .then(user => {
-                 this.user = user.data.id;
-                 console.log(user.data.id);
 
-
-             })
-             .catch(error => console.log(error));
     },
 
     methods: {
@@ -89,24 +82,26 @@
           .then(response => {
             this.items = response.data.data;
             this.total = response.data.total;
+              
             this.pagination();
+
           })
-          .catch(error => alert(error));
+          .catch(error => console.log(error));
 
 
         // для тестов бэкэнда
         this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
-          category_id:4,
+         category_id:4,
           title: 'weeerr',
           description: 'text23',
           content: 'text45',
           tags_array: ["asd"]})
-          .then(response => {
-            this.items = response.data.data;
-            this.total = response.data.total;
-            this.pagination();
-          })
-        //   .catch(error => alert(error));
+         .then(response => {
+           this.items = response.data.data;
+           this.total = response.data.total;
+           this.pagination();
+         })
+          .catch(error => alert(error));
         // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
         //   description: 'text',
         //   content:'text',
