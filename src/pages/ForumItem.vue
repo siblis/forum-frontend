@@ -1,5 +1,5 @@
 <template>
-  <div class="content row" v-if="post">
+  <div class="content row" v-if="isPostLoaded">
     <div class="main-content col-xs-12 col-md-6">
       <router-link to="/" class="arrow-home col-xs-12 start-xs">
         <i class='icon-arrow-back'></i>
@@ -10,15 +10,15 @@
         <h1 class="post-title">{{ post.title }}</h1>
         <div class="post-tags row" v-if="hasTags">
           <i class='post-tags-label icon-label'></i>
-          <a href="#" class="post-tag" v-for="(tag, i) in post.tags" :key="i">{{ tag }}</a>
+          <a href="#" class="post-tag" v-for="(tag, i) in tags" :key="i">{{ tag }}</a>
         </div>
         <div class="post-block">
           <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-8 row bottom-xs">
+            <dir class="post-user-block col-xs-6 row bottom-xs">
               <div class="post-user-img">U</div>
               <a href="#" class="post-user-name">{{ author.name }}</a>
             </dir>
-            <div class="post-time col-xs-4 end-xs" v-if="post.created_at">
+            <div class="post-time col-xs-6 end-xs" v-if="post.created_at">
               {{ [post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
             </div>
           </div>
@@ -31,31 +31,32 @@
         </div>
       </div>
 
-      <div class="post-card" v-if="hasComments">
-        <h2 class="post-title-secondary">
+      <div class="post-card">
+        <h2 class="post-title-secondary"  v-if="isCommentsLoaded && hasComments">
           Комментарии ({{ commentsCount }})
         </h2>
-        <div class="post-block" v-for="comment in comments" :key="comment.id">
+        <div class="post-block" v-for="(comment, i) in comments" :key="i">
           <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-8 row bottom-xs">
+            <dir class="post-user-block col-xs-6 row bottom-xs">
               <div class="post-user-img">U</div>
-              <a href="#" class="post-user-name">{{ comment.username.name }}</a>
+              <a href="#" class="post-user-name">{{ comment.username ? comment.username.name : '' }}</a>
             </dir>
-            <div class="post-time col-xs-4 end-xs" v-if="comment.created_at">
-              {{ [comment.created_at, "YYYY-MM-DDHH:mm:ss"] | moment("from") }}
+            <div class="post-time col-xs-6 end-xs" v-if="comment.created_at">
+              {{ [comment.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
             </div>
           </div>
           <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ comment.content }}</div>
-          <div class="post-props row">
-            <div class="post-props-answer">
-              <a href="#comment">Ответить</a>
-            </div>
+            <div class="post-content">{{ comment.content ? comment.content : '' }}</div>
+            <div class="post-props row">
+              <div class="post-props-answer">
+                <a href="#comment" @click="prepareAnswer(comment.username.name, comment.username.id)">Ответить</a>
+              </div>
               <div class="post-props-like row">
                 <a class="like">Спасибо</a>
                 <i class="icon-thump-up like-icon"></i>
-                <span class="like-counter">0</span>
+                <span class="like-counter">{{ comment.like ? comment.like : 0 }}</span>
               </div>
+              <div class='post-props-change-comment'>Редактировать</div>
             </div>
           </div>
         </div> 
@@ -139,7 +140,7 @@
           </div>
         </div>
     </div>
-    <div class="del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
+    <!-- <div class="del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
         <p class="col-xs-12">Вы уверены, что хотите удалить пост? Все комментарии тоже будут удалены.</p>
         <button class="button button-main col-xs-12 col-sm-5" @click="delPost">Удалить</button>
         <button class="button button-main col-xs-12 col-sm-5" @click="clsConfirm">Отмена</button>
@@ -149,17 +150,17 @@
       <router-link class="col-xs-12 col-sm-7" to="/forum">
         <button class="button button-main confirm-link">Ок</button>
       </router-link>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TOPIC_LOAD } from '../store/actions';
+  import { TOPIC_LOAD, TOPIC_ADD_COMMENT } from '../store/actions';
   export default {
     name: 'ForumItem',
     props: ['postId'],
-    data: function() {
+    data() {
       return {        
         myComment: '',
        }
@@ -169,20 +170,21 @@
     },
     computed:{
       ...mapGetters({
+        isLoggedIn: 'isLoggedIn',
+        isMyProfileId: 'isMyProfileId',
+        isAdmin: 'isAdmin',
         post: 'currentTopic',
+        tags: 'currentTopicTags',
         comments: 'currentTopicComments',
         author: 'currentTopicAuthor',
         isPostLoaded: 'isCurrentTopicPostLoaded',
         isCommentsLoaded: 'isCurrentTopicCommentsLoaded',
-        isAdmin: 'isAdmin',
-        isMyProfileId: 'isMyProfileId',
-        isLoggedIn: 'isLoggedIn',
       }),
       isAuthor() {
         return this.isPostLoaded && this.author.id && this.isMyProfileId(this.author.id);
       },
       hasTags() {
-        return this.isPostLoaded && this.post.tags && this.post.tags.length > 0;
+        return this.isPostLoaded && this.tags && this.tags.length > 0;
       },
       hasComments() {
         return this.isCommentsLoaded && this.comments.length > 0;
@@ -192,49 +194,59 @@
       }
     },
     methods: {
-      async delPost () {
-        await this.axios
-          .delete(
-            // `posts/${this.post.id}`,
-          )
-          .then((response) => {
-            document.querySelector('.del-confirm').classList.add('invisible');
-            document.querySelector('.after-del-confirm').classList.remove('invisible');
-            return response;
-          })
-          .catch(error => console.log(error));
+      prepareAnswer(name, id) {
+        if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
+          return;
+        }
+        this.myComment = `${name}, `;
       },
-      delConfirm () {
-        document.querySelector('.del-confirm').classList.remove('invisible');
-        document.querySelector('.shadow').classList.remove('invisible');
+      async addComment() {
+        await this.$store.dispatch(TOPIC_ADD_COMMENT, this.myComment);
+        this.myComment = "";
       },
-      clsConfirm () {
-        document.querySelector('.del-confirm').classList.add('invisible');
-        document.querySelector('.shadow').classList.add('invisible');
-      },
-      openAnswer(id, name) {
-        // this.newComment[id] += `${name}, `;
-        this.newComment = '';
-        document.querySelector(`#my-answer-${id}`).classList.remove('invisible');
-        document.querySelector(`#comment-props-${id}`).classList.add('invisible');
-        this.newComment += `${name}, `;
-        document.querySelector('#comment').focus()
-        // console.log(this.newComment);
-        // document.querySelector(`#textarea-${id}`).focus();
+      // async delPost () {
+      //   await this.axios
+      //     .delete(
+      //       // `posts/${this.post.id}`,
+      //     )
+      //     .then((response) => {
+      //       document.querySelector('.del-confirm').classList.add('invisible');
+      //       document.querySelector('.after-del-confirm').classList.remove('invisible');
+      //       return response;
+      //     })
+      //     .catch(error => console.log(error));
+      // },
+      // delConfirm () {
+      //   document.querySelector('.del-confirm').classList.remove('invisible');
+      //   document.querySelector('.shadow').classList.remove('invisible');
+      // },
+      // clsConfirm () {
+      //   document.querySelector('.del-confirm').classList.add('invisible');
+      //   document.querySelector('.shadow').classList.add('invisible');
+      // },
+      // openAnswer(id, name) {
+      //   // this.newComment[id] += `${name}, `;
+      //   this.newComment = '';
+      //   document.querySelector(`#my-answer-${id}`).classList.remove('invisible');
+      //   document.querySelector(`#comment-props-${id}`).classList.add('invisible');
+      //   this.newComment += `${name}, `;
+      //   document.querySelector('#comment').focus()
+      //   // console.log(this.newComment);
+      //   // document.querySelector(`#textarea-${id}`).focus();
 
-      },
-      closeAnswer(id) {
-        document.querySelector(`#my-answer-${id}`).classList.add('invisible');
-        document.querySelector(`#comment-props-${id}`).classList.remove('invisible');
-        // this.newComment[id] = '';
-      },
-      addComment: function () {
-        this.comments.push({
-          textComment: this.newComment,
+      // },
+      // closeAnswer(id) {
+      //   document.querySelector(`#my-answer-${id}`).classList.add('invisible');
+      //   document.querySelector(`#comment-props-${id}`).classList.remove('invisible');
+      //   // this.newComment[id] = '';
+      // },
+      // addComment: function () {
+      //   this.comments.push({
+      //     textComment: this.newComment,
 
-        });
-        this.newComment = "";
-      },
+      //   });
+      //   this.newComment = "";
+      // },
      },
   }
 
@@ -375,16 +387,22 @@
         cursor: default
       &-answer
         padding-left: 15px
+        @media screen and ( max-width: 420px )
+          padding-left: 0
         a
           text-decoration: none
           color: inherit
-
+      &-change-comment
+        margin-left: auto
       &-answer:hover,
       &-delete:hover,
+      &-delete-comment:hover,
       .like:hover
         opacity: 0.5
       &-like
         padding-left: 23px
+        @media screen and ( max-width: 420px )
+          padding-left: 8px
       .like,
       .like-icon
         margin-right: 4px
@@ -401,7 +419,7 @@
         opacity: 0.5
   
   .add-comments-body
-    @media screen and ( max-width: 420px )
+    @media screen and ( max-width: 768px )
       padding-top: 15px
     .add-comments-content
       min-height: 88px
