@@ -1,16 +1,16 @@
-
 <template>
   <div class="container">
-    <forum-header></forum-header>
-    <router-view class="main-app-content"></router-view>
-    <forum-footer></forum-footer>
+      <forum-header class="header"></forum-header>
+      <router-view class="main-app-content"></router-view>
+      <forum-footer class="footer"></forum-footer>
   </div>
 </template>
 
 <script>
   import FooterForum from "@/components/FooterForum";
   import HeaderForum from "@/components/HeaderForum";
-  import { PROFILE_TRY_TO_LOAD } from './store/actions';
+  import {PROFILE_TRY_TO_LOAD} from './store/actions';
+
   export default {
     name: 'app',
     components: {
@@ -18,8 +18,7 @@
       'forum-header': HeaderForum
     },
     data: () => {
-      return {
-      }
+      return {}
     },
     created() {
       // если в хранилище есть токен и профиль отсутствует,
