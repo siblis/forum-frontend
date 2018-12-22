@@ -25,7 +25,7 @@
           <div class="post-body col-xs-12 col-sm">
             <div class="post-content">{{ post.content }}</div>
             <div class="post-props row end-xs"  v-if="isAdmin">
-              <span class="post-props-delete" @click="delConfirm">Удалить</span>
+              <span class="post-props-delete" @click="delConfirmation">Удалить</span>
             </div>
           </div>
         </div>
@@ -49,14 +49,14 @@
             <div class="post-content">{{ comment.content ? comment.content : '' }}</div>
             <div class="post-props row">
               <div class="post-props-answer">
-                <a href="#comment" @click="prepareAnswer(comment.username.name, comment.username.id)">Ответить</a>
+                <a href="#comment" @click="prepareComment(comment.username.name, comment.username.id)">Ответить</a>
               </div>
               <div class="post-props-like row">
                 <a class="like">Спасибо</a>
                 <i class="icon-thump-up like-icon"></i>
                 <span class="like-counter">{{ comment.like ? comment.like : 0 }}</span>
               </div>
-              <div class='post-props-change-comment'>Редактировать</div>
+              <div class='post-props-change-comment' v-if="isMyProfileId(comment.username.id)">Редактировать</div>
             </div>
           </div>
         </div> 
@@ -90,7 +90,7 @@
         </div>
       </div>
 
-      <div class="post-card">
+      <div class="post-card" v-if="false">
         <h2>Похожие запросы</h2>
          <div class='same-request row middle-xs'>
           <div class='col-xs-12 col-sm-6'>
@@ -140,32 +140,35 @@
           </div>
         </div>
     </div>
-    <!-- <div class="del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
+    <div class='shadow' v-if="showDelConfirmation || wasDeleted"></div>
+    <div class="del-confirm row center-xs col-xs-12 around-sm col-sm-6" v-if="showDelConfirmation">
         <p class="col-xs-12">Вы уверены, что хотите удалить пост? Все комментарии тоже будут удалены.</p>
-        <button class="button button-main col-xs-12 col-sm-5" @click="delPost">Удалить</button>
-        <button class="button button-main col-xs-12 col-sm-5" @click="clsConfirm">Отмена</button>
+        <button class="button button-main col-xs-12 col-sm-5" @click="deletePost">Удалить</button>
+        <button class="button button-main col-xs-12 col-sm-5" @click="cancelDelConfirmation">Отмена</button>
     </div>
-    <div class="after-del-confirm invisible row center-xs col-xs-12 around-sm col-sm-6">
+    <div class="after-del-confirm row center-xs col-xs-12 around-sm col-sm-6" v-if="wasDeleted">
       <p class="col-xs-12">Пост удалён.</p>
       <router-link class="col-xs-12 col-sm-7" to="/forum">
         <button class="button button-main confirm-link">Ок</button>
       </router-link>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TOPIC_LOAD, TOPIC_ADD_COMMENT } from '../store/actions';
+  import { TOPIC_LOAD, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_CLEAR } from '../store/actions';
   export default {
     name: 'ForumItem',
     props: ['postId'],
     data() {
       return {        
         myComment: '',
+        showDelConfirmation: false,
        }
     },
     async mounted() {
+      this.$store.dispatch(TOPIC_CLEAR);
       await this.$store.dispatch(TOPIC_LOAD, this.postId);
     },
     computed:{
@@ -179,6 +182,7 @@
         author: 'currentTopicAuthor',
         isPostLoaded: 'isCurrentTopicPostLoaded',
         isCommentsLoaded: 'isCurrentTopicCommentsLoaded',
+        wasDeleted: 'isCurrentTopicWasDeleted',
       }),
       isAuthor() {
         return this.isPostLoaded && this.author.id && this.isMyProfileId(this.author.id);
@@ -194,7 +198,7 @@
       }
     },
     methods: {
-      prepareAnswer(name, id) {
+      prepareComment(name, id) {
         if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
           return;
         }
@@ -204,49 +208,18 @@
         await this.$store.dispatch(TOPIC_ADD_COMMENT, this.myComment);
         this.myComment = "";
       },
-      // async delPost () {
-      //   await this.axios
-      //     .delete(
-      //       // `posts/${this.post.id}`,
-      //     )
-      //     .then((response) => {
-      //       document.querySelector('.del-confirm').classList.add('invisible');
-      //       document.querySelector('.after-del-confirm').classList.remove('invisible');
-      //       return response;
-      //     })
-      //     .catch(error => console.log(error));
-      // },
-      // delConfirm () {
-      //   document.querySelector('.del-confirm').classList.remove('invisible');
-      //   document.querySelector('.shadow').classList.remove('invisible');
-      // },
-      // clsConfirm () {
-      //   document.querySelector('.del-confirm').classList.add('invisible');
-      //   document.querySelector('.shadow').classList.add('invisible');
-      // },
-      // openAnswer(id, name) {
-      //   // this.newComment[id] += `${name}, `;
-      //   this.newComment = '';
-      //   document.querySelector(`#my-answer-${id}`).classList.remove('invisible');
-      //   document.querySelector(`#comment-props-${id}`).classList.add('invisible');
-      //   this.newComment += `${name}, `;
-      //   document.querySelector('#comment').focus()
-      //   // console.log(this.newComment);
-      //   // document.querySelector(`#textarea-${id}`).focus();
-
-      // },
-      // closeAnswer(id) {
-      //   document.querySelector(`#my-answer-${id}`).classList.add('invisible');
-      //   document.querySelector(`#comment-props-${id}`).classList.remove('invisible');
-      //   // this.newComment[id] = '';
-      // },
-      // addComment: function () {
-      //   this.comments.push({
-      //     textComment: this.newComment,
-
-      //   });
-      //   this.newComment = "";
-      // },
+      delConfirmation () {
+        if (this.isAdmin) {
+          this.showDelConfirmation = true;
+        }
+      },
+      cancelDelConfirmation () {
+        this.showDelConfirmation = false;
+      },
+      async deletePost () {
+        await this.$store.dispatch(TOPIC_DELETE)
+        this.showDelConfirmation = false;
+      },
      },
   }
 
@@ -274,7 +247,6 @@
       &:not(button),
         background-color: $text_background_color
 
-    
     .arrow-home
       display: flex
       align-items: center
@@ -394,9 +366,10 @@
           color: inherit
       &-change-comment
         margin-left: auto
+        color: inherit
       &-answer:hover,
       &-delete:hover,
-      &-delete-comment:hover,
+      &-change-comment:hover,
       .like:hover
         opacity: 0.5
       &-like
@@ -561,11 +534,7 @@
     height: 100%
     width: 100%
     z-index: 1000
-    background: $comment_background_color
+    background: #000
     opacity: 0.5
-
-  .invisible
-    display: none
-    margin-bottom: 0
 
 </style>

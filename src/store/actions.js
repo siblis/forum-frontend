@@ -10,3 +10,4 @@ export const REG_REQUEST = 'REG_REQUEST';
 export const TOPIC_LOAD = 'TOPIC_LOAD';
 export const TOPIC_CLEAR = 'TOPIC_CLEAR';
 export const TOPIC_ADD_COMMENT = 'TOPIC_ADD_COMMENT';
+export const TOPIC_DELETE = 'TOPIC_DELETE';

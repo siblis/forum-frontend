@@ -1,20 +1,28 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
-import { TOPIC_LOAD, TOPIC_CLEAR, TOPIC_ADD_COMMENT } from '../actions';
+import { TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT } from '../actions';
 
 const TOPIC_POST_REQUEST_MUT = 'TOPIC_POST_REQUEST_MUT';
 const TOPIC_POST_SUCCESS_MUT = 'TOPIC_POST_SUCCESS_MUT';
 const TOPIC_POST_ERROR_MUT = 'TOPIC_POST_ERROR_MUT';
+
+const TOPIC_DEL_REQUEST_MUT = 'TOPIC_DEL_REQUEST_MUT';
+const TOPIC_DEL_SUCCESS_MUT = 'TOPIC_DEL_SUCCESS_MUT';
+const TOPIC_DEL_ERROR_MUT = 'TOPIC_DEL_ERROR_MUT';
+
 const TOPIC_COMMENTS_REQUEST_MUT = 'TOPIC_COMMENTS_REQUEST_MUT';
 const TOPIC_COMMENTS_SUCCESS_MUT = 'TOPIC_COMMENTS_SUCCESS_MUT';
 const TOPIC_COMMENTS_ERROR_MUT = 'TOPIC_COMMENTS_ERROR_MUT';
-const TOPIC_CLEAR_MUT = 'TOPIC_CLEAR_MUT';
+
 const TOPIC_ADD_COMMENT_REQUEST_MUT = 'TOPIC_ADD_COMMENT_REQUEST_MUT';
 const TOPIC_ADD_COMMENT_SUCCESS_MUT = 'TOPIC_ADD_COMMENT_SUCCESS_MUT';
 const TOPIC_ADD_COMMENT_ERROR_MUT = 'TOPIC_ADD_COMMENT_ERROR_MUT';
 
+const TOPIC_CLEAR_MUT = 'TOPIC_CLEAR_MUT';
+
 const initialState = {
   postLoadStatus: '',
+  topicDelStatus: '',
   commentsLoadStatus: '',
   addCommentStatus: '',
   post: {},
@@ -25,12 +33,16 @@ const initialState = {
 
 const mutations = {
   [TOPIC_POST_REQUEST_MUT]: state => state.postLoadStatus = 'PENDING',
+  [TOPIC_DEL_REQUEST_MUT]: state => state.topicDelStatus = 'PENDING',
   [TOPIC_COMMENTS_REQUEST_MUT]: state => state.commentsLoadStatus = 'PENDING',
   [TOPIC_ADD_COMMENT_REQUEST_MUT]: state => state.addCommentStatus = 'PENDING',
   [TOPIC_POST_SUCCESS_MUT]: (state, post) => {
     state.postLoadStatus = 'SUCCESS';
     state.post = { ...post };
     state.author = { ...post.username };
+  },
+  [TOPIC_DEL_SUCCESS_MUT]: (state) => {
+    state.topicDelStatus = 'SUCCESS';
   },
   [TOPIC_COMMENTS_SUCCESS_MUT]: (state, comments) => {
     state.commentsLoadStatus = 'SUCCESS';
@@ -44,6 +56,10 @@ const mutations = {
     state.postLoadStatus = 'ERROR';
     state.errorMessage = message;
   },
+  [TOPIC_DEL_ERROR_MUT]: (state, message) => {
+    state.topicDelStatus = 'ERROR';
+    state.errorMessage = message;
+  },
   [TOPIC_COMMENTS_ERROR_MUT]: (state, message) => {
     state.commentsLoadStatus = 'ERROR';
     state.errorMessage = message;
@@ -54,6 +70,7 @@ const mutations = {
   },
   [TOPIC_CLEAR_MUT]: (state) => {
     state.postLoadStatus = '';
+    state.topicDelStatus = '';
     state.commentsLoadStatus = '';
     state.addCommentStatus = '';
     state.post = {};
@@ -64,6 +81,7 @@ const mutations = {
 };
 
 const getters = {
+  currentTopicPostId: ({ post: { id } }) => id,
   currentTopic: state => state.post,
   currentTopicComments: state => state.comments,
   currentTopicAuthor: state => state.author,
@@ -76,6 +94,7 @@ const getters = {
   },
   isCurrentTopicPostLoaded: state => state.postLoadStatus === 'SUCCESS' && !!state.post.id,
   isCurrentTopicCommentsLoaded: state => state.commentsLoadStatus === 'SUCCESS',
+  isCurrentTopicWasDeleted: state => state.topicDelStatus === 'SUCCESS',
 };
 
 const actions = {
@@ -96,7 +115,7 @@ const actions = {
       const commentsResponse = await Vue.axios.get(`posts/${postId}/comments`);
       const { data: { data }, status } = commentsResponse;
       if (status !== 200) {
-        throw new Error(`Some netwotk problem, response status: ${commentsResponse.status}`);
+        throw new Error(`Some netwotk problem, response status: ${status}`);
       }
       const comments = Object.values(data);
       commit(TOPIC_COMMENTS_SUCCESS_MUT, comments);
@@ -111,10 +130,10 @@ const actions = {
     if (!getters.isCurrentTopicPostLoaded || !rootGetters.isLoggedIn) {
       return;
     }
-    const { id: postId } = getters.currentTopic;
     try {
       commit(TOPIC_ADD_COMMENT_REQUEST_MUT);
-      const commentResponse = await Vue.axios.post(`posts/${postId}/comments`,{ content });
+      const commentResponse = await Vue.axios
+        .post(`posts/${getters.currentTopicPostId}/comments`,{ content });
       const { data, status } = commentResponse;
       if (status !== 201) {
         throw new Error(`Some netwotk problem, response status: ${status}`);
@@ -122,6 +141,21 @@ const actions = {
       commit(TOPIC_ADD_COMMENT_SUCCESS_MUT, data);
     } catch (err) {
       commit(TOPIC_ADD_COMMENT_ERROR_MUT, err.message);
+    }
+  },
+  [TOPIC_DELETE]: async ({commit, getters, rootGetters}) => {
+    try {
+      commit(TOPIC_DEL_REQUEST_MUT);
+      if (!getters.isCurrentTopicPostLoaded || !rootGetters.isAdmin) {
+        throw new Error('User can not delete this topic');
+      }
+      const delResponse = await Vue.axios.delete(`posts/${getters.currentTopicPostId}`);
+      if (delResponse.status !== 204) {
+        throw new Error(`Some netwotk problem, response status: ${delResponse.status}`);
+      }
+      commit(TOPIC_DEL_SUCCESS_MUT);
+    } catch (err) {
+      commit(TOPIC_DEL_ERROR_MUT , err.message);
     }
   },
   [TOPIC_CLEAR]: ({ commit }) => commit(TOPIC_CLEAR_MUT),
