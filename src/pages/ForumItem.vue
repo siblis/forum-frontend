@@ -24,7 +24,7 @@
           </div>
           <div class="post-body col-xs-12 col-sm">
             <div class="post-content">{{ post.content }}</div>
-            <div class="post-props row end-xs"  v-if="isAdmin">
+            <div class="post-props row end-xs"  v-if="isAuthor">
               <span class="post-props-delete" @click="delConfirmation">Удалить</span>
             </div>
           </div>
@@ -39,17 +39,17 @@
           <div class='row between-xs bottom-xs'>
             <dir class="post-user-block col-xs-6 row bottom-xs">
               <div class="post-user-img">U</div>
-              <a href="#" class="post-user-name">{{ comment.username ? comment.username.name : '' }}</a>
+              <a href="#" class="post-user-name">{{ comment.username.name }}</a>
             </dir>
             <div class="post-time col-xs-6 end-xs" v-if="comment.created_at">
               {{ [comment.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
             </div>
           </div>
           <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ comment.content ? comment.content : '' }}</div>
+            <div class="post-content">{{ comment.content }}</div>
             <div class="post-props row">
               <div class="post-props-answer">
-                <a href="#comment" @click="prepareComment(comment.username.name, comment.username.id)">Ответить</a>
+                <span @click="prepareComment(comment.username.name, comment.username.id)">Ответить</span>
               </div>
               <div class="post-props-like row">
                 <a class="like">Спасибо</a>
@@ -80,7 +80,7 @@
               type="text"
               v-model="myComment"
               class="add-comments-content col-xs-12 col-sm"
-              id="comment">
+              ref="comment">
             </textarea>
               <div class="row col-xs-12 center-xs start-sm">
                 <button class="button button-main" @click="addComment">Отправить</button>
@@ -199,6 +199,7 @@
     },
     methods: {
       prepareComment(name, id) {
+        this.$refs.comment.focus(); //фокус на элемент с ref="comment", чтобы не использовать ссылки 
         if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
           return;
         }
@@ -209,7 +210,7 @@
         this.myComment = "";
       },
       delConfirmation () {
-        if (this.isAdmin) {
+        if (this.isAuthor) {
           this.showDelConfirmation = true;
         }
       },
@@ -361,7 +362,7 @@
         padding-left: 15px
         @media screen and ( max-width: 420px )
           padding-left: 0
-        a
+        span
           text-decoration: none
           color: inherit
       &-change-comment
