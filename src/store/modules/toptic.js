@@ -2,6 +2,8 @@
 import Vue from 'vue';
 import { TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT } from '../actions';
 
+const TOPIC_COMMENTS_LOAD = 'TOPIC_COMMENTS_LOAD';
+
 const TOPIC_POST_REQUEST_MUT = 'TOPIC_POST_REQUEST_MUT';
 const TOPIC_POST_SUCCESS_MUT = 'TOPIC_POST_SUCCESS_MUT';
 const TOPIC_POST_ERROR_MUT = 'TOPIC_POST_ERROR_MUT';
@@ -48,9 +50,8 @@ const mutations = {
     state.commentsLoadStatus = 'SUCCESS';
     state.comments = comments;
   },
-  [TOPIC_ADD_COMMENT_SUCCESS_MUT]: (state, comment) => {
+  [TOPIC_ADD_COMMENT_SUCCESS_MUT]: (state) => {
     state.addCommentStatus = 'SUCCESS';
-    state.comments.push(comment);
   },
   [TOPIC_POST_ERROR_MUT]: (state, message) => {
     state.postLoadStatus = 'ERROR';
@@ -98,7 +99,7 @@ const getters = {
 };
 
 const actions = {
-  [TOPIC_LOAD]: async ({ commit }, postId) => {
+  [TOPIC_LOAD]: async ({ commit, dispatch }, postId) => {
     try {
       commit(TOPIC_POST_REQUEST_MUT);
       const postResponse = await Vue.axios.get(`posts/${postId}`);
@@ -107,12 +108,18 @@ const actions = {
         throw new Error(`Some netwotk problem, response status: ${status}`);
       }
       commit(TOPIC_POST_SUCCESS_MUT, data);
+      dispatch(TOPIC_COMMENTS_LOAD);
     } catch (err) {
       commit(TOPIC_POST_ERROR_MUT, err.message);
     }
+  },
+  [TOPIC_COMMENTS_LOAD]: async ({ commit, getters, rootGetters }) => {
+    if (!getters.isCurrentTopicPostLoaded || !rootGetters.isLoggedIn) {
+      return;
+    }
     try {
       commit(TOPIC_COMMENTS_REQUEST_MUT);
-      const commentsResponse = await Vue.axios.get(`posts/${postId}/comments`);
+      const commentsResponse = await Vue.axios.get(`posts/${getters.currentTopicPostId}/comments`);
       const { data: { data }, status } = commentsResponse;
       if (status !== 200) {
         throw new Error(`Some netwotk problem, response status: ${status}`);
@@ -123,7 +130,7 @@ const actions = {
       commit(TOPIC_COMMENTS_ERROR_MUT, err.message);
     }
   },
-  [TOPIC_ADD_COMMENT]: async ({commit, getters, rootGetters}, content) => {
+  [TOPIC_ADD_COMMENT]: async ({ commit, getters, rootGetters, dispatch }, content) => {
     if (content === '') {
       return;
     }
@@ -134,11 +141,11 @@ const actions = {
       commit(TOPIC_ADD_COMMENT_REQUEST_MUT);
       const commentResponse = await Vue.axios
         .post(`posts/${getters.currentTopicPostId}/comments`,{ content });
-      const { data, status } = commentResponse;
-      if (status !== 201) {
-        throw new Error(`Some netwotk problem, response status: ${status}`);
+      if (commentResponse.status !== 201) {
+        throw new Error(`Some netwotk problem, add comment response status: ${status}`);
       }
-      commit(TOPIC_ADD_COMMENT_SUCCESS_MUT, data);
+      commit(TOPIC_ADD_COMMENT_SUCCESS_MUT);
+      dispatch(TOPIC_COMMENTS_LOAD);
     } catch (err) {
       commit(TOPIC_ADD_COMMENT_ERROR_MUT, err.message);
     }
@@ -146,7 +153,11 @@ const actions = {
   [TOPIC_DELETE]: async ({commit, getters, rootGetters}) => {
     try {
       commit(TOPIC_DEL_REQUEST_MUT);
-      if (!getters.isCurrentTopicPostLoaded || !rootGetters.isAdmin) {
+      if (!getters.isCurrentTopicPostLoaded) {
+        throw new Error('Nothing to delete');
+      }
+      const author = getters.currentTopicAuthor;
+      if (!author || !rootGetters.isMyProfileId(author.id)) {
         throw new Error('User can not delete this topic');
       }
       const delResponse = await Vue.axios.delete(`posts/${getters.currentTopicPostId}`);
