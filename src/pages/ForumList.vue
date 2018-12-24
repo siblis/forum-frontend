@@ -1,32 +1,26 @@
 <template>
   <div class="row between-md top-xs">
-    <div class="col-xs-12 col-md-9 col-lg-9">
+    <div class="col-xs-12 col-md-9">
       <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +</router-link>
       <h2 class="header-of-list">Список тем</h2>
       <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
-        <div class="list-of-topics col-xs-12 col-sm-8">
+        <div class="list-of-topics col-xs-9 col-sm-10">
           <router-link :to="{name: 'posts', params: {postId:item.id}}"><h4 class="header-of-topic">{{item.title}}</h4>
           </router-link>
           <div class="topic-params row">
             <!--скрыла, пока не приходят теги-->
-            <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">-->
+            <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-12 col-sm-6 col-lg-4">-->
             <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
             <!--</span>-->
-            <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-4">
+            <span v-if="item.created_at" class="commentTime col-xs-12 col-sm-6 col-lg-4">
               <nobr><i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }} </nobr>
             </span>
-            <span class=" col-xs-6 col-lg-4">
+            <span class=" col-xs-12 col-sm-6 col-lg-4">
               <nobr><i class='icon-eye'></i> {{item.views || 0}} {{ item.views | pluralize( ['просмотр', 'просмотра', 'просмотров']) }}</nobr>
             </span>
-            <!--<span class=" col-xs-6 col-lg-3">-->
-            <!--<nobr><i class='icon-speak'></i> Ответить</nobr>-->
-            <!--</span>-->
           </div>
         </div>
-        <!--<div class="col-xs-6 col-sm-2">-->
-        <!--<span class="watchNewCount"><i class='icon-speak' style="font-size: 1.5em"></i> Ответить</span>-->
-        <!--</div>-->
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-xs-3 col-sm-2">
           <p  class="comments_count">{{item.comments}} </p>
           <p class="comments_count">{{ item.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
         </div>
@@ -70,6 +64,7 @@
       }
     },
     mounted: function () {
+      this.page = parseInt(this.$route.query.page || 1);
       this.loadPosts();
     },
     methods: {
@@ -81,52 +76,27 @@
             this.pagination();
           })
           .catch(error => alert(error));
-
-
-        // для тестов бэкэнда
-        // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
-        //   category_id:4,
-        //   title: 'weeerr',
-        //   description: 'text23',
-        //   content: 'text45',
-        //   tags_array: ["asd"]})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
-        //   .catch(error => alert(error));
-        // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
-        //   description: 'text',
-        //   content:'text',
-        //   tags: []})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
-        // this.axios.delete('http://api.forum.pocketmsg.ru/posts/70')
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
       },
 
-
-
+      changePageUrl(newPage) {
+        this.$router.push({name: 'home', query: { page: newPage }});
+      },
       nextPage() {
         this.page += 1;
+        this.changePageUrl(this.page);
         this.loadPosts();
+
       },
       prevPage() {
         if (this.page > 1) {
           this.page -= 1;
+          this.changePageUrl(this.page);
           this.loadPosts();
         }
       },
       changePage(page) {
         this.page = page;
+        this.changePageUrl(this.page);
         this.loadPosts();
       },
       pagination() {

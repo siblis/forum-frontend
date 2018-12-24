@@ -32,7 +32,7 @@ Vue.filter('pluralize', pluralize);
 
 const router = new VueRouter({
   routes: [
-    {path: '/', component: ForumList},
+    {path: '/', name: 'home', component: ForumList},
     {path: '/profile', component: ForumAccount},
     {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},

@@ -14,10 +14,10 @@
         </div>
         <div class="post-block">
           <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-6 row bottom-xs">
+            <div class="post-user-block col-xs-6 row bottom-xs">
               <div class="post-user-img">U</div>
               <a href="#" class="post-user-name">{{ author.name }}</a>
-            </dir>
+            </div>
             <div class="post-time col-xs-6 end-xs" v-if="post.created_at">
               {{ [post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
             </div>
@@ -25,6 +25,7 @@
           <div class="post-body col-xs-12 col-sm">
             <div class="post-content">{{ post.content }}</div>
             <div class="post-props row end-xs"  v-if="isAuthor">
+              <router-link :to="{name: 'post', params: {postId:postId}}" v-if="post.canEdit" tag="span" class="post-props-edit">Редактировать</router-link>
               <span class="post-props-delete" @click="delConfirmation">Удалить</span>
             </div>
           </div>
@@ -245,7 +246,7 @@
     *
       margin: 0
       padding: 0
-      &:not(button),
+      &:not(button)
         background-color: $text_background_color
 
     .arrow-home
@@ -365,12 +366,15 @@
         span
           text-decoration: none
           color: inherit
+      &-edit
+        margin-right: 7px
       &-change-comment
         margin-left: auto
         color: inherit
       &-answer:hover,
       &-delete:hover,
       &-change-comment:hover,
+      &-edit:hover,
       .like:hover
         opacity: 0.5
       &-like
