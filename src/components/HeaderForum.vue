@@ -1,7 +1,7 @@
 <template>
 <header>
   <div class="row between-sm" id="header-content">
-    <router-link class="logo col-xs-12 center-xs col-md-3 start-md col-lg-2" to="/">
+    <router-link class="logo col-xs-12 center-xs col-md-2 start-md col-lg-2" to="/">
       <svg id="logo-img" width="161" height="49" viewBox="0 0 161 49">
         <path d="M50.5689 24.6748H45V1H50.5689V24.6748Z" fill="white"/>
         <path d="M72.1601 5.4065H65.207V24.6748H59.6222V5.4065H52.7964V1H72.1601V5.4065Z" fill="white"/>
@@ -23,7 +23,7 @@
       <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
     </div>
     <a
-      class="rules col-xs-12 center-xs col-sm start-sm center-md"
+      class="rules col-xs-12 center-xs col-sm start-sm col-md-1 center-md"
       type="application/pdf"
       href="https://drive.google.com/file/d/1FFqsqbN0Mr0PPIsyV7wwRRVa70xvXu4E/view?usp=sharing"
       target="_blank">
@@ -39,8 +39,8 @@
           <div id="user-ico"></div>
          </router-link>
         <button
-          class="auth_btn bnt_signOut button button-default"
           v-show="hideBtn"
+          class="auth_btn bnt_signOut button button-default"
           @click="logout()">
           Выход
         </button>
@@ -64,6 +64,7 @@ export default {
   data: function() {
     return {
       hideBtn: false,
+      hideExitBtn: false
     }
   },
   computed: {
@@ -112,6 +113,9 @@ header
 
 .logo, #search, #buttons, .rules
   margin: 5px 0
+
+.rules
+  padding: 10px
 
 .logo, #search, #buttons, #user-field
   display: flex
