@@ -36,31 +36,11 @@
         <h2 class="post-title-secondary"  v-if="isCommentsLoaded && hasComments">
           Комментарии ({{ commentsCount }})
         </h2>
-        <div class="post-block" v-for="(comment, i) in comments" :key="i">
-          <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-6 row bottom-xs">
-              <div class="post-user-img">U</div>
-              <a href="#" class="post-user-name">{{ comment.username.name }}</a>
-            </dir>
-            <div class="post-time col-xs-6 end-xs" v-if="comment.created_at">
-              {{ [comment.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
-            </div>
-          </div>
-          <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ comment.content }}</div>
-            <div class="post-props row">
-              <div class="post-props-answer">
-                <span @click="prepareComment(comment.username.name, comment.username.id)">Ответить</span>
-              </div>
-              <div class="post-props-like row">
-                <a class="like">Спасибо</a>
-                <i class="icon-thump-up like-icon"></i>
-                <span class="like-counter">{{ comment.like ? comment.like : 0 }}</span>
-              </div>
-              <div class='post-props-change-comment' v-if="isMyProfileId(comment.username.id)">Редактировать</div>
-            </div>
-          </div>
-        </div> 
+        <comment  v-for="(comment, i) in comments"
+                  :key="i"
+                  :comment="comment"
+                  @answer="prepareComment"
+        />
 
         <div class="post-block" v-if="!isLoggedIn">
           <h2 id="comment" class="add-comments-header">Оставить комментарий</h2>
@@ -159,9 +139,13 @@
 <script>
   import { mapGetters } from 'vuex';
   import { TOPIC_LOAD, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_CLEAR } from '../store/actions';
+  import Comment from '../components/Comment.vue';
   export default {
     name: 'ForumItem',
     props: ['postId'],
+    components: {
+      Comment,
+    },
     data() {
       return {        
         myComment: '',
@@ -224,7 +208,6 @@
       },
      },
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -377,15 +360,6 @@
       &-edit:hover,
       .like:hover
         opacity: 0.5
-      &-like
-        padding-left: 23px
-        @media screen and ( max-width: 420px )
-          padding-left: 8px
-      .like,
-      .like-icon
-        margin-right: 4px
-      .like-counter
-        // font-size: inherit
   
   .post-block-auth
     font-size: $base_font_size
@@ -402,7 +376,7 @@
     .add-comments-content
       min-height: 88px
       border: none
-      resize: none // переделать через js
+      resize: vertical // переделать через js
       overflow: auto
       padding: 15px
       border-radius: 4px
