@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import auth from './modules/auth';
 import profile from './modules/profile';
 import registration from './modules/registration';
+import topic from './modules/toptic';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     auth,
     profile,
     registration,
+    topic,
   },
   strict: useStrict,
 });
