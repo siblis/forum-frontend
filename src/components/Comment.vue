@@ -10,12 +10,17 @@
       </div>
     </div>
     <div class="comment-body col-xs-12 col-sm">
-      <div class="comment-content">{{ comment ? comment.content : '' }}</div>
-      <textarea 
+      <div class="comment-content" v-show="!editionMode">{{ comment ? comment.content : '' }}</div>
+      <textarea-autosize
+        v-show="editionMode"
         type="text"
         class="comment-content"
+        rows="1"
+        ref="changeRef"
         v-model="value"
-      ></textarea>
+        @blur.native="closeEditing"
+        @keydown.native="operateKeyDown"
+      ></textarea-autosize>
       <div class="comment-props row">
         <div class="comment-props-answer">
           <span @click="$emit('answer', comment.username.name, comment.username.id)">Ответить</span>
@@ -25,7 +30,14 @@
           <i class="icon-thump-up like-icon"></i>
           <span class="like-counter">{{ (comment && comment.like) ? comment.like : 0 }}</span>
         </div>
-        <div class='comment-props-change-comment' v-if="isMyProfileId(comment.username.id)">Редактировать</div>
+        <div  class='comment-props-change-comment'
+              v-show="isMyProfileId(comment.username.id) && !editionMode"
+              @click="prepareEditing"
+        >Редактировать</div>
+        <div  class='comment-props-change-comment'
+              v-show="isMyProfileId(comment.username.id) && editionMode"
+              @mousedown="applyChanges"
+        >Сохранить</div>
       </div>
     </div>
   </div> 
@@ -38,14 +50,41 @@ export default {
   data() {
     return {
       value: '',
-      redactorMode: false,
+      editionMode: false,
     };
   },
-  computed:{
+  computed: {
     ...mapGetters({
       isMyProfileId: 'isMyProfileId',
     }),
   },
+  methods: {
+    prepareEditing() {
+      if (this.value === '') {
+        this.value = this.comment.content;
+      }
+      this.editionMode = true;
+      setTimeout(() => this.$refs.changeRef.$el.focus());
+    },
+    closeEditing() {
+      this.editionMode = false
+    },
+    operateKeyDown(e) {
+      if (e.ctrlKey && e.key === "Enter") {
+        this.applyChanges();
+      } else if (e.key === "Escape") {
+        this.clearValue();  
+      }
+    },
+    applyChanges() {
+      console.log(this.value);
+      this.clearValue();
+    },
+    clearValue() {
+      this.editionMode = false;
+      this.value = '';
+    }
+  }
 }
 </script>
 <style lang="sass" scoped>
@@ -81,6 +120,7 @@ export default {
     @media screen and ( max-width: 420px )
       padding-left: 0
       padding-top: 15px
+
   .comment-content
     padding: 15px
     border-radius: 4px
@@ -91,8 +131,11 @@ export default {
     width: 100%
     outline: none
     border: none
-    height: auto
-    resize: none
+  textarea.comment-content
+    margin-bottom: -4px // correction
+  div.comment-content
+    padding-bottom: 16px  // correction
+  
   .comment-props
     padding-top: 10px
     font-size: $forun_item_secondary_font_size
@@ -123,6 +166,4 @@ export default {
     .like,
     .like-icon
       margin-right: 4px
-    .like-counter
-      // font-size: inherit
 </style>
