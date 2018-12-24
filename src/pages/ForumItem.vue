@@ -1,7 +1,7 @@
 <template>
   <div class="content row" v-if="isPostLoaded">
     <div class="main-content col-xs-12 col-md-6">
-      <router-link to="/" class="arrow-home col-xs-12 start-xs">
+      <router-link :to="{name: 'home'}" class="arrow-home col-xs-12 start-xs">
         <i class='icon-arrow-back'></i>
         <span class='arrow-home-text'>Главная</span>
       </router-link>
