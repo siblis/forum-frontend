@@ -23,7 +23,11 @@
             </div>
           </div>
           <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ post.content }}</div>
+            <div  class="post-content"
+                  :class="{ 'post-content-edited': wasEdited }"
+            >
+              {{ post.content }}
+            </div>
             <div class="post-props row end-xs"  v-if="isAuthor">
               <router-link :to="{name: 'post', params: {postId:postId}}" v-if="post.canEdit" tag="span" class="post-props-edit">Редактировать</router-link>
               <span class="post-props-delete" @click="delConfirmation">Удалить</span>
@@ -36,8 +40,8 @@
         <h2 class="post-title-secondary"  v-if="isCommentsLoaded && hasComments">
           Комментарии ({{ commentsCount }})
         </h2>
-        <comment  v-for="(comment, i) in comments"
-                  :key="i"
+        <comment  v-for="comment in comments"
+                  :key="comment.id"
                   :comment="comment"
                   @answer="prepareComment"
         />
@@ -180,7 +184,12 @@
       },
       commentsCount() {
         return this.isCommentsLoaded ? this.comments.length : 0;
-      }
+      },
+      wasEdited() {
+        return this.post.created_at
+            && this.post.updated_at
+            && this.post.updated_at !== this.post.created_at
+      },
     },
     methods: {
       prepareComment(name, id) {
@@ -333,7 +342,22 @@
       word-wrap: break-word
       color: $base_font_color
       font-size: $base_font_size
+      position: relative
+    .post-content-edited
+      &:before
+        content: 'Сообщение отредактировано'
+        position: absolute
+        top: 2px
+        right: 3px
+        font-size: 10px
+        font-weight: 500
+        color: $dark_background_color
 
+  .comment-props
+    padding-top: 10px
+    font-size: $forun_item_secondary_font_size
+    line-height: normal
+    color: $base_font_color
     .post-props
       padding-top: 10px
       font-size: $forun_item_secondary_font_size

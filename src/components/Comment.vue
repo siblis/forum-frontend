@@ -10,7 +10,12 @@
       </div>
     </div>
     <div class="comment-body col-xs-12 col-sm">
-      <div class="comment-content" v-show="!editionMode">{{ comment ? comment.content : '' }}</div>
+      <div  class="comment-content"
+            :class="{ 'comment-content-edited': wasEdited }"
+            v-show="!editionMode">
+        {{ comment ? comment.content : '' }}
+        <!-- <div class='shadow' v-show="isUpdPending"></div> -->
+      </div>
       <textarea-autosize
         v-show="editionMode"
         type="text"
@@ -44,6 +49,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+ import { TOPIC_UPD_COMMENT } from '../store/actions';
 export default {
   name: 'Comment',
   props: ['comment'],
@@ -56,7 +62,13 @@ export default {
   computed: {
     ...mapGetters({
       isMyProfileId: 'isMyProfileId',
+      isUpdPending: 'isCurrentTopicUpdCommentPending',
     }),
+    wasEdited() {
+      return this.comment.created_at
+          && this.comment.updated_at
+          && this.comment.updated_at !== this.comment.created_at
+    }
   },
   methods: {
     prepareEditing() {
@@ -67,7 +79,7 @@ export default {
       setTimeout(() => this.$refs.changeRef.$el.focus());
     },
     closeEditing() {
-      this.editionMode = false
+      setTimeout(() => this.editionMode = false, 400);
     },
     operateKeyDown(e) {
       if (e.ctrlKey && e.key === "Enter") {
@@ -76,9 +88,12 @@ export default {
         this.clearValue();  
       }
     },
-    applyChanges() {
-      console.log(this.value);
-      this.clearValue();
+    async applyChanges() {
+      const result = await this.$store.dispatch(TOPIC_UPD_COMMENT, { commentId: this.comment.id, content: this.value });
+      if (result) {
+        this.clearValue();
+      }
+      this.editionMode = false;  
     },
     clearValue() {
       this.editionMode = false;
@@ -97,6 +112,9 @@ export default {
     margin-bottom: 10px
   &:nth-last-child(2)
     margin-bottom: 17px
+  .comment-user-block
+    padding-right: 0
+    padding-left: 0
   .comment-user-img // заменить на фото
     height: 32px
     width: 32px
@@ -116,12 +134,33 @@ export default {
     margin-bottom: 6px
     font-size: $forun_item_secondary_font_size
   .comment-body
-    padding-left: 40px
+    margin-left: 40px
+    padding-right: 0
+    padding-left: 0
     @media screen and ( max-width: 420px )
-      padding-left: 0
-      padding-top: 15px
+      margin-left: 0
+      margin-top: 15px
+  // .shadow // доработать
+  //   position: absolute
+  //   top: 0
+  //   right: 0
+  //   height: 100%
+  //   width: 100%
+  //   box-sizing: border-box
+  //   font-size: 30px
+  //   display: flex
+  //   margin-left: 40px
+  //   align-items: center
+  //   justify-content: center
+  //   z-index: 100
+  //   border-radius: 4px
+  //   background-color: $dark_background_color
+  //   color: $text_background_color
+  //   &:before
+  //     content: "PENDING ... "
 
   .comment-content
+    position: relative
     padding: 15px
     border-radius: 4px
     background-color: $comment_background_color
@@ -131,11 +170,25 @@ export default {
     width: 100%
     outline: none
     border: none
+    border: 1px solid $comment_background_color
+  
   textarea.comment-content
     margin-bottom: -4px // correction
+    border-color: $dark_background_color
+    background-color: $background-color
   div.comment-content
-    padding-bottom: 16px  // correction
+    padding-bottom: 14px  // correction
   
+  .comment-content-edited
+    &:before
+      content: 'Сообщение отредактировано'
+      position: absolute
+      top: 2px
+      right: 3px
+      font-size: 10px
+      font-weight: 500
+      color: $dark_background_color
+
   .comment-props
     padding-top: 10px
     font-size: $forun_item_secondary_font_size
