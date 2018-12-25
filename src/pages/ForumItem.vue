@@ -15,7 +15,8 @@
         <div class="post-block">
           <div class='row between-xs bottom-xs'>
             <div class="post-user-block col-xs-6 row bottom-xs">
-              <div class="post-user-img">U</div>
+
+              <div class="post-user-img">{{ author.name[0].toUpperCase() }}</div>
               <a href="#" class="post-user-name">{{ author.name }}</a>
             </div>
             <div class="post-time col-xs-6 end-xs" v-if="post.created_at">
@@ -44,6 +45,7 @@
                   :key="comment.id"
                   :comment="comment"
                   @answer="prepareComment"
+                  :ref="`comment-${comment.id}`"
         />
 
         <div class="post-block" v-if="!isLoggedIn">
@@ -59,14 +61,14 @@
         <div class="post-block" v-else>
           <h2 class="add-comments-header">Оставить комментарий</h2>
           <div  class="row">
-            <div class="post-user-img">I</div>
+            <div class="post-user-img">{{ isLoggedIn ? profile.name[0].toUpperCase() : '' }}</div>
             <div class="add-comments-body row col-xs-12 col-sm">
-            <textarea
-              type="text"
-              v-model="myComment"
-              class="add-comments-content col-xs-12 col-sm"
-              ref="comment">
-            </textarea>
+              <textarea-autosize  type="text"
+                                  class="add-comments-content col-xs-12 col-sm"
+                                  ref="comment"
+                                  v-model="myComment"
+                                  @keydown.native="operateKeyDown"
+              ></textarea-autosize>
               <div class="row col-xs-12 center-xs start-sm">
                 <button class="button button-main" @click="addComment">Отправить</button>
               </div>
@@ -163,6 +165,7 @@
     computed:{
       ...mapGetters({
         isLoggedIn: 'isLoggedIn',
+        profile: 'profile',
         isMyProfileId: 'isMyProfileId',
         isAdmin: 'isAdmin',
         post: 'currentTopic',
@@ -193,11 +196,18 @@
     },
     methods: {
       prepareComment(name, id) {
-        this.$refs.comment.focus(); //фокус на элемент с ref="comment", чтобы не использовать ссылки 
+        this.$refs.comment.$el.focus(); 
         if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
           return;
         }
         this.myComment = `${name}, `;
+      },
+      operateKeyDown(e) {
+        if (e.ctrlKey && e.key === "Enter") {
+          this.addComment();
+        } else if (e.key === "Escape") {
+          this.myComment = ""; 
+        }
       },
       async addComment() {
         await this.$store.dispatch(TOPIC_ADD_COMMENT, this.myComment);
@@ -314,9 +324,12 @@
       width: 32px
       border-radius: 50%
       background-color: $topic_block_background
-      text-align: center
-      line-height: 32px
       margin-right: 8px
+      display: flex
+      justify-content: center
+      align-items: center
+      font-weight: 700
+      color: #333
     
     .post-user-name
       font-size: $forun_item_secondary_font_size
@@ -399,9 +412,7 @@
       padding-top: 15px
     .add-comments-content
       min-height: 88px
-      border: none
-      resize: vertical // переделать через js
-      overflow: auto
+      border: 1px solid $comment_background_color
       padding: 15px
       border-radius: 4px
       background-color: $comment_background_color
@@ -411,6 +422,8 @@
       margin-bottom: 15px
       &:focus
         outline: none
+        border-color: $dark_background_color
+        background-color: $background-color
     .button
       margin-bottom: 0
   

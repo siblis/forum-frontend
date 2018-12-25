@@ -2,7 +2,7 @@
    <div class="comment-block">
     <div class='row between-xs bottom-xs'>
       <dir class="comment-user-block col-xs-6 row bottom-xs">
-        <div class="comment-user-img">U</div>
+        <div class="comment-user-img">{{ comment ? comment.username.name[0].toUpperCase() : 'U'}}</div>
         <a href="#" class="comment-user-name">{{ comment ? comment.username.name : '' }}</a>
       </dir>
       <div class="comment-time col-xs-6 end-xs" v-if="comment.created_at">
@@ -120,9 +120,12 @@ export default {
     width: 32px
     border-radius: 50%
     background-color: $topic_block_background
-    text-align: center
-    line-height: 32px
     margin-right: 8px
+    display: flex
+    justify-content: center
+    align-items: center
+    font-weight: 700
+    color: #333
   
   .comment-user-name
     font-size: $forun_item_secondary_font_size
@@ -169,7 +172,6 @@ export default {
     font-size: $base_font_size
     width: 100%
     outline: none
-    border: none
     border: 1px solid $comment_background_color
   
   textarea.comment-content
