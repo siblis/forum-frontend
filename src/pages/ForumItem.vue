@@ -45,7 +45,6 @@
                   :key="comment.id"
                   :comment="comment"
                   @answer="prepareComment"
-                  :ref="`comment-${comment.id}`"
         />
 
         <div class="post-block" v-if="!isLoggedIn">
