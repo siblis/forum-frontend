@@ -135,10 +135,10 @@ const actions = {
       commit(TOPIC_POST_ERROR_MUT, err.message);
     }
   },
-  [TOPIC_COMMENTS_LOAD]: async ({ commit, getters, rootGetters }) => {
+  [TOPIC_COMMENTS_LOAD]: async ({ commit, getters }) => {
     try {
       commit(TOPIC_COMMENTS_REQUEST_MUT);
-      if (!getters.isCurrentTopicPostLoaded || !rootGetters.isLoggedIn) {
+      if (!getters.isCurrentTopicPostLoaded) {
         throw new Error('Some error');
       }
       const commentsResponse = await Vue.axios.get(`posts/${getters.currentTopicPostId}/comments`);
