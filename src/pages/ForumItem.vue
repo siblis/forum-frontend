@@ -60,7 +60,7 @@
         <div class="post-block" v-else>
           <h2 class="add-comments-header">Оставить комментарий</h2>
           <div  class="row">
-            <div class="post-user-img">{{ firstCharOfMyProfile }}</div>
+            <div class="post-user-img">{{ firstCharOfMyName }}</div>
             <div class="add-comments-body row col-xs-12 col-sm">
               <textarea-autosize  type="text"
                                   class="add-comments-content col-xs-12 col-sm"
