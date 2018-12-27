@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import { 
-  TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_UPD_COMMENT
+  TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_UPD_COMMENT, TOPIC_DEL_COMMENT
 } from '../actions';
 
 const TOPIC_COMMENTS_LOAD = 'TOPIC_COMMENTS_LOAD';
@@ -21,6 +21,10 @@ const TOPIC_COMMENTS_ERROR_MUT = 'TOPIC_COMMENTS_ERROR_MUT';
 const TOPIC_ADD_COMMENT_REQUEST_MUT = 'TOPIC_ADD_COMMENT_REQUEST_MUT';
 const TOPIC_ADD_COMMENT_SUCCESS_MUT = 'TOPIC_ADD_COMMENT_SUCCESS_MUT';
 const TOPIC_ADD_COMMENT_ERROR_MUT = 'TOPIC_ADD_COMMENT_ERROR_MUT';
+
+const TOPIC_DEL_COMMENT_REQUEST_MUT = 'TOPIC_DEL_COMMENT_REQUEST_MUT';
+const TOPIC_DEL_COMMENT_SUCCESS_MUT = 'TOPIC_DEL_COMMENT_SUCCESS_MUT';
+const TOPIC_DEL_COMMENT_ERROR_MUT = 'TOPIC_DEL_COMMENT_ERROR_MUT';
 
 const TOPIC_UPD_COMMENT_REQUEST_MUT = 'TOPIC_UPD_COMMENT_REQUEST_MUT';
 const TOPIC_UPD_COMMENT_SUCCESS_MUT = 'TOPIC_UPD_COMMENT_SUCCESS_MUT';
@@ -76,6 +80,16 @@ const mutations = {
     state.errorMessage = message;
   },
 
+  [TOPIC_DEL_COMMENT_SUCCESS_MUT]: (state, commentId) => {
+    state.delCommentStatus = 'SUCCESS'
+    state.comments = state.comments.filter(comment => comment.id !== commentId);
+  },
+  [TOPIC_DEL_COMMENT_REQUEST_MUT]: state => state.delCommentStatus = 'PENDING',
+  [TOPIC_DEL_COMMENT_ERROR_MUT]: (state, message) => {
+    state.delCommentStatus = 'ERROR';
+    state.errorMessage = message;
+  },
+
   [TOPIC_UPD_COMMENT_REQUEST_MUT]: state => state.updCommentStatus = 'PENDING',
   [TOPIC_UPD_COMMENT_SUCCESS_MUT]: (state, { id, item }) => {
     state.updCommentStatus = 'SUCCESS';
@@ -94,6 +108,7 @@ const mutations = {
     state.commentsLoadStatus = '';
     state.addCommentStatus = '';
     state.updCommentStatus = '';
+    state.delCommentStatus = '';
     state.post = {};
     state.author = {};
     state.comments = [];
@@ -215,6 +230,26 @@ const actions = {
     } catch (err) {
       commit(TOPIC_DEL_ERROR_MUT , err.message);
       throw new Error(err.message);
+    }
+  },
+  [TOPIC_DEL_COMMENT]: async ({commit, getters, rootGetters}, commentId) => {
+    try {
+      commit(TOPIC_DEL_COMMENT_REQUEST_MUT);
+      const comment = getters.getCurrentTopicCommentById(commentId);
+      if (!comment) {
+        throw new Error('Nothing to delete');
+      }
+      const commentAuthorId = comment.username && comment.username.id;
+      if (!commentAuthorId || !rootGetters.isMyProfileId(commentAuthorId)) {
+        throw new Error('User can not delete comment');
+      }     
+      const delResponse = await Vue.axios.delete(`comments/${commentId}`);
+      if (delResponse.status !== 204) {
+        throw new Error(`Some netwotk problem, response status: ${delResponse.status}`);
+      }
+      commit(TOPIC_DEL_COMMENT_SUCCESS_MUT, commentId);
+    } catch (err) {
+      commit(TOPIC_DEL_COMMENT_ERROR_MUT , err.message);
     }
   },
   [TOPIC_CLEAR]: ({ commit }) => commit(TOPIC_CLEAR_MUT),
