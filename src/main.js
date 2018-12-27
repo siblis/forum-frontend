@@ -36,6 +36,8 @@ Vue.use(VueTextareaAutosize);
 const router = new VueRouter({
   routes: [
     {path: '/', name: 'home', component: ForumList},
+    {path: '/search/:query', name: 'userSearch', component: ForumList, props: true},
+    {path: '/search', redirect: '/' },
     {path: '/profile', component: ForumAccount},
     {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},

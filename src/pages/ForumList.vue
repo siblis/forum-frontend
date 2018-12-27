@@ -11,9 +11,9 @@
           <div class="topic-params row">
             <div v-if="item.tags" class="col-xs-12">
               <div class="row tags-row">
-              <i class='icon-label'></i>
-              <a href="#" class="tags" v-for="(tag, i) in item.tags.split(',')" :key="i">{{ tag }}</a>
-            </div>
+                <i class='icon-label'></i>
+                <a href="#" class="tags" v-for="(tag, i) in item.tags.split(',')" :key="i">{{ tag }}</a>
+              </div>
             </div>
             <div v-if="item.created_at" class="commentTime col-xs-12 col-sm-6 col-lg-4">
               <i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
@@ -23,7 +23,6 @@
               'просмотров']) }}
             </div>
           </div>
-
         </div>
         <div class="col-xs-3 col-sm-2">
           <p class="comments_count">{{item.comments}} </p>
@@ -49,7 +48,12 @@
       </div>
     </div>
     <div class="topic-block col-xs-12 col-md-3">
-      здесь будет контент
+      <h2 class="header-of-list">Лучшие темы</h2>
+      <div v-for="bestItem in bestItems" :key="bestItem.id">
+        <div>
+          {{bestItem}}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,11 +61,14 @@
 <script>
   export default {
     name: 'ForumList',
+    props: ['query'],
     data() {
       return {
+        userSearch: '',
         page: 1,
         total: 0,
         items: [],
+        bestItems: [],
         userId: '',
         pagesList: [],
         user: '',
@@ -70,16 +77,42 @@
       }
     },
     mounted: function () {
+      console.log('mounter');
+      this.userSearch = this.query;
+      console.log(this.query);
       this.page = parseInt(this.$route.query.page || 1);
       this.loadPosts();
     },
+    watch: {
+      '$route'(to, from) {
+        console.log('watch', to);
+        this.userSearch = to.params.query;
+        this.loadPosts();
+      }
+    },
     methods: {
       loadPosts() {
-        this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
+        if (this.userSearch) {
+          this.axios.get('http://api.forum.pocketmsg.ru/search/' + this.userSearch)
+            .then(response => {
+              this.items = response.data.Posts.data;
+              this.total = response.data.Posts.total;
+            })
+            .catch(error => alert(error));
+        } else {
+          this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
+            .then(response => {
+              this.items = response.data.data;
+              this.total = response.data.total;
+              this.pagination();
+            })
+            .catch(error => alert(error));
+        }
+
+        this.axios.get('http://api.forum.pocketmsg.ru/best-posts')
           .then(response => {
-            this.items = response.data.data;
-            this.total = response.data.total;
-            this.pagination();
+            this.bestItems = response.data.data;
+            this.bestItems.length = 5;
           })
           .catch(error => alert(error));
       },
@@ -143,8 +176,6 @@
         return this.$store.getters.isLoggedIn
       },
     },
-
-    props: {}
   }
 
 </script>
@@ -211,8 +242,7 @@
   .topic-block
     background-color: $topic_block_background
     width: 100%
-    padding: 200px 0
-    text-align: center
+    padding: 10px 5px
 
   .paginator
     margin: 35px 20px 40px 50px
