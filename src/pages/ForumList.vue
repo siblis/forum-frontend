@@ -1,6 +1,6 @@
 <template>
   <div class="row between-md top-xs">
-    <div class="col-xs-12 col-md-9">
+    <div class="col-xs-12 col-md-8">
       <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +
       </router-link>
       <h2 class="header-of-list">Список тем</h2>
@@ -47,13 +47,20 @@
         </button>
       </div>
     </div>
-    <div class="topic-block col-xs-12 col-md-3">
-      <h2 class="header-of-list">Лучшие темы</h2>
-      <div v-for="bestItem in bestItems" :key="bestItem.id" >
-        <div class="best-topic row" >
+    <div class="topic-block col-xs-12 col-md-4">
+      <h2 class="header-of-best-topics">Лучшие темы</h2>
+      <div v-for="bestItem in bestItems" :key="bestItem.id">
+        <div class="best-topic row">
           <div class="userImg">{{bestItem.username[0].toUpperCase()}}</div>
-            <a href="#" class="best-topic-name col-xs">{{bestItem.title}}</a>
-            <div class="best-topic-props col-xs-2">{{bestItem.comments}}<br/>{{ bestItem.comments | pluralize( ['ответ', 'ответа', 'ответов']) }} </div>
+          <p
+            @click="() => linkToTopic(bestItem.id)"
+            class="new-topic-name col-xs">
+            {{bestItem.title}}
+          </p>
+          <div class="best-topic-props col-xs-2">
+            <p>{{bestItem.comments}}</p>
+            <p>{{ bestItem.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
+          </div>
 
         </div>
       </div>
@@ -88,6 +95,7 @@
       '$route'(to, from) {
         this.userSearch = to.params.query;
         this.loadPosts();
+        this.$store.dispatch(TOPIC_LOAD, to.params.postId);
       }
     },
     methods: {
@@ -112,9 +120,11 @@
 
         this.axios.get('http://api.forum.pocketmsg.ru/best-posts')
           .then(response => {
-            this.bestItems = response.data.data;
-           this.bestItems.sort(this.bestItems.comments);
-            this.bestItems.length = 5;
+            this.bestItems = response.data.data.filter((item) => {
+              return item.id !== parseInt(this.postId);
+            });
+            this.bestItems.sort(this.bestItems.comments);
+            this.bestItems.length = 15;
             console.log(response)
           })
           .catch(error => alert(error));
@@ -143,13 +153,13 @@
       },
       pagination() {
         let current = this.page,
-            last = this.numberOfPage,
-            delta = 2,
-            left = current - delta,
-            right = current + delta + 1,
-            range = [],
-            rangeWithDots = [],
-            l;
+          last = this.numberOfPage,
+          delta = 2,
+          left = current - delta,
+          right = current + delta + 1,
+          range = [],
+          rangeWithDots = [],
+          l;
 
         for (let i = 1; i <= last; i++) {
           if (i === 1 || i === last || i >= left && i < right) {
@@ -169,6 +179,10 @@
           l = i;
         }
         this.pagesList = rangeWithDots;
+      },
+
+      linkToTopic(postId) {
+        this.$router.push({name: 'posts', params: { postId }})
       }
     },
     computed: {
@@ -242,8 +256,6 @@
       font-weight: bold
       font-size: 18px
 
-
-
   .paginator
     margin: 35px 20px 40px 50px
     .paginate-links
@@ -269,16 +281,18 @@
     @media (min-width: $sm + 1px)
       padding-left: 25px
 
-
   .invisible
     display: none
     margin-bottom: 0
 
   .topic-block
-    width: 100%
-    margin: 0
-    padding: 38px 0 0
-
+    padding: 13px 12px 0 12px
+    background-color: $topic_block_background
+    .header-of-best-topics
+      font-size: 20px
+      font-weight: bold
+      line-height: 23px
+      padding-bottom: 15px
 
     *
       margin: 0
@@ -288,9 +302,9 @@
     div, a
       font-size: $medium_font_size
       font-weight: normal
-    .best-topic:not(:last-child)
+    .best-topic
       margin-bottom: 24px
-    .userImg // заменить на фото
+    .userImg
       height: 32px
       border-radius: 50%
       width: 32px
@@ -299,6 +313,7 @@
       line-height: 32px
       margin-right: 6px
       margin-bottom: 8px
+
     .best-topic-name
       padding-top: 5px
       text-decoration: none
