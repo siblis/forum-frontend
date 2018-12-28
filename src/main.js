@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios';
 import store from './store';
 import moment from 'moment';
 import VueMoment from 'vue-moment';
+import VueTextareaAutosize from 'vue-textarea-autosize'
 import pluralize from './utils/pluralize';
 import ForumItem from '@/pages/ForumItem';
 // import Example from '@/pages/Example';
@@ -30,9 +31,13 @@ Vue.use(VueMoment, { moment });
 
 Vue.filter('pluralize', pluralize);
 
+Vue.use(VueTextareaAutosize);
+
 const router = new VueRouter({
   routes: [
-    {path: '/', component: ForumList},
+    {path: '/', name: 'home', component: ForumList},
+    {path: '/search/:query', name: 'userSearch', component: ForumList, props: true},
+    {path: '/search', redirect: '/' },
     {path: '/profile', component: ForumAccount},
     {path: '/posts/:postId', name: 'posts', component: ForumItem, props: true},
     {path: '/forum', component: ForumList},

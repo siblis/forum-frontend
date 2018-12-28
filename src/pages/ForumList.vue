@@ -1,33 +1,31 @@
 <template>
   <div class="row between-md top-xs">
-    <div class="col-xs-12 col-md-9 col-lg-9">
-      <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +</router-link>
+    <div class="col-xs-12 col-md-9">
+      <router-link to="/create-post" tag="button" class="button button-main" v-show="isLoggedIn">Добавить тему +
+      </router-link>
       <h2 class="header-of-list">Список тем</h2>
       <div v-for="item in items" :key="item.id" class="post_unit row around-xs middle-xs">
-        <div class="list-of-topics col-xs-12 col-sm-8">
+        <div class="list-of-topics col-xs-9 col-sm-10">
           <router-link :to="{name: 'posts', params: {postId:item.id}}"><h4 class="header-of-topic">{{item.title}}</h4>
           </router-link>
           <div class="topic-params row">
-            <!--скрыла, пока не приходят теги-->
-            <!--<span v-if="item.tags && item.tags.length" class="tags col-xs-6 col-lg-4">-->
-            <!--<nobr><i class='icon-label'></i> {{item.tags.join().replace(/,([^\s])/g, ", $1")}}</nobr>-->
-            <!--</span>-->
-            <span v-if="item.created_at" class="commentTime col-xs-6 col-lg-4">
-              <nobr><i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }} </nobr>
-            </span>
-            <span class=" col-xs-6 col-lg-4">
-              <nobr><i class='icon-eye'></i> {{item.views || 0}} {{ item.views | pluralize( ['просмотр', 'просмотра', 'просмотров']) }}</nobr>
-            </span>
-            <!--<span class=" col-xs-6 col-lg-3">-->
-            <!--<nobr><i class='icon-speak'></i> Ответить</nobr>-->
-            <!--</span>-->
+            <div v-if="item.tags" class="col-xs-12">
+              <div class="row tags-row">
+                <i class='icon-label'></i>
+                <a href="#" class="tags" v-for="(tag, i) in item.tags.split(',')" :key="i">{{ tag }}</a>
+              </div>
+            </div>
+            <div v-if="item.created_at" class="commentTime col-xs-12 col-sm-6 col-lg-4">
+              <i class='icon-clock'></i> {{[item.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
+            </div>
+            <div class=" col-xs-12 col-sm-6 col-lg-4">
+              <i class='icon-eye'></i> {{item.views || 0}} {{ item.views | pluralize( ['просмотр', 'просмотра',
+              'просмотров']) }}
+            </div>
           </div>
         </div>
-        <!--<div class="col-xs-6 col-sm-2">-->
-        <!--<span class="watchNewCount"><i class='icon-speak' style="font-size: 1.5em"></i> Ответить</span>-->
-        <!--</div>-->
-        <div class="col-xs-12 col-sm-2">
-          <p  class="comments_count">{{item.comments}} </p>
+        <div class="col-xs-3 col-sm-2">
+          <p class="comments_count">{{item.comments}} </p>
           <p class="comments_count">{{ item.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
         </div>
       </div>
@@ -50,7 +48,12 @@
       </div>
     </div>
     <div class="topic-block col-xs-12 col-md-3">
-      здесь будет контент
+      <h2 class="header-of-list">Лучшие темы</h2>
+      <div v-for="bestItem in bestItems" :key="bestItem.id">
+        <div>
+          {{bestItem}}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -58,75 +61,81 @@
 <script>
   export default {
     name: 'ForumList',
+    props: ['query'],
     data() {
       return {
+        userSearch: '',
         page: 1,
         total: 0,
         items: [],
+        bestItems: [],
         userId: '',
         pagesList: [],
-        user:'',
-        comments:''
+        user: '',
+        comments: '',
+        tags: ''
       }
     },
     mounted: function () {
+      console.log('mounter');
+      this.userSearch = this.query;
+      console.log(this.query);
+      this.page = parseInt(this.$route.query.page || 1);
       this.loadPosts();
+    },
+    watch: {
+      '$route'(to, from) {
+        console.log('watch', to);
+        this.userSearch = to.params.query;
+        this.loadPosts();
+      }
     },
     methods: {
       loadPosts() {
-        this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
+        if (this.userSearch) {
+          this.axios.get('http://api.forum.pocketmsg.ru/search/' + this.userSearch)
+            .then(response => {
+              this.items = response.data.Posts.data;
+              this.total = response.data.Posts.total;
+            })
+            .catch(error => alert(error));
+        } else {
+          this.axios.get('http://api.forum.pocketmsg.ru/posts?page=' + this.page)
+            .then(response => {
+              this.items = response.data.data;
+              this.total = response.data.total;
+              this.pagination();
+            })
+            .catch(error => alert(error));
+        }
+
+        this.axios.get('http://api.forum.pocketmsg.ru/best-posts')
           .then(response => {
-            this.items = response.data.data;
-            this.total = response.data.total;
-            this.pagination();
+            this.bestItems = response.data.data;
+            this.bestItems.length = 5;
           })
           .catch(error => alert(error));
-
-
-        // для тестов бэкэнда
-        // this.axios.post('http://api.forum.pocketmsg.ru/posts', {user_id:14,
-        //   category_id:4,
-        //   title: 'weeerr',
-        //   description: 'text23',
-        //   content: 'text45',
-        //   tags_array: ["asd"]})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
-        //   .catch(error => alert(error));
-        // this.axios.put('http://api.forum.pocketmsg.ru/posts/73', {title: 'text',
-        //   description: 'text',
-        //   content:'text',
-        //   tags: []})
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
-        // this.axios.delete('http://api.forum.pocketmsg.ru/posts/70')
-        //   .then(response => {
-        //     this.items = response.data.data;
-        //     this.total = response.data.total;
-        //     this.pagination();
-        //   })
       },
 
-
-
+      changePageUrl(newPage) {
+        this.$router.push({name: 'home', query: {page: newPage}});
+      },
       nextPage() {
         this.page += 1;
+        this.changePageUrl(this.page);
         this.loadPosts();
+
       },
       prevPage() {
         if (this.page > 1) {
           this.page -= 1;
+          this.changePageUrl(this.page);
           this.loadPosts();
         }
       },
       changePage(page) {
         this.page = page;
+        this.changePageUrl(this.page);
         this.loadPosts();
       },
       pagination() {
@@ -163,12 +172,10 @@
       numberOfPage: function () {
         return Math.ceil(this.total / 15);
       },
-        isLoggedIn() {
-            return this.$store.getters.isLoggedIn
-        },
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn
+      },
     },
-
-    props: {}
   }
 
 </script>
@@ -194,6 +201,7 @@
     padding: 1px
     .list-of-topics
       padding-top: 15px
+      padding-left: 40px
       a
         text-decoration: none
       .header-of-topic
@@ -204,15 +212,28 @@
         white-space: nowrap
       .topic-params
         margin-bottom: 15px
-        .tags
-          text-transform: uppercase
-      span
+        margin-top: 0
+        .tags-row
+          margin-top: 0
+          .tags
+            text-transform: uppercase
+            opacity: 1
+            line-height: 120%
+            &:hover
+              opacity: 0.5
+            &:not(:last-child)
+              margin-right: 1px
+              &:after
+                content: ","
+      div
         display: flex
         align-items: center
         margin-top: 15px
         color: $topic_params_color
       i
         margin-right: 5px
+        vertical-align: middle
+        opacity: 1
     .comments_count
       text-align: center
       font-weight: bold
@@ -221,8 +242,7 @@
   .topic-block
     background-color: $topic_block_background
     width: 100%
-    padding: 200px 0
-    text-align: center
+    padding: 10px 5px
 
   .paginator
     margin: 35px 20px 40px 50px
@@ -245,9 +265,9 @@
   .list-of-topics,
   .post_unit
     @media (min-width: $xs) and (max-width: $sm)
-      padding-left: 0
+      padding-left: 7px
     @media (min-width: $sm + 1px)
-      padding-left: 40px
+      padding-left: 25px
 
   .invisible
     display: none

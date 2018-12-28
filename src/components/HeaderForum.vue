@@ -1,7 +1,7 @@
 <template>
 <header>
   <div class="row between-sm" id="header-content">
-    <router-link class="logo col-xs-12 center-xs col-md-3 start-md col-lg-2" to="/">
+    <router-link class="logo col-xs-12 center-xs col-md-2 start-md col-lg-2" to="/">
       <svg id="logo-img" width="161" height="49" viewBox="0 0 161 49">
         <path d="M50.5689 24.6748H45V1H50.5689V24.6748Z" fill="white"/>
         <path d="M72.1601 5.4065H65.207V24.6748H59.6222V5.4065H52.7964V1H72.1601V5.4065Z" fill="white"/>
@@ -15,15 +15,20 @@
       </svg>
     </router-link>
     <div class="col-xs-12 col-md-4 col-lg-5" id="search">
-      <button id="btn-search" type="submit">
+      <button id="btn-search" type="submit" v-on:click="searchButton">
         <svg id="search-img" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.8041 14.8637L11.9576 11.0171C12.911 9.85469 13.4857 8.36571 13.4857 6.74286C13.4857 3.02041 10.4653 0 6.74286 0C3.01714 0 0 3.02041 0 6.74286C0 10.4653 3.01714 13.4857 6.74286 13.4857C8.36571 13.4857 9.85143 12.9143 11.0139 11.9608L14.8604 15.8041C15.1216 16.0653 15.5429 16.0653 15.8041 15.8041C16.0653 15.5461 16.0653 15.1216 15.8041 14.8637ZM6.74286 12.1437C3.76163 12.1437 1.33878 9.72082 1.33878 6.74286C1.33878 3.7649 3.76163 1.33878 6.74286 1.33878C9.72082 1.33878 12.1469 3.7649 12.1469 6.74286C12.1469 9.72082 9.72082 12.1437 6.74286 12.1437Z" fill="#757575"/>
         </svg>
       </button>
-      <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
+      <input
+        v-model.trim="userSearch"
+        autocomplete="false"
+        type="search"
+        id="search_line"
+        placeholder="Поиск вопроса, темы по сайту...">
     </div>
     <a
-      class="rules col-xs-12 center-xs col-sm start-sm center-md"
+      class="rules col-xs-12 center-xs col-sm start-sm col-md-1 center-md"
       type="application/pdf"
       href="https://drive.google.com/file/d/1FFqsqbN0Mr0PPIsyV7wwRRVa70xvXu4E/view?usp=sharing"
       target="_blank">
@@ -39,8 +44,8 @@
           <div id="user-ico"></div>
          </router-link>
         <button
-          class="auth_btn bnt_signOut button button-default"
           v-show="hideBtn"
+          class="auth_btn bnt_signOut button button-default"
           @click="logout()">
           Выход
         </button>
@@ -64,6 +69,7 @@ export default {
   data: function() {
     return {
       hideBtn: false,
+      userSearch: ''
     }
   },
   computed: {
@@ -74,10 +80,10 @@ export default {
       return this.$store.getters.profile;
     }
   },
-  mounted(){
-    console.log(this.my);
-  },
   methods: {
+    searchButton() {
+      this.$router.push({path: `/search/` + this.userSearch})
+    },
     logout() {
       this.$store.dispatch(AUTH_LOGOUT);
       this.showButton();
@@ -112,6 +118,9 @@ header
 
 .logo, #search, #buttons, .rules
   margin: 5px 0
+
+.rules
+  padding: 10px
 
 .logo, #search, #buttons, #user-field
   display: flex

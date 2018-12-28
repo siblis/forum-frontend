@@ -1,7 +1,7 @@
 <template>
   <div class="content row" v-if="isPostLoaded">
     <div class="main-content col-xs-12 col-md-6">
-      <router-link to="/" class="arrow-home col-xs-12 start-xs">
+      <router-link :to="{name: 'home'}" class="arrow-home col-xs-12 start-xs">
         <i class='icon-arrow-back'></i>
         <span class='arrow-home-text'>Главная</span>
       </router-link>
@@ -14,17 +14,23 @@
         </div>
         <div class="post-block">
           <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-6 row bottom-xs">
-              <div class="post-user-img">U</div>
+            <div class="post-user-block col-xs-6 row bottom-xs">
+
+              <div class="post-user-img">{{ author.name[0].toUpperCase() }}</div>
               <a href="#" class="post-user-name">{{ author.name }}</a>
-            </dir>
+            </div>
             <div class="post-time col-xs-6 end-xs" v-if="post.created_at">
               {{ [post.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
             </div>
           </div>
           <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ post.content }}</div>
-            <div class="post-props row end-xs"  v-if="isAdmin">
+            <div  class="post-content"
+                  :class="{ 'post-content-edited': wasEdited }"
+            >
+              {{ post.content }}
+            </div>
+            <div class="post-props row end-xs"  v-if="isAuthor">
+              <router-link :to="{name: 'post', params: {postId:postId}}" v-if="post.canEdit" tag="span" class="post-props-edit">Редактировать</router-link>
               <span class="post-props-delete" @click="delConfirmation">Удалить</span>
             </div>
           </div>
@@ -35,31 +41,11 @@
         <h2 class="post-title-secondary"  v-if="isCommentsLoaded && hasComments">
           Комментарии ({{ commentsCount }})
         </h2>
-        <div class="post-block" v-for="(comment, i) in comments" :key="i">
-          <div class='row between-xs bottom-xs'>
-            <dir class="post-user-block col-xs-6 row bottom-xs">
-              <div class="post-user-img">U</div>
-              <a href="#" class="post-user-name">{{ comment.username ? comment.username.name : '' }}</a>
-            </dir>
-            <div class="post-time col-xs-6 end-xs" v-if="comment.created_at">
-              {{ [comment.created_at, "YYYY-MM-DD HH:mm:ss"] | moment("from") }}
-            </div>
-          </div>
-          <div class="post-body col-xs-12 col-sm">
-            <div class="post-content">{{ comment.content ? comment.content : '' }}</div>
-            <div class="post-props row">
-              <div class="post-props-answer">
-                <a href="#comment" @click="prepareComment(comment.username.name, comment.username.id)">Ответить</a>
-              </div>
-              <div class="post-props-like row">
-                <a class="like">Спасибо</a>
-                <i class="icon-thump-up like-icon"></i>
-                <span class="like-counter">{{ comment.like ? comment.like : 0 }}</span>
-              </div>
-              <div class='post-props-change-comment' v-if="isMyProfileId(comment.username.id)">Редактировать</div>
-            </div>
-          </div>
-        </div> 
+        <comment  v-for="comment in comments"
+                  :key="comment.id"
+                  :comment="comment"
+                  @answer="prepareComment"
+        />
 
         <div class="post-block" v-if="!isLoggedIn">
           <h2 id="comment" class="add-comments-header">Оставить комментарий</h2>
@@ -74,14 +60,14 @@
         <div class="post-block" v-else>
           <h2 class="add-comments-header">Оставить комментарий</h2>
           <div  class="row">
-            <div class="post-user-img">I</div>
+            <div class="post-user-img">{{ isLoggedIn ? profile.name[0].toUpperCase() : '' }}</div>
             <div class="add-comments-body row col-xs-12 col-sm">
-            <textarea
-              type="text"
-              v-model="myComment"
-              class="add-comments-content col-xs-12 col-sm"
-              id="comment">
-            </textarea>
+              <textarea-autosize  type="text"
+                                  class="add-comments-content col-xs-12 col-sm"
+                                  ref="comment"
+                                  v-model="myComment"
+                                  @keydown.native="operateKeyDown"
+              ></textarea-autosize>
               <div class="row col-xs-12 center-xs start-sm">
                 <button class="button button-main" @click="addComment">Отправить</button>
               </div>
@@ -158,9 +144,13 @@
 <script>
   import { mapGetters } from 'vuex';
   import { TOPIC_LOAD, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_CLEAR } from '../store/actions';
+  import Comment from '../components/Comment.vue';
   export default {
     name: 'ForumItem',
     props: ['postId'],
+    components: {
+      Comment,
+    },
     data() {
       return {        
         myComment: '',
@@ -174,6 +164,7 @@
     computed:{
       ...mapGetters({
         isLoggedIn: 'isLoggedIn',
+        profile: 'profile',
         isMyProfileId: 'isMyProfileId',
         isAdmin: 'isAdmin',
         post: 'currentTopic',
@@ -195,21 +186,34 @@
       },
       commentsCount() {
         return this.isCommentsLoaded ? this.comments.length : 0;
-      }
+      },
+      wasEdited() {
+        return this.post.created_at
+            && this.post.updated_at
+            && this.post.updated_at !== this.post.created_at
+      },
     },
     methods: {
       prepareComment(name, id) {
+        this.$refs.comment.$el.focus(); 
         if (!this.isLoggedIn || this.myComment !== '' || this.isMyProfileId(id)) {
           return;
         }
         this.myComment = `${name}, `;
+      },
+      operateKeyDown(e) {
+        if (e.ctrlKey && e.key === "Enter") {
+          this.addComment();
+        } else if (e.key === "Escape") {
+          this.myComment = ""; 
+        }
       },
       async addComment() {
         await this.$store.dispatch(TOPIC_ADD_COMMENT, this.myComment);
         this.myComment = "";
       },
       delConfirmation () {
-        if (this.isAdmin) {
+        if (this.isAuthor) {
           this.showDelConfirmation = true;
         }
       },
@@ -222,7 +226,6 @@
       },
      },
   }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -244,7 +247,7 @@
     *
       margin: 0
       padding: 0
-      &:not(button),
+      &:not(button)
         background-color: $text_background_color
 
     .arrow-home
@@ -320,9 +323,12 @@
       width: 32px
       border-radius: 50%
       background-color: $topic_block_background
-      text-align: center
-      line-height: 32px
       margin-right: 8px
+      display: flex
+      justify-content: center
+      align-items: center
+      font-weight: 700
+      color: #333
     
     .post-user-name
       font-size: $forun_item_secondary_font_size
@@ -348,7 +354,22 @@
       word-wrap: break-word
       color: $base_font_color
       font-size: $base_font_size
+      position: relative
+    .post-content-edited
+      &:before
+        content: 'Сообщение отредактировано'
+        position: absolute
+        top: 2px
+        right: 3px
+        font-size: 10px
+        font-weight: 500
+        color: $dark_background_color
 
+  .comment-props
+    padding-top: 10px
+    font-size: $forun_item_secondary_font_size
+    line-height: normal
+    color: $base_font_color
     .post-props
       padding-top: 10px
       font-size: $forun_item_secondary_font_size
@@ -361,26 +382,20 @@
         padding-left: 15px
         @media screen and ( max-width: 420px )
           padding-left: 0
-        a
+        span
           text-decoration: none
           color: inherit
+      &-edit
+        margin-right: 7px
       &-change-comment
         margin-left: auto
         color: inherit
       &-answer:hover,
       &-delete:hover,
       &-change-comment:hover,
+      &-edit:hover,
       .like:hover
         opacity: 0.5
-      &-like
-        padding-left: 23px
-        @media screen and ( max-width: 420px )
-          padding-left: 8px
-      .like,
-      .like-icon
-        margin-right: 4px
-      .like-counter
-        // font-size: inherit
   
   .post-block-auth
     font-size: $base_font_size
@@ -396,9 +411,7 @@
       padding-top: 15px
     .add-comments-content
       min-height: 88px
-      border: none
-      resize: none // переделать через js
-      overflow: auto
+      border: 1px solid $comment_background_color
       padding: 15px
       border-radius: 4px
       background-color: $comment_background_color
@@ -408,6 +421,8 @@
       margin-bottom: 15px
       &:focus
         outline: none
+        border-color: $dark_background_color
+        background-color: $background-color
     .button
       margin-bottom: 0
   

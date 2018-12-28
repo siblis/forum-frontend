@@ -3,7 +3,7 @@
     <div id="left-main-block"></div>
     <div id="right-main-block">
       <div id="nav-panel">
-        <router-link to="/">
+        <router-link :to="{name: 'home'}">
           <svg viewBox="4 0 16 16" fill="none">
             <path d="M7.44645 9.35355L12.6929 14.6L12 15.2929L4.70711 8L12 0.707107L12.6929 1.4L7.44645 6.64645L6.59289 7.5H7.8H19.5V8.5H7.8H6.59289L7.44645 9.35355Z" fill="black" fill-opacity="0.5" stroke="black"/>
           </svg>Главная
