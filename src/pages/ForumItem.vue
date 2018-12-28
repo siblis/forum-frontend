@@ -172,7 +172,9 @@
       await this.$store.dispatch(TOPIC_LOAD, this.postId);
       this.axios.get('http://api.forum.pocketmsg.ru/posts')
         .then(response => {
-          this.lastItems = response.data.data;
+          this.lastItems = response.data.data.filter((item) => {
+            return item.id !== parseInt(this.postId);
+          });
           this.lastItems.length = 5;
         })
         .catch(error => alert(error));
@@ -394,11 +396,6 @@
         font-weight: 500
         color: $dark_background_color
 
-  // .comment-props
-  //   padding-top: 10px
-  //   font-size: $forun_item_secondary_font_size
-  //   line-height: normal
-  //   color: $base_font_color
     .post-props
       padding-top: 10px
       font-size: $forun_item_secondary_font_size
