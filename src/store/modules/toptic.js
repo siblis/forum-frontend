@@ -41,6 +41,7 @@ const initialState = {
   post: {},
   author: {},
   comments: [],
+  commentsTotalCount: 0,
   errorMessage: '',
 };
 
@@ -57,9 +58,10 @@ const mutations = {
   },
 
   [TOPIC_COMMENTS_REQUEST_MUT]: state => state.commentsLoadStatus = 'PENDING',
-  [TOPIC_COMMENTS_SUCCESS_MUT]: (state, comments) => {
+  [TOPIC_COMMENTS_SUCCESS_MUT]: (state, { comments, total }) => {
     state.commentsLoadStatus = 'SUCCESS';
     state.comments = comments;
+    state.commentsTotalCount = total;
   },
   [TOPIC_COMMENTS_ERROR_MUT]: (state, message) => {
     state.commentsLoadStatus = 'ERROR';
@@ -112,6 +114,7 @@ const mutations = {
     state.post = {};
     state.author = {};
     state.comments = [];
+    state.commentsTotalCount = 0;
     state.errorMessage = '';
   }
 };
@@ -120,6 +123,7 @@ const getters = {
   currentTopicPostId: ({ post: { id } }) => id,
   currentTopic: state => state.post,
   currentTopicComments: state => state.comments,
+  currentTopicCommentsTotalCount: state => state.commentsTotalCount,
   currentTopicAuthor: state => state.author,
   currentTopicTags: (state, getters) => {
     const { tags } = state.post;
@@ -157,12 +161,24 @@ const actions = {
         throw new Error('Some error');
       }
       const commentsResponse = await Vue.axios.get(`posts/${getters.currentTopicPostId}/comments`);
-      const { data: { data }, status } = commentsResponse;
+        // current_page: 1
+        // data: {} 
+        // first_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=1"
+        // from: 1
+        // last_page: 2
+        // last_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=2"
+        // next_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=2"
+        // path: "http://api.forum.pocketmsg.ru/posts/17/comments"
+        // per_page: 10
+        // prev_page_url: null
+        // to: 10
+        // total: 15
+      const { data: { data, total }, status } = commentsResponse;
       if (status !== 200) {
         throw new Error(`Some netwotk problem, response status: ${status}`);
       }
       const comments = Object.values(data);
-      commit(TOPIC_COMMENTS_SUCCESS_MUT, comments);
+      commit(TOPIC_COMMENTS_SUCCESS_MUT, { comments, total });
     } catch (err) {
       commit(TOPIC_COMMENTS_ERROR_MUT, err.message);
     }
