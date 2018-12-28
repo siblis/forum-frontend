@@ -21,6 +21,7 @@
         </svg>
       </button>
       <input
+        @keyup.enter="searchButton"
         v-model.trim="userSearch"
         autocomplete="false"
         type="search"
