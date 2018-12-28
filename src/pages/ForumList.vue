@@ -49,11 +49,15 @@
     </div>
     <div class="topic-block col-xs-12 col-md-3">
       <h2 class="header-of-list">Лучшие темы</h2>
-      <div v-for="bestItem in bestItems" :key="bestItem.id">
-        <div>
-          {{bestItem}}
+      <div v-for="bestItem in bestItems" :key="bestItem.id" >
+        <div class="best-topic row" >
+          <div class="userImg">{{bestItem.username[0].toUpperCase()}}</div>
+            <a href="#" class="best-topic-name col-xs">{{bestItem.title}}</a>
+            <div class="best-topic-props col-xs-2">{{bestItem.comments}}<br/>{{ bestItem.comments | pluralize( ['ответ', 'ответа', 'ответов']) }} </div>
+
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -109,7 +113,9 @@
         this.axios.get('http://api.forum.pocketmsg.ru/best-posts')
           .then(response => {
             this.bestItems = response.data.data;
+           this.bestItems.sort(this.bestItems.comments);
             this.bestItems.length = 5;
+            console.log(response)
           })
           .catch(error => alert(error));
       },
@@ -236,10 +242,7 @@
       font-weight: bold
       font-size: 18px
 
-  .topic-block
-    background-color: $topic_block_background
-    width: 100%
-    padding: 10px 5px
+
 
   .paginator
     margin: 35px 20px 40px 50px
@@ -266,7 +269,44 @@
     @media (min-width: $sm + 1px)
       padding-left: 25px
 
+
   .invisible
     display: none
     margin-bottom: 0
+
+  .topic-block
+    width: 100%
+    margin: 0
+    padding: 38px 0 0
+
+
+    *
+      margin: 0
+      padding: 0
+      background-color: $aside_background_color
+
+    div, a
+      font-size: $medium_font_size
+      font-weight: normal
+    .best-topic:not(:last-child)
+      margin-bottom: 24px
+    .userImg // заменить на фото
+      height: 32px
+      border-radius: 50%
+      width: 32px
+      background-color: $light_background_color
+      text-align: center
+      line-height: 32px
+      margin-right: 6px
+      margin-bottom: 8px
+    .best-topic-name
+      padding-top: 5px
+      text-decoration: none
+      &:hover
+        opacity: 0.5
+    .best-topic-props
+      text-align: center
+      margin-right: 10px
+
+
 </style>
