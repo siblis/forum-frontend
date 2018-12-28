@@ -16,7 +16,7 @@
           <div class='row between-xs bottom-xs'>
             <div class="post-user-block col-xs-6 row bottom-xs">
 
-              <div class="post-user-img">{{ author.name[0].toUpperCase() }}</div>
+              <div class="post-user-img">{{ firstCharOfAuthorName }}</div>
               <a href="#" class="post-user-name">{{ author.name }}</a>
             </div>
             <div class="post-time col-xs-6 end-xs" v-if="post.created_at">
@@ -30,7 +30,7 @@
               {{ post.content }}
             </div>
             <div class="post-props row end-xs"  v-if="isAuthor">
-              <router-link :to="{name: 'post', params: {postId:postId}}" v-if="post.canEdit" tag="span" class="post-props-edit">Редактировать</router-link>
+              <router-link :to="{ name: 'post', params: { postId } }" v-if="post.canEdit" tag="span" class="post-props-edit">Редактировать</router-link>
               <span class="post-props-delete" @click="delConfirmation">Удалить</span>
             </div>
           </div>
@@ -46,7 +46,9 @@
                   :comment="comment"
                   @answer="prepareComment"
         />
-
+        <div class='post-comments-load-button'>
+          <button class="button button-inverse">Больше комментариев ... </button>
+        </div>
         <div class="post-block" v-if="!isLoggedIn">
           <h2 id="comment" class="add-comments-header">Оставить комментарий</h2>
           <div class="post-block-auth">
@@ -60,7 +62,7 @@
         <div class="post-block" v-else>
           <h2 class="add-comments-header">Оставить комментарий</h2>
           <div  class="row">
-            <div class="post-user-img">{{ isLoggedIn ? profile.name[0].toUpperCase() : '' }}</div>
+            <div class="post-user-img">{{ firstCharOfMyName }}</div>
             <div class="add-comments-body row col-xs-12 col-sm">
               <textarea-autosize  type="text"
                                   class="add-comments-content col-xs-12 col-sm"
@@ -178,12 +180,14 @@
     computed:{
       ...mapGetters({
         isLoggedIn: 'isLoggedIn',
+        isProfileLoaded: 'isProfileLoaded',
         profile: 'profile',
         isMyProfileId: 'isMyProfileId',
         isAdmin: 'isAdmin',
         post: 'currentTopic',
         tags: 'currentTopicTags',
         comments: 'currentTopicComments',
+        commentsCount: 'currentTopicCommentsTotalCount',
         author: 'currentTopicAuthor',
         isPostLoaded: 'isCurrentTopicPostLoaded',
         isCommentsLoaded: 'isCurrentTopicCommentsLoaded',
@@ -198,13 +202,16 @@
       hasComments() {
         return this.isCommentsLoaded && this.comments.length > 0;
       },
-      commentsCount() {
-        return this.isCommentsLoaded ? this.comments.length : 0;
-      },
       wasEdited() {
         return this.post.created_at
             && this.post.updated_at
             && this.post.updated_at !== this.post.created_at
+      },
+      firstCharOfMyName() {
+        return (this.isLoggedIn && this.isProfileLoaded) ? this.profile.name[0].toUpperCase() : ''
+      },
+      firstCharOfAuthorName() {
+        return (this.isPostLoaded && this.author) ? this.author.name[0].toUpperCase() : ''
       },
     },
     watch: {
@@ -387,11 +394,11 @@
         font-weight: 500
         color: $dark_background_color
 
-  .comment-props
-    padding-top: 10px
-    font-size: $forun_item_secondary_font_size
-    line-height: normal
-    color: $base_font_color
+  // .comment-props
+  //   padding-top: 10px
+  //   font-size: $forun_item_secondary_font_size
+  //   line-height: normal
+  //   color: $base_font_color
     .post-props
       padding-top: 10px
       font-size: $forun_item_secondary_font_size
@@ -399,6 +406,8 @@
       color: $base_font_color
       & *
         font-size: inherit
+        cursor: default
+      &-delete:hover
         cursor: default
       &-answer
         padding-left: 15px
@@ -419,6 +428,20 @@
       .like:hover
         opacity: 0.5
   
+  .post-comments-load-button
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    padding-top: 7px
+    padding-bottom: 7px
+    // @media screen and ( max-width: 420px )
+    //   justify-content: center
+    button
+      padding: 5px
+      cursor: pointer
+      font-weight: 400
+      font-size: 12px
+
   .post-block-auth
     font-size: $base_font_size
     line-height: 16px

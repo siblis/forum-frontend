@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import Vue from 'vue';
 import { 
-  TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_UPD_COMMENT
+  TOPIC_LOAD, TOPIC_CLEAR, TOPIC_DELETE, TOPIC_ADD_COMMENT, TOPIC_UPD_COMMENT, TOPIC_DEL_COMMENT
 } from '../actions';
 
 const TOPIC_COMMENTS_LOAD = 'TOPIC_COMMENTS_LOAD';
@@ -22,6 +22,10 @@ const TOPIC_ADD_COMMENT_REQUEST_MUT = 'TOPIC_ADD_COMMENT_REQUEST_MUT';
 const TOPIC_ADD_COMMENT_SUCCESS_MUT = 'TOPIC_ADD_COMMENT_SUCCESS_MUT';
 const TOPIC_ADD_COMMENT_ERROR_MUT = 'TOPIC_ADD_COMMENT_ERROR_MUT';
 
+const TOPIC_DEL_COMMENT_REQUEST_MUT = 'TOPIC_DEL_COMMENT_REQUEST_MUT';
+const TOPIC_DEL_COMMENT_SUCCESS_MUT = 'TOPIC_DEL_COMMENT_SUCCESS_MUT';
+const TOPIC_DEL_COMMENT_ERROR_MUT = 'TOPIC_DEL_COMMENT_ERROR_MUT';
+
 const TOPIC_UPD_COMMENT_REQUEST_MUT = 'TOPIC_UPD_COMMENT_REQUEST_MUT';
 const TOPIC_UPD_COMMENT_SUCCESS_MUT = 'TOPIC_UPD_COMMENT_SUCCESS_MUT';
 const TOPIC_UPD_COMMENT_ERROR_MUT = 'TOPIC_UPD_COMMENT_ERROR_MUT';
@@ -37,6 +41,7 @@ const initialState = {
   post: {},
   author: {},
   comments: [],
+  commentsTotalCount: 0,
   errorMessage: '',
 };
 
@@ -53,9 +58,10 @@ const mutations = {
   },
 
   [TOPIC_COMMENTS_REQUEST_MUT]: state => state.commentsLoadStatus = 'PENDING',
-  [TOPIC_COMMENTS_SUCCESS_MUT]: (state, comments) => {
+  [TOPIC_COMMENTS_SUCCESS_MUT]: (state, { comments, total }) => {
     state.commentsLoadStatus = 'SUCCESS';
     state.comments = comments;
+    state.commentsTotalCount = total;
   },
   [TOPIC_COMMENTS_ERROR_MUT]: (state, message) => {
     state.commentsLoadStatus = 'ERROR';
@@ -73,6 +79,16 @@ const mutations = {
   [TOPIC_ADD_COMMENT_REQUEST_MUT]: state => state.addCommentStatus = 'PENDING',
   [TOPIC_ADD_COMMENT_ERROR_MUT]: (state, message) => {
     state.addCommentStatus = 'ERROR';
+    state.errorMessage = message;
+  },
+
+  [TOPIC_DEL_COMMENT_SUCCESS_MUT]: (state, commentId) => {
+    state.delCommentStatus = 'SUCCESS'
+    state.comments = state.comments.filter(comment => comment.id !== commentId);
+  },
+  [TOPIC_DEL_COMMENT_REQUEST_MUT]: state => state.delCommentStatus = 'PENDING',
+  [TOPIC_DEL_COMMENT_ERROR_MUT]: (state, message) => {
+    state.delCommentStatus = 'ERROR';
     state.errorMessage = message;
   },
 
@@ -94,9 +110,11 @@ const mutations = {
     state.commentsLoadStatus = '';
     state.addCommentStatus = '';
     state.updCommentStatus = '';
+    state.delCommentStatus = '';
     state.post = {};
     state.author = {};
     state.comments = [];
+    state.commentsTotalCount = 0;
     state.errorMessage = '';
   }
 };
@@ -105,6 +123,7 @@ const getters = {
   currentTopicPostId: ({ post: { id } }) => id,
   currentTopic: state => state.post,
   currentTopicComments: state => state.comments,
+  currentTopicCommentsTotalCount: state => state.commentsTotalCount,
   currentTopicAuthor: state => state.author,
   currentTopicTags: (state, getters) => {
     const { tags } = state.post;
@@ -142,12 +161,24 @@ const actions = {
         throw new Error('Some error');
       }
       const commentsResponse = await Vue.axios.get(`posts/${getters.currentTopicPostId}/comments`);
-      const { data: { data }, status } = commentsResponse;
+        // current_page: 1
+        // data: {} 
+        // first_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=1"
+        // from: 1
+        // last_page: 2
+        // last_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=2"
+        // next_page_url: "http://api.forum.pocketmsg.ru/posts/17/comments?page=2"
+        // path: "http://api.forum.pocketmsg.ru/posts/17/comments"
+        // per_page: 10
+        // prev_page_url: null
+        // to: 10
+        // total: 15
+      const { data: { data, total }, status } = commentsResponse;
       if (status !== 200) {
         throw new Error(`Some netwotk problem, response status: ${status}`);
       }
       const comments = Object.values(data);
-      commit(TOPIC_COMMENTS_SUCCESS_MUT, comments);
+      commit(TOPIC_COMMENTS_SUCCESS_MUT, { comments, total });
     } catch (err) {
       commit(TOPIC_COMMENTS_ERROR_MUT, err.message);
     }
@@ -215,6 +246,26 @@ const actions = {
     } catch (err) {
       commit(TOPIC_DEL_ERROR_MUT , err.message);
       throw new Error(err.message);
+    }
+  },
+  [TOPIC_DEL_COMMENT]: async ({commit, getters, rootGetters}, commentId) => {
+    try {
+      commit(TOPIC_DEL_COMMENT_REQUEST_MUT);
+      const comment = getters.getCurrentTopicCommentById(commentId);
+      if (!comment) {
+        throw new Error('Nothing to delete');
+      }
+      const commentAuthorId = comment.username && comment.username.id;
+      if (!commentAuthorId || !rootGetters.isMyProfileId(commentAuthorId)) {
+        throw new Error('User can not delete comment');
+      }     
+      const delResponse = await Vue.axios.delete(`comments/${commentId}`);
+      if (delResponse.status !== 204) {
+        throw new Error(`Some netwotk problem, response status: ${delResponse.status}`);
+      }
+      commit(TOPIC_DEL_COMMENT_SUCCESS_MUT, commentId);
+    } catch (err) {
+      commit(TOPIC_DEL_COMMENT_ERROR_MUT , err.message);
     }
   },
   [TOPIC_CLEAR]: ({ commit }) => commit(TOPIC_CLEAR_MUT),

@@ -14,7 +14,6 @@
             :class="{ 'comment-content-edited': wasEdited }"
             v-show="!editionMode">
         {{ comment ? comment.content : '' }}
-        <!-- <div class='shadow' v-show="isUpdPending"></div> -->
       </div>
       <textarea-autosize
         v-show="editionMode"
@@ -35,21 +34,50 @@
           <i class="icon-thump-up like-icon"></i>
           <span class="like-counter">{{ (comment && comment.like) ? comment.like : 0 }}</span>
         </div>
-        <div  class='comment-props-change-comment'
+        <div  class='comment-props-control'
               v-show="isMyProfileId(comment.username.id) && !editionMode"
-              @click="prepareEditing"
-        >Редактировать</div>
-        <div  class='comment-props-change-comment'
+              ref="commentControl"
+              tabindex="1"
+              @blur="showCommentControl = false"
+        >
+          <i  class='icon-dots'
+              @click="showCommentControl = true">
+          </i>
+          <div  class='comment-props-control-list'
+                v-show="showCommentControl"
+                @mouseleave="showCommentControl = false"
+          >
+            <div  class='comment-props-control-item'
+                  v-show="isMyProfileId(comment.username.id) && !editionMode"
+                  @click="prepareEditing"
+            >
+              Редактировать
+            </div>
+            <span class="comment-props-control-item"
+                  @click="delConfirmation"
+            >
+              Удалить
+            </span>
+          </div>
+        </div>
+        <div  class='comment-props-control'
               v-show="isMyProfileId(comment.username.id) && editionMode"
-              @mousedown="applyChanges"
-        >Сохранить</div>
+              @mousedown="applyChanges">
+          Сохранить
+        </div>
       </div>
+    </div>
+    <div class='shadow' v-if="showDelConfirmation"></div>
+    <div class="del-confirm row center-xs col-xs-12 around-sm col-sm-6" v-if="showDelConfirmation">
+        <p class="col-xs-12">Вы уверены, что хотите удалить комментарий?</p>
+        <button class="button button-main col-xs-12 col-sm-5" @click="deleteComment">Удалить</button>
+        <button class="button button-main col-xs-12 col-sm-5" @click="cancelDelConfirmation">Отмена</button>
     </div>
   </div> 
 </template>
 <script>
 import { mapGetters } from 'vuex';
- import { TOPIC_UPD_COMMENT } from '../store/actions';
+ import { TOPIC_UPD_COMMENT, TOPIC_DEL_COMMENT } from '../store/actions';
 export default {
   name: 'Comment',
   props: ['comment'],
@@ -57,6 +85,8 @@ export default {
     return {
       value: '',
       editionMode: false,
+      showCommentControl: false,
+      showDelConfirmation: false,
     };
   },
   computed: {
@@ -79,7 +109,10 @@ export default {
       setTimeout(() => this.$refs.changeRef.$el.focus());
     },
     closeEditing() {
-      setTimeout(() => this.editionMode = false, 400);
+      setTimeout(() => {
+        this.editionMode = false;
+        this.showCommentControl = false;
+      }, 400);
     },
     operateKeyDown(e) {
       if (e.ctrlKey && e.key === "Enter") {
@@ -98,7 +131,17 @@ export default {
     clearValue() {
       this.editionMode = false;
       this.value = '';
-    }
+    },
+    delConfirmation () {
+      this.showDelConfirmation = true;
+    },
+    cancelDelConfirmation () {
+      this.showDelConfirmation = false;
+    },
+    async deleteComment () {
+      await this.$store.dispatch(TOPIC_DEL_COMMENT, this.comment.id);
+      this.showDelConfirmation = false;
+    },
   }
 }
 </script>
@@ -143,24 +186,6 @@ export default {
     @media screen and ( max-width: 420px )
       margin-left: 0
       margin-top: 15px
-  // .shadow // доработать
-  //   position: absolute
-  //   top: 0
-  //   right: 0
-  //   height: 100%
-  //   width: 100%
-  //   box-sizing: border-box
-  //   font-size: 30px
-  //   display: flex
-  //   margin-left: 40px
-  //   align-items: center
-  //   justify-content: center
-  //   z-index: 100
-  //   border-radius: 4px
-  //   background-color: $dark_background_color
-  //   color: $text_background_color
-  //   &:before
-  //     content: "PENDING ... "
 
   .comment-content
     position: relative
@@ -192,6 +217,7 @@ export default {
       color: $dark_background_color
 
   .comment-props
+    position: relative
     padding-top: 10px
     font-size: $forun_item_secondary_font_size
     line-height: normal
@@ -206,9 +232,6 @@ export default {
       span
         text-decoration: none
         color: inherit
-    &-change-comment
-      margin-left: auto
-      color: inherit
     &-answer:hover,
     &-delete:hover,
     &-change-comment:hover,
@@ -221,4 +244,62 @@ export default {
     .like,
     .like-icon
       margin-right: 4px
+    &-control
+      margin-left: auto
+      color: inherit
+      outline: none
+      .icon-dots
+        padding-right: 7px
+    &-control-list
+      position: absolute
+      right: 0
+      top: 2px
+      border: 1px solid
+      display: inline-flex
+      flex-direction: column
+      outline: none
+      border-color: $dark_background_color
+      background-color: $text_background_color
+      padding: 10px
+      border-radius: 4px
+      z-index: 10
+    &-control-item
+      &:not(:last-child)
+        margin-bottom: 5px
+      &:last-child
+        border-top: 1px solid $dark_background_color
+        padding-top: 5px
+      &:hover
+        color: #4D4D4D
+  
+  .del-confirm,
+  .after-del-confirm
+    padding-top: 15px
+    padding-bottom: 15px
+    position: fixed
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    background: $text_background_color
+    border-radius: 4px
+    min-width: 300px
+    z-index: 1100
+    max-height: 100%
+  .after-del-confirm
+    a
+      padding: 0
+    .confirm-link
+      width: 100%
+      height: 100%
+      margin: 0
+
+  .shadow
+    position: fixed
+    top: 0
+    left: 0
+    height: 100%
+    width: 100%
+    z-index: 1000
+    background: #000
+    opacity: 0.5
 </style>
