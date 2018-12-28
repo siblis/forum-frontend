@@ -119,10 +119,17 @@
     <div class="right-content col-xs-12 col-md-4">
         <div class="new-topic-block">
           <h2>Новые темы</h2>
-          <div class="new-topic row">
-            <div class="userImg">U</div>
-            <a href="#" class="new-topic-name col-xs">Как вы разрабатываете REST API?</a>
-            <div class="new-topic-props col-xs-2">3<br/>ответа</div>
+          <div v-for="lastItem in lastItems" :key="lastItem.id" class="new-topic row">
+            <div class="userImg">{{lastItem.username[0].toUpperCase()}}</div>
+            <p
+              @click="() => linkToTopic(lastItem.id)"
+              class="new-topic-name col-xs">
+              {{lastItem.title}}
+            </p>
+            <div class="new-topic-props col-xs-2">
+              <p class="comments_count">{{lastItem.comments}} </p>
+              <p class="comments_count">{{ lastItem.comments | pluralize( ['ответ', 'ответа', 'ответов']) }}</p>
+            </div>
           </div>
         </div>
     </div>
@@ -155,11 +162,18 @@
       return {        
         myComment: '',
         showDelConfirmation: false,
+        lastItems: []
        }
     },
     async mounted() {
       this.$store.dispatch(TOPIC_CLEAR);
       await this.$store.dispatch(TOPIC_LOAD, this.postId);
+      this.axios.get('http://api.forum.pocketmsg.ru/posts')
+        .then(response => {
+          this.lastItems = response.data.data;
+          this.lastItems.length = 5;
+        })
+        .catch(error => alert(error));
     },
     computed:{
       ...mapGetters({
@@ -193,6 +207,11 @@
             && this.post.updated_at !== this.post.created_at
       },
     },
+    watch: {
+      '$route'(to, from) {
+        this.$store.dispatch(TOPIC_LOAD, to.params.postId);
+      }
+    },
     methods: {
       prepareComment(name, id) {
         this.$refs.comment.$el.focus(); 
@@ -221,9 +240,12 @@
         this.showDelConfirmation = false;
       },
       async deletePost () {
-        await this.$store.dispatch(TOPIC_DELETE)
+        await this.$store.dispatch(TOPIC_DELETE);
         this.showDelConfirmation = false;
       },
+      linkToTopic(postId) {
+        this.$router.push({name: 'posts', params: { postId }})
+      }
      },
   }
 </script>
@@ -510,6 +532,7 @@
       text-decoration: none
       &:hover
         opacity: 0.5
+        cursor: pointer
     .new-topic-props
       text-align: center
 

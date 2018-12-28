@@ -6,7 +6,7 @@
         <p>Похоже, что такой страницы не существует.</p>
         <p>Не расстраивайтесь, сделайте шаг назад.</p>
         <br>
-        <router-link to="/" tag="button" type="submit" class="button button-default-big">Назад</router-link>
+        <button @click="$router.go(-1)" type="submit" class="button button-default-big">Назад</button>
         <p>Либо воспользуйтесь поиском ниже</p>
         <input type="search" placeholder="Поиск">
       </div>

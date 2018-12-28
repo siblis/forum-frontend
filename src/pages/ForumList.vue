@@ -77,15 +77,11 @@
       }
     },
     mounted: function () {
-      console.log('mounter');
-      this.userSearch = this.query;
-      console.log(this.query);
       this.page = parseInt(this.$route.query.page || 1);
       this.loadPosts();
     },
     watch: {
       '$route'(to, from) {
-        console.log('watch', to);
         this.userSearch = to.params.query;
         this.loadPosts();
       }
@@ -97,6 +93,7 @@
             .then(response => {
               this.items = response.data.Posts.data;
               this.total = response.data.Posts.total;
+              this.pagination();
             })
             .catch(error => alert(error));
         } else {
@@ -140,13 +137,13 @@
       },
       pagination() {
         let current = this.page,
-          last = this.numberOfPage,
-          delta = 2,
-          left = current - delta,
-          right = current + delta + 1,
-          range = [],
-          rangeWithDots = [],
-          l;
+            last = this.numberOfPage,
+            delta = 2,
+            left = current - delta,
+            right = current + delta + 1,
+            range = [],
+            rangeWithDots = [],
+            l;
 
         for (let i = 1; i <= last; i++) {
           if (i === 1 || i === last || i >= left && i < right) {

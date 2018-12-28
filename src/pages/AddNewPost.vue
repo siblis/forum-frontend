@@ -52,7 +52,9 @@
                      v-model="isCheckedRules"
                      @change="checkForm">
               <label for="rules"> Я внимательно ознакомился и обязуюсь соблюдать
-                <a class="rules" href="#">правила форума</a>.
+                <router-link to="/rules" class="rules">
+                  правила форума
+                </router-link>.
               </label>
             </div>
             <div>

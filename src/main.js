@@ -10,7 +10,7 @@ import VueMoment from 'vue-moment';
 import VueTextareaAutosize from 'vue-textarea-autosize'
 import pluralize from './utils/pluralize';
 import ForumItem from '@/pages/ForumItem';
-// import Example from '@/pages/Example';
+import Rules from '@/pages/Rules';
 import ForumList from '@/pages/ForumList';
 import LogIn from '@/pages/LogIn';
 import Registration from '@/pages/Registration';
@@ -46,6 +46,7 @@ const router = new VueRouter({
     {path: '/create-post', component: AddNewPost},
     {path: '/ui-kit', component: UIkit},
     {path: '/404', component: Page404},
+    {path: '/rules', component: Rules},
     {path: '/edit-post/:postId', name: 'post', component: EditPost, props: true},
 
 
