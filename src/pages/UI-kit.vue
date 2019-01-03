@@ -102,7 +102,7 @@
         <br>
         <button class="button button-main-big">Войти</button>
         <p>
-          <i class='icon-label' style="color: #ff0000; font-size: 2em"></i>
+          <i class='icon-label' style="color: #ff0000; font-size: 1em"></i>
           стили естественно можно задавать классом, работет и font-size и color
         </p>
         <p>
@@ -161,6 +161,15 @@
         </p>
         <p>
           <i class='icon-check'></i>
+        </p>
+        <p>
+          <i class='icon-look'></i>
+        </p>
+        <p>
+          <i class='icon-thump-up'></i>
+        </p>
+        <p>
+          <i class='icon-logo'></i>
         </p>
     </div>
 </template>

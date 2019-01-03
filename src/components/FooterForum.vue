@@ -149,7 +149,6 @@
   @import "../assets/variables.sass"
 
   *
-    background-color: $dark_background_color
     color: $text_background_color
     font-size: $medium_font_size
 

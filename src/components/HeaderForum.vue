@@ -1,7 +1,7 @@
 <template>
 <header>
-  <div id="header-content">
-    <router-link to="/">
+  <div class="row between-sm" id="header-content">
+    <router-link class="logo col-xs-12 center-xs col-md-2 start-md col-lg-2" to="/">
       <svg id="logo-img" width="161" height="49" viewBox="0 0 161 49">
         <path d="M50.5689 24.6748H45V1H50.5689V24.6748Z" fill="white"/>
         <path d="M72.1601 5.4065H65.207V24.6748H59.6222V5.4065H52.7964V1H72.1601V5.4065Z" fill="white"/>
@@ -14,29 +14,44 @@
         <path d="M0 0V25H26V0H0ZM18.0177 6.29679H7.98331L3.46139 1.94977H22.5386L18.0177 6.29679ZM17.4236 8.24657V16.7534H8.57643V8.24657H17.4236ZM6.54867 7.67626V17.3247L2.02776 21.6717V3.32826L6.54867 7.67626ZM7.98331 18.7032H18.0177L22.5386 23.0502H3.46139L7.98331 18.7032ZM19.4513 17.3247V7.67626L23.9722 3.32924V21.6717L19.4513 17.3247Z" fill="white"/>
       </svg>
     </router-link>
-    <div id="search">
-      <button id="btn-search" type="submit">
+    <div class="col-xs-12 col-md-3 col-lg-5" id="search">
+      <button id="btn-search" type="submit" v-on:click="searchButton">
         <svg id="search-img" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.8041 14.8637L11.9576 11.0171C12.911 9.85469 13.4857 8.36571 13.4857 6.74286C13.4857 3.02041 10.4653 0 6.74286 0C3.01714 0 0 3.02041 0 6.74286C0 10.4653 3.01714 13.4857 6.74286 13.4857C8.36571 13.4857 9.85143 12.9143 11.0139 11.9608L14.8604 15.8041C15.1216 16.0653 15.5429 16.0653 15.8041 15.8041C16.0653 15.5461 16.0653 15.1216 15.8041 14.8637ZM6.74286 12.1437C3.76163 12.1437 1.33878 9.72082 1.33878 6.74286C1.33878 3.7649 3.76163 1.33878 6.74286 1.33878C9.72082 1.33878 12.1469 3.7649 12.1469 6.74286C12.1469 9.72082 9.72082 12.1437 6.74286 12.1437Z" fill="#757575"/>
         </svg>
       </button>
-      <input id="search_line" placeholder="Поиск вопроса, темы по сайту..." type="search">
+      <input
+        @keyup.enter="searchButton"
+        v-model.trim="userSearch"
+        autocomplete="false"
+        type="search"
+        id="search_line"
+        placeholder="Поиск вопроса, темы по сайту...">
     </div>
-    <div id="buttons">
-      <router-link v-show="!isLoggedIn" to="/login" tag="button" id="enter_btn" class="auth_btn">Вход</router-link>
-      <router-link v-show="!isLoggedIn" to="/signup" tag="button" id="reg_btn" class="auth_btn">Регистрация</router-link>
-      <button v-show="isLoggedIn"
-              class="auth_btn bnt_signOut"
-              @click="logout()"
-      >
-        Выход
-      </button>
-      <div id="user-field">
-        <router-link to="/profile"><div id="user-ico"></div></router-link>
-        <svg width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="2" cy="2" r="2" fill="#C4C4C4"/>
-          <circle cx="2" cy="10" r="2" fill="#C4C4C4"/>
-          <circle cx="2" cy="18" r="2" fill="#C4C4C4"/>
+    <router-link
+      to="/rules"
+      class="rules col-xs-12 center-xs col-sm start-sm col-md-2 center-md">
+      Правила&nbsp;форума
+    </router-link>
+    <div class="col-xs-12 center-xs col-sm end-sm col-md-3" id="buttons">
+      <router-link v-show="!isLoggedIn" to="/login" tag="button" id="enter_btn" class="auth_btn button button-default">Вход</router-link>
+      <router-link v-show="!isLoggedIn" to="/signup" tag="button" id="reg_btn" class="auth_btn button button-default">Регистрация</router-link>
+
+      <div v-if="isLoggedIn" id="user-field">
+        <router-link class="user-info" to="/profile">
+          <p class="my-name">{{my.name}}</p>
+          <div id="user-ico"></div>
+         </router-link>
+        <button
+          v-show="hideBtn"
+          class="auth_btn bnt_signOut button button-default"
+          @click="logout()">
+          Выход
+        </button>
+        <svg class="show-button" @click="showButton()" width="4" height="20" viewBox="0 0 4 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="2" cy="2" r="2"/>
+          <circle cx="2" cy="10" r="2"/>
+          <circle cx="2" cy="18" r="2"/>
         </svg>
       </div>
     </div>
@@ -50,14 +65,30 @@ import { AUTH_LOGOUT } from '../store/actions'
 export default {
   name: 'HeaderForum',
   props: {},
+  data: function() {
+    return {
+      hideBtn: false,
+      userSearch: ''
+    }
+  },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn
+      return this.$store.getters.isLoggedIn;
     },
+    my() {
+      return this.$store.getters.profile;
+    }
   },
   methods: {
+    searchButton() {
+      this.$router.push({path: `/search/` + this.userSearch})
+    },
     logout() {
-      this.$store.dispatch(AUTH_LOGOUT)
+      this.$store.dispatch(AUTH_LOGOUT);
+      this.showButton();
+    },
+    showButton() {
+      this.hideBtn = !this.hideBtn;
     },
   }
 }
@@ -71,38 +102,54 @@ export default {
 header
   background-color: $dark_background_color
 
+*
+  padding: 0
+  margin: 0
+  box-sizing: border-box
+
 #header-content
   width: 100%
   min-height: 60px
-  display: flex
   align-items: center
   flex-wrap: wrap
-  padding: 0 25px
+  padding: 5px 25px
   justify-content: space-between
-  
-#logo-img, #search, #buttons, #user-field
+
+.logo, #search, #buttons, .rules
+  margin: 5px 0
+
+.rules
+  padding: 10px
+
+.logo, #search, #buttons, #user-field
   display: flex
   align-items: center
 
-#logo-img
-  margin-top: 5px
-  margin-right: 10px
-  
+
 #btn-search
   position: absolute
   width: 16px
   height: 16px
   background: inherit
   cursor: pointer
-  border: 0
+  border: none
+  outline: none
   padding: 0
   margin-left: 11px
+  svg
+    fill-opacity: 0.7
+  &:hover svg
+    fill-opacity: 1
+  &:active svg
+    transform: scale(1.1, 1.1)
 
-#search-img, #search_line, #enter_btn, #reg_btn, #user-ico
+
+
+#search-img, #search_line, #user-ico, .button
   background-color: $background-color
   
 #search
-  min-width: 607px
+  /*min-width: 607px*/
   
 #search_line
   height: 32px
@@ -111,7 +158,11 @@ header
   outline: none
   padding-left: 42px
   width: 100%
-  
+  box-shadow: 0 0 1px 1px rgba(0,0,0,0)
+  transition: .17s linear
+  &:focus
+    box-shadow: 0 0 1px 1px $background-color
+
 #btn
   width: 40px
   height: 40px
@@ -119,15 +170,52 @@ header
     
 .auth_btn
   height: 30px
-  border: 0
   padding: 0
-  margin-left: 21px
-  border-radius: 5px
+  margin-bottom: 0
+  &:last-of-type
+    margin-left: 21px
+
+
+.user-info
+  display: flex
+  text-decoration: none
+  align-items: center
+  &:hover
+    .my-name
+      color: $button_hover_color
+    #user-ico
+      transform: scale(1.1, 1.1)
+  &:active
+    .my-name
+      color: $topic_block_background
+    #user-ico
+      transform: scale(0.95, 0.95)
+
+.my-name
+  color: $background-color
+  margin-right: 10px
+
+.rules
+  text-decoration: none
+  color: $background-color
+  cursor: pointer
+  &:hover
+    color: $button_hover_color
+  &:active
+    color: $topic_block_background
+
+.show-button
+  margin-left: 15px
+  circle
+    fill: $background-color
+  &:hover circle
+    fill: $button_hover_color
+  &:active circle
+    fill: $topic_block_background
 
 .bnt_signOut
   cursor: pointer
   width: 84px
-  margin-right: 30px
 
 #enter_btn, #reg_btn, #user-field
   cursor: pointer
@@ -139,37 +227,36 @@ header
 #reg_btn
   width: 129px
   height: 30px
-  margin-right: 30px
-  
+
 #user-ico
   width: 45px
   height: 45px
   border-radius: 50%
-  margin-right: 15px
-  
-@media only screen and (max-width: 1193px)
-  #header-content
-    justify-content: center
-  #logo-img
-    margin-top: 10px
-  #buttons
-    margin-bottom: 10px
-    
-@media only screen and (max-width: 843px)
-  #buttons
-    margin-top: 10px
-    
-@media only screen and (max-width: 656px)
-  #header-content
-    padding: 0 5px
-  #search
-    min-width: 100%
-    
-@media only screen and (max-width: 375px)
-  #buttons
-    flex-wrap: wrap
-    justify-content: center
-  #user-field
-    margin-top: 10px
+
+
+/*@media only screen and (max-width: 1193px)*/
+  /*#header-content*/
+    /*justify-content: center*/
+  /*#logo-img*/
+    /*margin-top: 10px*/
+  /*#buttons*/
+    /*margin-bottom: 10px*/
+    /**/
+/*@media only screen and (max-width: 843px)*/
+  /*#buttons*/
+    /*margin-top: 10px*/
+    /**/
+/*@media only screen and (max-width: 656px)*/
+  /*#header-content*/
+    /*padding: 0 5px*/
+  /*#search*/
+    /*min-width: 100%*/
+    /**/
+/*@media only screen and (max-width: 375px)*/
+  /*#buttons*/
+    /*flex-wrap: wrap*/
+    /*justify-content: center*/
+  /*#user-field*/
+    /*margin-top: 10px*/
 
 </style>

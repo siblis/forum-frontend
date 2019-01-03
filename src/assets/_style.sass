@@ -42,13 +42,31 @@ h5
 h6
   font-size: 16px
 
-.container-fluid,
 .container
+  display: flex
+  flex-direction: column
   padding: 0
+  height: 100%
+
+.main-app-content
+  flex: 1 0 auto
+  background-color: $background-color
+
+.footer
+  flex: 0 0 auto
+  background-color: $dark_background_color
+
+.header
+  background-color: $dark_background_color
+
+html
+  height: 100%
 
 body
   margin: 0
   background-color: $background-color
+  height: 100%
+
 
 .button
   margin-bottom: 15px
@@ -72,6 +90,17 @@ body
   font-size: 14px
   line-height: normal
   text-align: center
+
+.button-inverse
+  padding: 7px 32px
+  border-radius: 5px
+  font-weight: 500
+  font-size: 14px
+  line-height: normal
+  text-align: center
+  background: $button_main_color
+  border-color: $button_main_color
+  color: $button_text_color
 
 .button-default-big
   padding: 10px 36px
