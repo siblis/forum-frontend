@@ -1,0 +1,136 @@
+@import "variables.sass"
+@import "font-icons.sass"
+
+@import url('//fonts.googleapis.com/css?family=Roboto:400,500,700')
+
+*
+  color: $base_font_color
+  font-family: 'Roboto', serif
+  font-weight: normal
+  font-size: $base_font_size
+  box-sizing: border-box
+
+.row
+  margin: 0
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6
+  font-weight: 500
+  margin: 0
+  padding: 0
+
+h1
+  font-size: 34px
+
+
+h2
+  font-size: 26px
+
+h3
+  font-size: 22px
+
+h4
+  font-size: 20px
+
+h5
+  font-size: 18px
+
+h6
+  font-size: 16px
+
+.container
+  display: flex
+  flex-direction: column
+  padding: 0
+  height: 100%
+
+.main-app-content
+  flex: 1 0 auto
+  background-color: $background-color
+
+.footer
+  flex: 0 0 auto
+  background-color: $dark_background_color
+
+.header
+  background-color: $dark_background_color
+
+html
+  height: 100%
+
+body
+  margin: 0
+  background-color: $background-color
+  height: 100%
+
+
+.button
+  margin-bottom: 15px
+  border: 1px solid
+  cursor: pointer
+  &:hover
+    background-color: $button_hover_color
+    outline: none
+    color: $base_font_color
+  &:focus
+    outline: none
+  &:active
+    box-shadow: inset 0 2px 2px rgba(0,0,0,.2)
+
+.button-default
+  padding: 7px 32px
+  background: $button_default_color
+  border-color: $button_default_color
+  border-radius: 5px
+  font-weight: 500
+  font-size: 14px
+  line-height: normal
+  text-align: center
+
+.button-inverse
+  padding: 7px 32px
+  border-radius: 5px
+  font-weight: 500
+  font-size: 14px
+  line-height: normal
+  text-align: center
+  background: $button_main_color
+  border-color: $button_main_color
+  color: $button_text_color
+
+.button-default-big
+  padding: 10px 36px
+  font-weight: normal
+  font-size: 16px
+  line-height: normal
+  text-align: center
+  background: $button_default_color
+  border-color: $button_default_color
+  border-radius: 5px
+
+.button-main
+  padding: 10px 36px!important
+  background: $button_main_color
+  border-color: $button_main_color
+  border-radius: 5px
+  font-weight: normal
+  font-size: 16px
+  line-height: normal
+  text-align: center
+  color: $button_text_color
+
+.button-main-big
+  padding: 9.5px 36px
+  background: $button_main_big_color
+  border-color: $button_main_big_color
+  border-radius: 5px
+  font-weight: normal
+  font-size: 16px
+  line-height: normal
+  text-align: center
+  color: $button_text_color
+

@@ -1,0 +1,135 @@
+$icomoon-font-family: "fp" !default
+$icomoon-font-path: "./assets/fonts" !default
+
+$icon-label: "\e900"
+$icon-clock: "\e901"
+$icon-eye: "\e902"
+$icon-speak: "\e903"
+$icon-arrow-back: "\e904"
+$icon-dots: "\e905"
+$icon-facebook: "\e906"
+$icon-google-plus: "\e907"
+$icon-instagram: "\e908"
+$icon-telegram: "\e909"
+$icon-twitter: "\e90a"
+$icon-vkontakte: "\e90b"
+$icon-youtube: "\e90c"
+$icon-chat: "\e90d"
+$icon-plus: "\e90e"
+$icon-checkbox: "\e90f"
+$icon-check: "\e910"
+$icon-look: "\e911"
+$icon-thump-up: "\e912"
+$icon-logo: "\e913"
+
+@font-face 
+  font-family: '#{$icomoon-font-family}'
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?fmic1d')
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?fmic1d#iefix') format('embedded-opentype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?fmic1d') format('truetype'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?fmic1d') format('woff'),
+  url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?fmic1d##{$icomoon-font-family}') format('svg')
+  font-weight: normal
+  font-style: normal
+
+i
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important
+  speak: none
+  font-style: normal
+  font-weight: normal
+  font-variant: normal
+  text-transform: none
+  line-height: 1
+
+  color: inherit
+  background-color: inherit
+  font-size: inherit
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+.icon-logo
+  &:before
+    content: $icon-logo
+
+.icon-thump-up
+  &:before
+    content: $icon-thump-up
+
+.icon-dots
+  &:before
+    content: $icon-dots
+
+.icon-look
+  &:before
+    content: $icon-look
+
+.icon-arrow-back
+  &:before
+    content: $icon-arrow-back
+
+.icon-chat
+  &:before
+    content: $icon-chat
+
+.icon-plus
+  &:before
+    content: $icon-plus
+
+.icon-checkbox
+  &:before
+    content: $icon-checkbox
+
+.icon-check
+  &:before
+    content: $icon-check
+
+.icon-label
+  &:before
+    content: $icon-label
+
+.icon-clock
+  &:before
+    content: $icon-clock
+
+.icon-eye
+  &:before
+    content: $icon-eye
+
+.icon-speak
+  &:before
+    content: $icon-speak
+
+.icon-facebook
+  font-size: 1.275em
+  &:before
+    content: $icon-facebook
+
+.icon-google-plus
+  &:before
+    content: $icon-google-plus
+
+.icon-instagram
+  font-size: 1.2em
+  &:before
+    content: $icon-instagram
+
+.icon-telegram
+  &:before
+    content: $icon-telegram
+
+.icon-twitter
+  &:before
+    content: $icon-twitter
+
+.icon-vkontakte
+  font-size: 0.785em
+  &:before
+    content: $icon-vkontakte
+
+.icon-youtube
+  font-size: 0.925em
+  &:before
+    content: $icon-youtube
